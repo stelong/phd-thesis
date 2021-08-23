@@ -407,7 +407,7 @@ At each iteration (in this context called \emph{wave}) the HM consists in perfor
     \item[\textsc{Step 4.}] Evaluate all the emulators in the points $\mathbf{x}\in\text{NROY}\setminus \{\mathbf{x_1},\,\dots,\,\mathbf{x_N}\}$ to predict each output feature.
     \item[\textsc{Step 5.}] In order to quantify \enquote{how good} a point is in matching the experimental data, compute the \emph{implausibility measure} for each $\mathbf{x}\in\text{NROY}\setminus \{\mathbf{x_1},\,\dots,\,\mathbf{x_N}\}$:
    
-    \begin{equation}\label{eq:implmeasure}
+    \begin{equation}
         I_j^2(\mathbf{x}):=\frac{(\mathbb{E}[f_{emul,\, j}(\mathbf{x})]-y_j)^2}{\mathbb{V}ar[f_{emul,\, j}(\mathbf{x})] + \mathbb{V}ar[e_j] + \mathbb{V}ar[md]},\quad for\,\,j=1,\dots,m
     \end{equation}
     where in the numerator we have the difference between the emulator mean and the observed value, while in the denominator we have the sum of the emulator variance, the observed error and the model discrepancy error.

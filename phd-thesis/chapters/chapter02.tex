@@ -18,16 +18,16 @@ Rat biventricular anatomy was \textit{in silico} represented by a cubic Hermite 
 \vspace{0.2cm}
 The mesh customisation pipeline starts from a binary image, which in our case is the segmentation obtained from the MRI scans. An idealised template mesh composed of truncated ellipsoids is then tailored to the binary mask provided, and image registration is performed to assess the deformation field from template to real anatomy. During this step, the user can choose the so called \textit{level-of-detail} (LoD), which gives a trade-off between fitting accuracy and numerical stability. The LoD ranges from $1$ (coarse and most stable) to $5$ (accurate but less likely to be stable). We opted for an LoD of $2$ for both the SHAM and the AB mesh generation, as we prioritised stability for mechanics simulations over accuracy. After having calculated the warping function by image registration, this is used to map the template mesh to the deformed space using a variational technique. The last step of the pipeline involves enhancing the quality of the mesh by improving the regularity of each element by linearising internal nodes transmural positions with no loss of accuracy. The generated meshes are shown in Figure.
 
-\begin{figure}[htb!]
-    \myfloatalign
-    \subfloat[SHAM]
-    {\label{fig:ratrepgeom-a}
-    \includegraphics[width=.3\linewidth]{chapter04/sham_mesh.png}}\quad
-    \subfloat[AB]
-    {\label{fig:ratrepgeom-b}
-    \includegraphics[width=.3\linewidth]{chapter04/ab_mesh.png}}
-    \caption{Rat representative cubic Hermite finite element meshes.}\label{fig:ratrepgeom}
-\end{figure}
+% \begin{figure}[htb!]
+%     \myfloatalign
+%     \subfloat[SHAM]
+%     {\label{fig:ratrepgeom-a}
+%     \includegraphics[width=.3\linewidth]{figures/chapter04/sham_mesh.png}\quad
+%     \subfloat[AB]
+%     {\label{fig:ratrepgeom-b}
+%     \includegraphics[width=.3\linewidth]{figures/chapter04/ab_mesh.png}
+%     \caption{Rat representative cubic Hermite finite element meshes.}\label{fig:ratrepgeom}
+% \end{figure}
 
 \vspace{0.2cm}
 Rule-based fibers~\cite{Bayer:2012} complemented the anatomical description of the rat anatomy along with the generated meshes.
