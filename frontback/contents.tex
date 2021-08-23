@@ -1,0 +1,110 @@
+%*******************************************************
+% Table of Contents
+%*******************************************************
+\pagestyle{scrheadings}
+%\phantomsection
+\pdfbookmark[1]{\contentsname}{tableofcontents}
+\setcounter{tocdepth}{2} % <-- 2 includes up to subsections in the ToC
+\setcounter{secnumdepth}{3} % <-- 3 numbers up to subsubsections
+\manualmark
+\markboth{\spacedlowsmallcaps{\contentsname}}{\spacedlowsmallcaps{\contentsname}}
+\tableofcontents
+\automark[section]{chapter}
+\renewcommand{\chaptermark}[1]{\markboth{\spacedlowsmallcaps{#1}}{\spacedlowsmallcaps{#1}}}
+\renewcommand{\sectionmark}[1]{\markright{\textsc{\thesection}\enspace\spacedlowsmallcaps{#1}}}
+%*******************************************************
+% List of Figures and of the Tables
+%*******************************************************
+\clearpage
+% \pagestyle{empty} % Uncomment this line if your lists should not have any headlines with section name and page number
+\begingroup
+    \let\clearpage\relax
+    \let\cleardoublepage\relax
+    %*******************************************************
+    % List of Figures
+    %*******************************************************
+    %\phantomsection
+    %\addcontentsline{toc}{chapter}{\listfigurename}
+    \pdfbookmark[1]{\listfigurename}{lof}
+    \listoffigures
+
+    \vspace{8ex}
+
+    %*******************************************************
+    % List of Tables
+    %*******************************************************
+    %\phantomsection
+    %\addcontentsline{toc}{chapter}{\listtablename}
+    \pdfbookmark[1]{\listtablename}{lot}
+    \listoftables
+
+    \vspace{8ex}
+    % \newpage
+
+    %*******************************************************
+    % List of Listings
+    %*******************************************************
+    %\phantomsection
+    %\addcontentsline{toc}{chapter}{\lstlistlistingname}
+    \pdfbookmark[1]{\lstlistlistingname}{lol}
+    \lstlistoflistings
+
+    \vspace{8ex}
+
+    %*******************************************************
+    % Acronyms
+    %*******************************************************
+    %\phantomsection
+    \pdfbookmark[1]{Acronyms}{acronyms}
+    \markboth{\spacedlowsmallcaps{Acronyms}}{\spacedlowsmallcaps{Acronyms}}
+    \chapter*{Acronyms}
+    \begin{acronym}[UMLX]
+        \acro{AP}{Action potential}
+        \acro{EC}{Excitation-contraction (coupling)}
+        \acro{Na}[$\Na$]{Sodium}
+        \acro{K}[$\K$]{Potassium}
+        \acro{Cl}[$\Cl$]{Chloride}
+        \acro{Ca}[$\Ca$]{Calcium}
+        \acro{NAK}{Sodium/potassium pump}
+        \acro{ATP}{Adenosine triphosphate}
+        \acro{NCX}{Sodium/calcium exchanger}
+        \acro{Cai}[$\Cai$]{Intracellular calcium concentration}
+        \acro{Tm}{Tropomyosin}
+        \acro{Tn}{Troponin}
+        \acro{TnC}{Troponin C}
+        \acro{SR}{Sarco(endo)plasmic reticulum}
+        \acro{T}{Transverse (tubules)}
+        \acro{RyR}{Ryanodine receptor}
+        \acro{PMCA}{Plasma membrane $\Ca$ ATPase}
+        \acro{SERCA}{Sarcoplasmic $\Ca$ ATPase}
+        \acro{RV}{Right ventricle}
+        \acro{LV}{Left ventricle}
+        \acro{RA}{Right atrium}
+        \acro{LA}{Left atrium}
+        \acro{EDV}{End-diastolic volume}
+        \acro{EDP}{End-diastolic pressure}
+        \acro{IVC}{Isovolumetric contraction}
+        \acro{SV}{Stroke volume}
+        \acro{ESV}{End-systolic volume}
+        \acro{EF}{Ejection fraction}
+        \acro{ESP}{End-systolic pressure}
+        \acro{IVR}{Isovolumetric relaxation}
+        \acro{HH}{Hodgkin-Huxley (model)}
+        \acro{MM}{Markov (chain) model}
+        \acro{ODE}{Ordinary differential equation}
+        \acro{LV}{Left ventricle}
+        \acro{HF}{Heart failure}
+        \acro{HFpEF}{Heart failure with preserved ejection fraction}
+        \acro{AB}{Aortic-banded (rat)}
+        \acro{SHAM}{Sham-operated (rat)}
+        \acro{MRI}{Magnetic resonance imaging}
+        \acro{PV}{Pressure-volume (loop)}
+        \acro{F-pCa}{Force-pCa (curve)}
+        \acro{GPE}{Gaussian process emulation/emulator}
+        \acro{GP}{Gaussian process}
+        \acro{ISE}{Independent standard error}
+        \acro{HM}{History matching (technique)}
+        \acro{MC}{Monte Carlo}
+    \end{acronym}
+
+\endgroup

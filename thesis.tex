@@ -1,0 +1,73 @@
+\documentclass[oneside,openright,titlepage,numbers=noenddot,headinclude,%
+                footinclude=true,cleardoublepage=empty,abstract=on,%
+                paper=a4,fontsize=11pt]{scrreprt}
+
+%==============================================================================
+% Classic thesis
+%==============================================================================
+\input{classicthesis-config}
+
+%==============================================================================
+% Bibliographies
+%==============================================================================
+\addbibresource{bibliography.bib}
+\addbibresource[label=ownpubs]{publications.bib}
+
+%==============================================================================
+% Start document
+%==============================================================================
+\begin{document}
+\frenchspacing
+\raggedbottom
+\selectlanguage{american}
+\pagenumbering{roman}
+\pagestyle{plain}
+
+%==============================================================================
+% Front pages
+%==============================================================================
+\include{frontback/titlepage}
+\cleardoublepage\include{frontback/abstract}
+\cleardoublepage\include{frontback/publications}
+\cleardoublepage\include{frontback/acknowledgments}
+\cleardoublepage\include{frontback/contents}
+
+%==============================================================================
+% Main body
+%==============================================================================
+\cleardoublepage
+\pagestyle{scrheadings}
+\pagenumbering{arabic}
+
+\cleardoublepage
+\part{Background}\label{pt:part1}
+\include{chapters/chapter01}\cleardoublepage
+
+\part{Methodology}\label{pt:part2}
+\include{chapters/chapter02}\cleardoublepage
+\include{chapters/chapter03}\cleardoublepage
+
+\part{Application results}\label{pt:part3}
+\include{chapters/chapter04}\cleardoublepage
+\include{chapters/chapter05}\cleardoublepage
+\include{chapters/chapter06}\cleardoublepage
+\include{chapters/chapter07}\cleardoublepage
+\include{chapters/chapter08}\cleardoublepage
+
+\part{Conclusions}\label{pt:part4}
+\include{chapters/chapter09}\cleardoublepage
+
+%==============================================================================
+% Back pages
+%==============================================================================
+\appendix
+\cleardoublepage
+\part{Appendix}\label{pt:part5}
+\include{chapters/chapterA}\cleardoublepage
+
+\include{frontback/bibliography}
+
+%==============================================================================
+% End document
+%==============================================================================
+\end{document}

@@ -1,0 +1,428 @@
+%==============================================================================
+\chapter{3D biophysical model of biventricular rat heart contraction 
+mechanics}\label{cha:chapter2}
+%==============================================================================
+%
+%
+%
+\begin{remark}{Outline}
+    Vediamo un po come funziona questo ambiente
+\end{remark}
+
+%
+%
+%
+\section{Anatomy}
+Rat biventricular anatomy was \textit{in silico} represented by a cubic Hermite finite element mesh. This was generated using an automatic service for ventricular cardiac meshes personalisation developed by Lamata et al.~\cite{Lamata:2011, Lamata:2014}.
+
+\vspace{0.2cm}
+The mesh customisation pipeline starts from a binary image, which in our case is the segmentation obtained from the MRI scans. An idealised template mesh composed of truncated ellipsoids is then tailored to the binary mask provided, and image registration is performed to assess the deformation field from template to real anatomy. During this step, the user can choose the so called \textit{level-of-detail} (LoD), which gives a trade-off between fitting accuracy and numerical stability. The LoD ranges from $1$ (coarse and most stable) to $5$ (accurate but less likely to be stable). We opted for an LoD of $2$ for both the SHAM and the AB mesh generation, as we prioritised stability for mechanics simulations over accuracy. After having calculated the warping function by image registration, this is used to map the template mesh to the deformed space using a variational technique. The last step of the pipeline involves enhancing the quality of the mesh by improving the regularity of each element by linearising internal nodes transmural positions with no loss of accuracy. The generated meshes are shown in Figure.
+
+\begin{figure}[htb!]
+    \myfloatalign
+    \subfloat[SHAM]
+    {\label{fig:ratrepgeom-a}
+    \includegraphics[width=.3\linewidth]{chapter04/sham_mesh.png}}\quad
+    \subfloat[AB]
+    {\label{fig:ratrepgeom-b}
+    \includegraphics[width=.3\linewidth]{chapter04/ab_mesh.png}}
+    \caption{Rat representative cubic Hermite finite element meshes.}\label{fig:ratrepgeom}
+\end{figure}
+
+\vspace{0.2cm}
+Rule-based fibers~\cite{Bayer:2012} complemented the anatomical description of the rat anatomy along with the generated meshes.
+
+
+%
+%
+%
+\section{Ionic model}
+We employed the Gattoni et al.~\cite{Gattoni:2016} model to simulate rat left ventricular myocytes electrophysiology and calcium dynamics at physiological pacing rate ($\SI{6}{\hertz}$) and temperature ($\SI{37}{\celsius}$). All the currents included in this framework are summarised in Table~\ref{tab:gattonicurrentstab}, while the main ion channels, transporters and pumps are depicted in Figure~\ref{fig:gattonicurrentsfig}.
+
+\begin{table}
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \tableheadline{Label} & \tableheadline{Definition} \\
+    \midrule
+    $I_{LCC}$    & L-type $\Ca$ current \\
+    $I_{RyR}$    & ryanodine receptor current \\
+    $I_{TRPN}$   & troponin buffering current \\
+    $I_{SERCA}$  & sarcoplasmic $\Ca$ pump current \\
+    $I_{SR\ell}$ & sarcoplasmic reticulum leakage current \\
+    $I_{NCX}$    & $\Na$/$\Ca$ exchanger current \\
+    $I_{PMCa}$   & plasma membrane $\Ca$ pump current \\
+    $I_{Cab}$    & $\Ca$ leak current \\
+    $I_{NaK}$    & $\Na$/$\K$ pump current \\
+    $I_{Na}$     & $\Na$ current \\
+    $I_{K1}$     & inwardly rectifying $\K$ current \\
+    $I_{to}$     & transient outward $\K$ current \\
+    $I_{ss}$     & steady-state outward $\K$ current \\
+    $I_{f}$      & hyperpolarisation-activated current \\
+    $I_{BNa}$    & $\Na$ background current \\
+    $I_{BK}$     & $\K$ background current \\
+    \bottomrule
+    \end{tabularx}
+    \caption{Gattoni et al.~\cite{Gattoni:2017} model's ionic currents.}
+    \label{tab:gattonicurrentstab}
+\end{table}
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter02/ep.pdf}
+    \caption{Main ion channels and pumps included in the Gattoni et al.~\cite{Gattoni:2016} model. \textcolor{blue}{TODO: improve figure's text and font}}
+    \label{fig:gattonicurrentsfig}
+\end{figure}
+
+
+\vspace{0.2cm}
+\textcolor{blue}{TODO: here, should I present all the equations for all the currents? I mean, for the contraction model (next section) we present both the equations fully, but just because they are needed to explain the force-calcium relationship and just because we will take most of the multi-scale map parameters from those equations.}
+
+\vspace{0.2cm}
+For our study, we made use of the two variants~\cite{Gattoni:2017} of the original model the same authors developed in order to describe the control SHAM and the diseased AB rats specific calcium dynamics. The experimental data the authors used to re-fit the original model comes from exactly the same experimental study (\cite{Roe:2017}) which we obtained the MRI scans from. For this reason, we were able have both sham-operated and aortic-banded rat cohorts-specific anatomy and electrophysiology mathematical descriptions at the same time. Simulated action potentials and calcium transients from the two different models are shown in Figure~\ref{fig:shamvsabcaap}.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter02/sham_vs_ab_ca_ap.pdf}
+    \caption{SHAM (blue) and AB (red) rats characteristic action potentials and calcium transients simulated using the Gattoni et al.~\cite{Gattoni:2017} model of rat left ventricular myocyte electrophysiology at $\SI{6}{\hertz}$ pacing frequency and $\SI{37}{\celsius}$.}
+    \label{fig:shamvsabcaap}
+\end{figure}
+
+%
+%
+%
+\section{Contraction model}
+We employed the Land et al.~\cite{Land:2012} myocyte contraction model to simulate active tension generation at sarcomere level and isometric steady-state force-calcium relationship in the rat heart. This model describes the cooperative binding of calcium to troponin C, which in turn causes unblocking of the actin sites for myosin cross-bridge cycling.
+
+\vspace{0.2cm}
+The process of $\Ca$ to TnC binding is described via the following equation:
+
+\begin{equation}\label{eq:landodesys1}
+    \der{\trpn}{t} = \ktrpn\left[\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\trpn\right]
+\end{equation}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $\trpn$  & proportions of bound $\Ca$-TnC complexes \\
+    $\ktrpn$ & unbinding rate of $\Ca$ from TnC \\
+    $\Cai$   & representative $\Ca$ transient \\
+    $\Caift$ & $\Ca$ thin filament sensitivity \\
+    $\ntrpn$ & $\Ca$-TnC binding degree of cooperativity
+\end{tabular}
+
+\vspace{0.3cm}
+The cross-bridge cycle is instead represented by a two-state model. One state is the \textit{cross-bridge state} ($\xb$), where the cross-bridge is actively cycling and includes both the weakly, strongly and unbound states all collapsed into one state, while the other state is the \textit{non-permissive state} ($N$). The transition between these two states is described via the following equation:
+
+\begin{align}\label{eq:landodesys2}
+    & \der{\xb}{t} = \kxb\left[\permtot(1-\xb)-\frac{1}{\permtot}\xb\right],\quad\text{with} \\
+    & \permtot := \sqrt{\left(\frac{\trpn}{\trpnf}\right)^{\nxb}} \nonumber
+\end{align}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $\xb$    & proportions of formed cross-bridges \\
+    $\kxb$   & cross-bridges cycling rate \\
+    $\trpnf$ & fraction of $\Ca$-TnC bounds for half-maximal cross-bridges activation \\
+    $\nxb$   & cross-bridge formation degree of cooperativity
+\end{tabular}
+
+\vspace{0.3cm}\noindent
+$\trpn$ and $\xb$ variation over time within one cardiac cycle is shown in Figure~\ref{fig:catrpnxb}, where the representative calcium
+transient from healthy, $\SI{6}{\hertz}$-paced rat left ventricular myocytes at $\SI{37}{\celsius}$ which was used to run the simulation is also displayed.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=0.8\textwidth]{figures/chapter02/Ca_TRPN_XB.pdf}
+    \caption{Fraction of bound $\Ca$-TnC complexes (TRPN) and of bound cross-bridges (XB) as a function of time. The intracellular $\textrm{Ca}^{2+}$ concentration variation over time is also displayed on a different scale (blue).}
+    \label{fig:catrpnxb}
+\end{figure}
+
+\vspace{0.3cm}
+In Land et al.~\cite{Land:2012} model, normalised active force is defined as:
+%
+\begin{equation}\label{eq:normforce}
+    F_n = g(Q)\cdot h(\lambda)\cdot \text{XB}
+\end{equation}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $h(\lambda)$ & length-dependence factor \\
+    $g(Q)$       & velocity-dependence factor
+\end{tabular}
+
+\vspace{0.3cm}\noindent
+Normalised force (equation~\eqref{eq:normforce}) is then scaled to actual tension using a reference tension $\tref$ scaling coefficient that encapsulates the total number of cross-bridges and the fraction of cycling cross-bridges in the force generating state for any given time:
+%
+\begin{equation}
+    T = \tref\cdot F_n
+\end{equation}
+ 
+%
+%
+%
+\subsection{Length-dependence}
+The active tension dependence on sarcomere length was based on filament overlap modelling:
+%
+\begin{align}
+    h'(\lambda) &= 1+\beta_0\,[\lambda+\min(\lambda,\,0.87)-1.87] \\
+    h(\lambda) &= \max(0,\,h'(\min(\lambda,\,1.2)))
+\end{align}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $\beta_0$ & phenomenological tension length-dependence scaling factor
+\end{tabular}
+
+\vspace{0.3cm}\noindent
+This results in a linear length dependence near resting sarcomere length, and a twice as steep decrease in tension when the sarcomere length falls below the thick filament length (at $\lambda = 0.87$).
+
+\vspace{0.2cm}
+A phenomenological representation of the thin filament calcium sensitivity shift in a length-dependent manner is also included as an important mechanism of tension length-dependence. This is implemented by $\Caift$ in equation~\eqref{eq:landodesys1}, which is further taken to be:
+%
+\begin{equation}\label{eq:Caift}
+    \Caift:=\Caif[1 + \beta_1(\lambda - 1)]
+\end{equation}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $\Caif$   & reference $\Ca$ thin filament sensitivity \\
+    $\beta_1$ & phenomenological tension length-dependence scaling factor \\
+    $\lambda$ & extension ratio along the fibre direction
+\end{tabular}
+
+\vspace{0.3cm}\noindent
+At the resting sarcomere configuration ($\lambda=1$), length-dependence effects are not present and no consequent shift in the calcium sensitivity is observed ($\Caift=\Caif$).
+
+
+% The parametrization of the velocity dependence was based on sinusoidal analysis experiments as done in \cite{palmer2007}. detailed data on the velocity-dependent response are often required.
+% The \emph{fading memory model} was employed to represent the velocity response as several strain-rate-dependent variables decay with time. An advantage of this model is that it is independent of the contraction model, as it can be added as an addition after modelling isometric tension and length-dependence. Use of the FMM model allows the tension development dependence on crossbridge kinetics to be phenomenologically represented. It 
+
+%
+%
+%
+\subsection{Velocity-dependence}
+To phenomenologically represent the tension development dependence on cross-bridge kinetics, the \emph{fading memory model} was employed as previously done in~\cite{Niederer:2006}, describing the velocity response as several strain-rate-dependent variables decay with time. In particular, this model describes the relationship between tension and sarcomere sliding velocity, by separating tension development into a non-linear static component and a linear time-dependent component, as described by the following two equations:
+%
+\begin{equation}
+    \der{Q_i}{t} = A_i\,\der{\lambda}{t}-\alpha_i\,Q_i,\quad i=1,2
+\end{equation}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $A_i,\,i=1,2$      & parameters related to the viscous and elastic moduli \\
+    $\alpha_i,\,i=1,2$ & parameters related to the frequencies
+\end{tabular}
+
+\vspace{0.3cm}\noindent
+The effect $g(Q)$ seen in equation~\eqref{eq:normforce} on tension is given by an equation derived from the Hill force-velocity curve extended to model stretch and shortening in a symmetric way as done in~\cite{Niederer:2006}:
+%
+\begin{equation}
+    g(Q) = \begin{cases}
+        \dfrac{a\,Q+1}{1-Q}\qquad & Q\le 0 \\
+        \dfrac{1+(a+2)\,Q}{1+Q}\qquad & Q>0
+    \end{cases}\,,\quad\text{with}\quad Q := \sum_{i=1}^2 Q_i
+\end{equation}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $a$ & slope of the Hill force-velocity relationship
+\end{tabular}
+
+\vspace{0.3cm}\noindent
+Land et al.~\cite{Land:2012} cell contraction model's main mechanisms are summarised in the schematic provided in Figure~\ref{fig:cellcontrschematic}.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=0.66\textwidth]{figures/chapter02/cellular_contraction_land.pdf}
+    \caption{Land et al.~\cite{Land:2012} cell contraction model schematic. $\Ca$ binds to TnC and when the fraction of bound complexes (TRPN) reaches $\trpnf$, half of the maximum number of cross-bridges has passed from the non-permissive state (N) to the actively cycling state (XB). Generated active force, which directly depends on the fraction of formed cross-bridges, causes tissue contraction which backwards modulate the force generation itself in a length- and velocity- dependent manner.}
+    \label{fig:cellcontrschematic}
+\end{figure}
+
+
+%
+%
+%
+\subsection{Uncoupling binding and unbinding rates}
+We modified equation~\eqref{eq:landodesys1} in order to uncouple the unbinding rate from the binding rate of the $\Ca$-TnC relationship. This was achieved by fixing the binding rate to a predefined value which was shown to characterise the intact rat muscle in literature experiments~\cite{Niederer:2006}, namely $\overline{\kon}=\SI{0.1}{\micro\Molar\per\milli\second}$, while at the same time re-scaling the calcium sensitivity parameter $\Caift$. By recalling equation~\eqref{eq:landodesys1}, we have that:
+
+\begin{align}
+    \frac{d\text{TRPN}}{dt} &=\ktrpn\left[\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\trpn\right] \\
+    &= \ktrpn\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\ktrpn\trpn \\
+    &= \underbrace{\frac{\ktrpn}{\Caift^{\ntrpn}}}_{\kon}\Cai^{\ntrpn}(1-\trpn)-\underbrace{\ktrpn}_{\koff}\trpn \\
+    &= \kon\Cai^{\ntrpn}(1-\trpn)-\koff\trpn
+\end{align}
+
+\noindent
+$\kon$ is therefore a function of $\koff$, $\Caift$ and $\ntrpn$. However, for every set of these three parameters $(\koff,\,\Caift,\,\ntrpn)\in\mathbb{R}^{3}$, there exists a unique value $\widehat{\Caift}\in\mathbb{R}$ such that:
+
+\begin{equation}
+    \widehat{\Caift}^{\ntrpn}\times\kon = \widehat{\Caift}^{\ntrpn}\times\frac{\koff}{\Caift^{\ntrpn}} = \overline{\kon} = \text{constant}
+\end{equation}
+
+\noindent
+The newly introduced parameter
+%
+\begin{equation}
+    \widehat{\Caift} := \Caift\left(\frac{\overline{\kon}}{\koff}\right)^{1/\ntrpn}
+\end{equation}
+
+\noindent
+allows to uncouple the unbinding rate from the binding rate in equation~\eqref{eq:landodesys1}, which can be now re-written as:
+
+\begin{equation}\label{eq:landodesys1mod}
+    \der{\trpn}{t} = \overline{\kon}\left(\frac{\Cai}{\widehat{\Caift}}\right)^{\ntrpn}(1-\trpn)-\koff\trpn 
+\end{equation}
+
+\noindent
+To simplify notation, we will keep using $\kon$ for $\overline{\kon}$ and $\Caift$ for $\widehat{\Caift}$, although it is worth noting that $\Caift$ is now given in $\SI{}{\micro\Molar}^{1-\frac{1}{\ntrpn}}$ units.
+
+
+%
+%
+%
+\subsection{The force-calcium relationship}
+The steady-state solutions of Equations~\eqref{eq:landodesys1mod}--\eqref{eq:landodesys2} are:
+%
+\begin{equation}\label{eq:landodesys1_ss}
+    \trpn_{ss} = \dfrac{\left(\dfrac{\Cai}{\Caift}\right)^{\ntrpn}}{\dfrac{\koff}{\kon}+\left(\dfrac{\Cai}{\Caift}\right)^{\ntrpn}}
+\end{equation}
+%
+\begin{equation}\label{eq:landodesys2_ss}
+    \xb_{ss} = \frac{(\trpn)^{\nxb}}{(\trpnf)^{\nxb}+(\trpn)^{\nxb}}
+\end{equation}
+
+\noindent
+In the case of isometric force studies, the length- ($h(\lambda)$) and velocity- ($g(Q)$) dependence terms equal to $1$, and the steady-state force is given by:
+%
+\begin{equation}\label{eq:landssforce}
+    F = \tref\cdot \xb_{ss}
+\end{equation}
+
+\noindent
+Equation~\eqref{eq:landssforce} can be re-written in a more classical form as
+%
+\begin{equation}\label{eq:forcess}
+    \frac{F}{F_0} = \frac{x^{h(x)}}{1+x^{h(x)}}\,,\quad\text{with}\quad x:=\frac{\Cai}{\ecf}
+\end{equation}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $F_0$  & reference force ($=\tref$) \\
+    $h(x)$ & Hill coefficient \\
+    $\ecf$ & half-maximal effective concentration
+\end{tabular}
+
+\vspace{0.3cm}\noindent
+The Hill coefficient $h(x)$ has the following form:
+%
+\begin{equation}
+    h(x) = \nxb\left[\ntrpn-\log_{x}{\left(1-\trpnf(1-x^{\ntrpn})\right)}\right]
+\end{equation}
+
+\noindent
+while the the half-maximal effective concentration $\ecf$ is given as a function of five model parameters:
+%
+\begin{equation}\label{eq:ec50}
+    \ecf = \Caift\left(\frac{\koff}{\kon}\frac{\trpnf}{1-\trpnf}\right)^{1/\ntrpn}
+\end{equation}
+
+By construction, the Land et al.~\cite{Land:2012} model has a biphasic Hill coefficient. To simplify the analysis, we approximated the steady-state force by characterising $F$ using a single Hill coefficient value $h$ defined as the slope at half-maximal activation:
+%
+\begin{equation}\label{eq:h}
+    h := \lim_{x\to1}h(x) = \nxb\ntrpn(1-\trpnf)
+\end{equation}
+
+\noindent
+As a result, the Hill coefficient does not depend on $\Cai$ and is a function of three model parameters. Using logarithmically-spaced calcium values, Equation~\eqref{eq:forcess} becomes
+%
+\begin{align}\label{eq:FpCa}
+    & \frac{F}{F_0} = \frac{1}{1+10^{h(\pCaf-\pCa)}}\,,\quad\text{with} \\
+    & \pCa:=-\log{\Cai} \\
+    & \pCaf:=-\log{\ecf}
+\end{align}
+
+\noindent
+Equation~\eqref{eq:FpCa} takes the name of \textit{force-pCa} (\acs{F-pCa}) \textit{curve}.
+
+
+%
+%
+%
+\section{Tissue model}
+We modelled passive material properties using the transversly isotropic cardiac strain energy function proposed by Guccione et al.~\cite{Guccione:1991}:
+%
+\begin{align}\label{eq:guccstrainenergy}
+    &W = W_g(\mathbf{E})\,,\quad\text{with} \\
+    &W_g(\mathbf{E}) := \frac{1}{2}\,C_1\,(e^{Q(\mathbf{E})}-1) \\
+    &Q(\mathbf{E}) := b_f E_{\text{ff}}^2 + b_{ft}(2E_{\text{fs}}^2+2E_{\text{fn}}^2) + b_t(E_{\text{ss}}^2+E_{\text{nn}}^2+2\,E_{\text{sn}}^2)
+\end{align}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $\mathbf{E}$ & Green strain tensor (introduced in Section~\ref{sec:tissue_mech_math_modelling}) \\
+    $C_1$ & scaling coefficient (representing an overall tissue stiffness) \\
+    $b_f,\,b_{ft},\,b_t$ & tissue mechanical response in the fibre, \\ & fibre-transverse shear and transverse planes \\
+\end{tabular}
+
+\vspace{0.3cm}\noindent
+Moreover, cardiac tissue was assumed to be fully incompressible. This was enforced by expanding the strain-energy function in equation~\eqref{eq:guccstrainenergy} with a Lagrange multiplier scheme in combination with an incompressibility penalty~\cite{Land:2015*b}:
+%
+\begin{align}\label{eq:landstrainenergy}
+    &W = W_g(\mathbf{E}) - p(J - 1) + \frac{\kappa}{2}(J - 1)^2\,,\quad\text{with}\quad J:=\text{det}(\mathbf{F}) \\
+    &\text{and with constraint:}\quad J=1
+\end{align}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $p$ & hydrostatic pressure \\
+    $\kappa$ & penalty parameter \\
+    $\mathbf{F}$ & deformation gradient tensor (introduced in Section~\ref{sec:tissue_mech_math_modelling})
+\end{tabular}
+
+
+%
+%
+%
+\section{Boundary conditions}
+We applied spatial boundary conditions to the mesh throughout all the mechanics solution process. Specifically, we constrained all the ventricles basal plane mesh nodes along the apex-base axis, and allowed no movement along any direction one mesh node on the interior LV wall. This constraint prevented free rotation and translation without limiting the deformation~\cite{Land:2012}.
+
+\vspace{0.2cm}
+We also set hemodynamic boundary conditions to control blood flow and pressures at the computational domain boundaries, thereby coupling the biventricular heart with the rest of the body circulatory system. We used a three-element Windkessel model~\cite{Westerhof:1971} to regulate ejection, and we used the Windkessel model generalised formulation (equation~\eqref{eq:windkgeneral}) to regulate the other phases of the cardiac cycle, namely initial preload filling, isovolumetric contraction, isovolumetric relaxation and diastolic filling, as described in Section~\ref{sec:hemodynamics_math_modelling}.
+
+
+%
+%
+%
+\section{Electrical activation}
+The calcium transient was assumed not to vary spatially and it homogeneously activated contraction throughout the ventricular walls. Previous heart models
+have shown that heterogeneous activation patterns have negligible impact in the small rat heart [REF], and investigating those was out of the scope of this project.

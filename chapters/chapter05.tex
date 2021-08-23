@@ -1,0 +1,145 @@
+%==============================================================================
+\chapter{In silico mapping drug effects on sarcomere dynamics to whole-organ 
+function and back again: omecamtiv mecarbil case study}\label{cha:chapter5}
+%==============================================================================
+%
+%
+%
+% Omecamtiv mecarbil (OM) is a cardiac myosin activator developed as a treatment of heart failure. OM acts on cross-bridge formation without disrupting intracellular calcium homeostasis. OM effects are extensively characterised both \textit{in vitro} and \textit{in vivo} yet how these mechanistically translate from the sarcomere to whole-heart function is not fully understood. We employed a $3$D biventricular contraction model of a healthy rat heart that was fitted to anatomic, structural, and hemodynamic and volumetric functional data. The model incorporates pre-load, after-load, fibre orientation, passive material properties, anatomy, calcium transients, and thin and thick filament dynamics. We identified $4$ sarcomere model parameters that reflect cross-bridge behavior. Gaussian process emulators (GPEs) were trained to map these parameters to pressure- and volume-based indexes of left ventricular (LV) function. We constrained the $4$-parameter space using preclinical OM data, either ($1$) \textit{in vivo} whole-heart hemodynamics data (using the Bayesian history matching technique), or ($2$) \textit{in vitro} force-pCa measurements. The OM-compatible sarcomere parameter space from case ($1$) was used to directly calculate force-pCa curves, while the one resulting from case ($2$) was mapped to the LV indexes using the trained GPEs. We found that our mapping from LV features to force-pCa and vice versa was in agreement with experimental data. In addition, our simulations supported the latest evidence that OM indirectly alters thin filament calcium sensitivity. Our work demonstrates how quantitative mapping from cellular to whole-organ level can be used to improve our understanding of drug action mechanisms.
+
+% %
+% %
+% %
+% \section{Introduction}
+% Heart failure (HF) is a leading cause of hospitalisation worldwide, with more than one million admissions annually in the US and Europe~\cite{Benjamin:2018}. However, the treatment options are limited and, therefore, new pharmacotherapies are continuously sought. HF pathways can involve impaired cellular function and propagate up to the whole-organ dysfunction. Multi-scale contraction modelling represents a useful tool for understanding the underlying mechanisms and possibly identifying targets in these pathways.
+
+% Building on a previously developed multi-scale rat bi-ventricle mechanics modelling framework~\cite{Longobardi:2020}, we can investigate drug mechanisms of action and better understand the mechanistic processes linking cellular and whole-heart contraction. For this case study, we chose omecamtiv mecarbil (OM), a novel drug currently in Phase $3$ clinical trial~\cite{Teerlink:2021} for treating HF. OM is a selective allosteric cardiac myosin modulator. It increases the rate of cross-bridge cycling by accelerating phosphate release~\cite{Malik:2011}, without disrupting intracellular calcium dynamics~\cite{Horvath:2017}. Recently, OM was shown to enhance the duty ratio, resulting in increased calcium sensitivity and slowed force development~\cite{Swenson:2017, Kampourakis:2018}.
+
+% This paper outlines our methodology of incorporating OM into our model, that consists of calibrating the cellular model using \textit{in vitro} data from skinned cellular and trabecular preparations in OM-containing solutions~\cite{Nagy:2015,Kampourakis:2018,Kieu:2019}, and validating the biventricular multi-scale contraction model using pressure-volume measurements from \textit{in vivo} whole-heart studies in healthy animals with OM~\cite{Bakkehaug:2015}. Our simulation results are consistent with the available experimental data on OM and support the hypothesis (e.g.~\cite{Swenson:2017}) that OM affects the thin filament.
+
+
+% \begin{table}
+%     \myfloatalign
+%     \caption{Land et al.~\cite{Land:2012} model parameters with Longobardi et al.~\cite{Longobardi:2020} baseline values.}\label{tab:landmodelparams}
+%     \begin{tabular}{l|l|l}
+%         \hline
+%         \textbf{Parameter} & \textbf{Definition} & \textbf{Value} \\
+%         \hline
+%         $\Caif$ & $\Ca$ thin filament sensitivity & $\SI{2.1708}{\micro\Molar\tothe{1-1/\ntrpn}}$ \\
+%         $\beta_1$ & phenomenological tension length & $\SI{-1.5}{}$ \\
+%         \phantom{$\beta_1$} & -dependence scaling factor & \phantom{$\SI{-1.5}{}$} \\
+%         $\ntrpn$ & $\Ca$-TnC binding degree of cooperativity & $\SI{2.0}{}$ \\
+%         $\kon$ & binding rate of $\Ca$ to TnC & $\SI{0.1}{\per\micro\Molar\per\milli\second}$ \\
+%         $\koff$ & unbinding rate of $\Ca$ from TnC & $\SI{0.0515}{\per\milli\second}$ \\
+%         $\nxb$ & cross-bridge formation degree of cooperativity & $\SI{5.0}{}$ \\
+%         $\kxb$ & cross-bridges cycling rate & $\SI{0.0172}{\per\milli\second}$ \\
+%         $\trpnf$ & fraction of $\Ca$-TnC bounds for half-maximal & $\SI{0.35}{}$ \\
+%         \phantom{$\trpnf$} & cross-bridges activation & \phantom{$\SI{0.35}{}$} \\
+%         $\tref$ & maximal reference tension & $\SI{156.067}{\kilo\pascal}$ \\
+%         \hline
+%     \end{tabular}
+% \end{table}
+
+% %
+% %
+% %
+% \subsection{Sarcomere parameter space}\label{subsec:ommodelling}
+% We modelled the OM effect at the sarcomere level by altering parameters that are specifically responsible for cross-bridge dynamics. Parameters regulating $\Ca$ binding to TnC, namely $\Caif$, $\beta_1$, $\ntrpn$, $\kon$, $\koff$, were kept fixed. As OM increases binding of cross-bridges, we considered the parameters $\nxb$, $\trpnf$, $\kxb$ and  $\tref$ that represent cross-bridge binding cooperativity, the number of cross-bridges bound as $\Ca$ binds to troponin, the rate of cross-bridge binding and the  force generated by bound cross-bridges, respectively.
+
+% %
+% %
+% %
+% \subsection{Mapping sarcomere parameters to whole-organ function}\label{subsec:mappingom}
+% To quantitatively link sarcomere properties to whole-organ function, we used a previously fitted $3$D biventricular contraction model of a healthy rat heart~\cite{Longobardi:2020}. The model simulation outputs of the LV contractile function can be described using $14$ features (Table~\ref{tab:lvfeatures}). We can thus treat the full model as a multi-scale map from sarcomere input parameters to LV output features.
+
+% %
+% %
+% %
+% \subsection{Surrogate mapping}
+% To overcome the computational burden of simulating the full model, we replaced the multi-scale map with a probabilistic surrogate based on Gaussian process emulation (GPE) ~\cite{Longobardi:2020}. Briefly, we sampled $4096$ points from a Latin hypercube design in the $4$-dimensional sarcomere parameter space with initial ranges: $\nxb\in[0.90,\,7.05]$, $\trpnf\in[0.05,\,0.50]$, $\kxb\in[0.0086,\,0.0258]$ and $\tref\in[109.25,\,202.89]$. These were set as the union of a $50\%$ perturbation around reference parameter values and the range of parameter values inferred from \textit{in vitro} force-pCa data of skinned rat myocyte preparations~\cite{Nagy:2015, Kampourakis:2018, Kieu:2019} (see Section~\ref{subsec:case2} for details). The full model was run at these points and the successfully completed simulations formed the training dataset ($1189$ points). Univariate GPEs were then trained with a $5$-fold cross-validation to predict each of the $14$ LV output features. The accuracy of each of the resulting $14$ trained GPEs was evaluated using the $R^2$-score regression metric. The resulting mean cross-validation $R^2$ test score was $>0.98$ for all the GPEs.
+
+% \begin{figure}[hbt!]
+%     \myfloatalign
+%     \includegraphics[width=\textwidth]{figures/chapter05/gsa_om.pdf}
+%     \caption{Bellazi.}
+%     \label{fig:omgsa}
+% \end{figure}
+
+
+% %
+% %
+% %
+% \section{Results}
+% %
+% %
+% %
+% \subsection{Inferring OM effects on the sarcomere from \textit{in vivo} \\ whole-organ hemodynamics data}\label{subsec:case1}
+% We did not have \textit{in vivo} measurements of OM effects on rat cardiac hemodynamics, so qualitative observations (Table~\ref{tab:pigdata}) from a healthy pig study were used~\cite{Bakkehaug:2015}. We aimed to match significant changes in hemodynamics from baseline after OM administration and keep all other features constant. Changes in parameters that could recover the desired hemodynamic changes were determined by using the available GPEs to predict LV features' values at $400,000$ input parameter points sampled using a Latin hypercube design over the training dataset's ranges. A single iteration of Bayesian history matching (HM) was then performed with an implausibility threshold set to $1.5$ (see~\cite{Longobardi:2020} for more details), that identified $3,469$ points (corresponding to $\SI{0.8672}{\percent}$ of the initial space) as non-implausible for replicating the organ-scale effects of OM administration (Fig.~\ref{fig:wave0}). We predicted the intact steady-state force-pCa curves for each of these parameter sets by running the cellular contraction model and derived the $\pCaf$ and $h$ values from the curves. The median predicted changes in the intact force-pCa curves following OM administration were then compared with measured \cite{Nagy:2015, Kampourakis:2018, Kieu:2019} changes in force-pCa curves from skinned rat preparations in OM-containing solutions (Fig.~\ref{fig:wave0mappingtofpCa}) and found to be in qualitative agreement. 
+
+% \begin{table}
+% 	\myfloatalign
+% 	\caption{Experimental values to match. Values are given as percentage change from healthy, reference experimental mean values.}\label{tab:pigdata}
+% 	\begin{tabular}{@{}lrr|llrr@{}}
+% 	\hline
+% 	\textbf{Label} & \textbf{Exp. mean} & \textbf{Exp. std} & $\,\,$ & \textbf{Label} & \textbf{Exp. mean} & \textbf{Exp. std} \\ \hline
+% 	$\textrm{SV}$ & $\SI{100.00}{\percent}$ & $\SI{0.00}{\percent}$ & $\,\,$ &	$\textrm{Tdiast}^*$ & $\SI{88.24}{\percent}$ & $\SI{16.97}{\percent}$ \\
+% 	$\textrm{EDV}^*$ & $\SI{87.14}{\percent}$ & $\SI{17.14}{\percent}$ & $\,\,$ & $\textrm{ET}^*$ & $\SI{116.16}{\percent}$ & $\SI{9.61}{\percent}$ \\
+% 	$\textrm{ESV}^*$ & $\SI{76.92}{\percent}$ & $\SI{20.51}{\percent}$ & $\,\,$ & $\textrm{dP/dt}_{\textrm{max}}^*$ & $\SI{121.66}{\percent}$ & $\SI{35.53}{\percent}$ \\
+% 	$\textrm{EF}$ & $\SI{100.00}{\percent}$ & $\SI{0.00}{\percent}$ & $\,\,$ & $\textrm{dP/dt}_{\textrm{min}}$ & $\SI{100.00}{\percent}$ & $\SI{0.00}{\percent}$ \\ \hline
+% 	\end{tabular}
+% \end{table}
+
+% \begin{figure}[hbt!]
+%     \myfloatalign
+%     \includegraphics[width=\textwidth]{figures/chapter05/Fig1.png}
+%     \caption{First iteration of HM procedure. The full parameter space is constrained according to an implausibility criterion which evaluates how plausible is a point to yield model predictions that are matching experimental observations.}
+%     \label{fig:wave0}
+% \end{figure}
+
+% \begin{figure}[hbt!]
+%     \myfloatalign
+%     \includegraphics[width=\textwidth]{figures/chapter05/Fig2.pdf}
+%     \caption{Predicted \textit{in silico} OM effects on the sarcomere as described by force-pCa curves calculated from the constrained, OM-compatible sarcomere parameter space and by the related percentage changes of $\pCaf$ and $h$ values from control values. Experimental uncertainty ranges are displayed (the middle and far right panels) as shaded regions using percentage-from-control mean $\pm$ standard deviation values for both the healthy (gray) and $+$OM (orange) cases.}
+%     \label{fig:wave0mappingtofpCa}
+% \end{figure}
+
+% %
+% %
+% %
+% \subsection{Inferring OM effects on whole-organ function from \textit{in vitro} \\ force-pCa measurements}\label{subsec:case2}
+% The effect of OM on force-pCa measurements in healthy rats' skinned myocytes preparations were taken from the literature ~\cite{Nagy:2015, Kampourakis:2018, Kieu:2019}. To map skinned experimental observations to intact/\textit{in vivo} results we scaled our reference $\pCaf$ and $h$ values by the experimentally observed percentage changes $P_{\textrm{shift}}$ and $P_{\textrm{slope}}$, respectively, to estimate the \textit{in vivo} change ($\Delta$) of $\pCaf$ and $h$ values due to OM. We indicate \textit{in vivo} model parameters in the presece of OM with a superscript OM. We define and calculate values for $\alpha,\,\beta\in\mathbb{R}$ such that  the parameters $\trpnf^{\textrm{OM}} := \alpha\cdot \trpnf$ and $\nxb^{\textrm{OM}} := \beta\cdot \nxb$ achieved the desired change in the force-pCa curve encoded by a given combination of $\Delta\pCa$ and $\Delta h$. To determine the plausible values of $\trpnf^{\textrm{OM}}$ and $\nxb^{\textrm{OM}}$, we sampled $100,000$ points from a $2$D Latin hypercube design using the experimentally observed ranges for $P_{\textrm{shift}}\in [0.0085,\,0.0833]$ and $P_{\textrm{slope}}\in [-0.7282,\,-0.2470]$ and determined the corresponding pair of scaling coefficients $(\alpha,\,\beta)$ for each point to define a set of $100,000$ plausible values of $(\nxb^{\textrm{OM}},\, \trpnf^{\textrm{OM}})$. Finally, we used the previously trained GPEs to predict $\textrm{EDV}$, $\textrm{ESV}$, $\textrm{ET/Tdiast}$ and $\textrm{dP/dt}_\textrm{max}$ for the plausible values of $(\nxb^{\textrm{OM}},\, \trpnf^{\textrm{OM}})$, while keeping the values of $\kxb$ of $\tref$, where we did not have data, fixed to control values. Fig.~\ref{fig:lvfeatsdistr} shows that the inferred median effects of these changes to $\pCaf$ and $h$ due to OM on whole-organ function show a qualitative agreement in the direction of change for all the $4$ LV features reported to be significantly altered by OM in the pig study~\cite{Bakkehaug:2015}.
+
+% \begin{figure}[hbt!]
+%     \myfloatalign
+%     \includegraphics[width=\textwidth]{figures/chapter05/Deltas_and_params_with_OM_blue.png}
+%     \caption{Predicted \textit{in silico} OM effects on whole-heart function as percentage changes of LV features' values from control values. Experimental uncertainty ranges are displayed as shaded regions using percentage-from-control mean $\pm$ standard deviation values for both the healthy (gray) and $+$OM (orange) cases.}
+%     \label{fig:deltas}
+% \end{figure}
+
+% \begin{figure}[hbt!]
+%     \myfloatalign
+%     \includegraphics[width=\textwidth]{figures/chapter05/Fig3_mod.pdf}
+%     \caption{Predicted \textit{in silico} OM effects on whole-heart function as percentage changes of LV features' values from control values. Experimental uncertainty ranges are displayed as shaded regions using percentage-from-control mean $\pm$ standard deviation values for both the healthy (gray) and $+$OM (orange) cases.}
+%     \label{fig:lvfeatsdistrmod}
+% \end{figure}
+
+% \begin{figure}[hbt!]
+%     \myfloatalign
+%     \includegraphics[width=\textwidth]{figures/chapter05/Fig3.pdf}
+%     \caption{Predicted \textit{in silico} OM effects on whole-heart function as percentage changes of LV features' values from control values. Experimental uncertainty ranges are displayed as shaded regions using percentage-from-control mean $\pm$ standard deviation values for both the healthy (gray) and $+$OM (orange) cases.}
+%     \label{fig:lvfeatsdistr}
+% \end{figure}
+
+% %
+% %
+% %
+% \section{Discussion}
+% We have demonstrated that our virtual rat heart framework~\cite{Longobardi:2020} can recapitulate the effects of OM on cardiac contraction and that multi-scale cardiac mechanics models can be used to infer the impact of drugs on cellular function from whole-organ observations. Calibration of model parameters to both cellular and whole-organ data on OM gives us additional insight into the mechanistic processes that link cellular and whole-heart contraction. Our results demonstrate that in order to reproduce available data, OM requires to alter the function of both thick and thin filaments. The OM effect on thick filament (the direct site of action of OM) is essential to reproduce OM effect on tension in whole-heart. Simulations show that the OM effect on force-pCa curves involve changes in thin filament function, namely by altering calcium myofilament sensitivity, which supports the recent hypothesis of the effect OM on thin filaments~\cite{Swenson:2017}.
+
+% Limitations of this work include: (1) Both thin and thick filament dynamics are modeled using a simplified representation of the sarcomere, without a detailed mechanistic description of its components. Specifically, the cross-bridge kinetics is described by a two-state model where the strongly-/weakly-/un-bound states are collapsed into a single state. While more detailed models exist~\cite{Land:2015}, their parameters are not necessarily constrained using experimental data due to difficulties in measuring subcellular processes. (2) As a result of (1), the OM effect is modelled using $2$- to $4$-parameters linked to the cross-bridge cycling but not directly incorporating the OM mechanism of action (which is to increase the rate of myosin-head attachment to actin~\cite{Malik:2011}). (3) OM whole-organ data in healthy animals is limited. To the best of our knowledge, the \textit{in vivo} pig hemodynamics data~\cite{Bakkehaug:2015} used to constrain the model parameters is the only available non-human study of OM effect on LV function with therapeutic doses in healthy animals. (4) Differences across species and in acute vs chronic OM administration are not explored. For example, studies in healthy volunteers~\cite{Teerlink:2011} suggest an increase in SV and EF following OM treatment as a result of the overall systolic function improvement. However, we only mapped LV features' values that were reported to significantly change from control after OM administration~\cite{Bakkehaug:2015}, thus our results excluded cases when change in SV and EF features was observed. Additional studies are needed to investigate species differences and chronic effect of OM. (5) We have shown that the median model predictions qualitatively match the observed changes due to OM at the tissue and whole-organ scale. However, the model does not quantitatively match experimental observations. Specifically, there are some non-implausible Hill coefficients in Fig.~\ref{fig:wave0mappingtofpCa} that are increased and so do not qualitatively match the experimentally observed changes. Similarly, in some cases $\textrm{ET}/\textrm{Tdiast}$ is predicted to decrease in Fig.~\ref{fig:lvfeatsdistr}, in contrast to the experimental observations. There are four potential contributors to this discrepancy. First, the tissue and organ drug effects are taken from different species. Second, the reference model parameters and anatomy are determined from a distinct set of experiments from the OM measurements. Third, the model is a simplification and may be missing some features. Forth, the experiments are performed in skinned preparations, while the model replicates intact tissue. This likely explains the discrepancy in predicted change in Hill coefficient, which is sensitive to the skinning process. Finally, we fitted the model to the data using an emulator, which itself has uncertainty, and this can increase the overall uncertainty. A self-consistent multi-scale data of the effects of OM on cell, tissue and organ scales would allow us to better identify and address the source of these discrepancies.
+
+% %
+% %
+% %
+% \section{Conclusions}
+% We demonstrated how multi-scale heart contraction models can aid our understanding of the mechanistic links between cellular and whole-organ function and can help in interpreting skinned experimental preparations in the context of \textit{in vivo} whole-heart function.
