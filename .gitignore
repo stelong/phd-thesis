@@ -14,3 +14,5 @@ chapters/*.aux
 *.out
 *.toc
 *.xml
+
+thesis.pdf
