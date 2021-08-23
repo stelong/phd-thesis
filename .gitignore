@@ -33,4 +33,5 @@
 *.vrb
 *.xdy
 *.tdo
-ClassicThesis.pdf
+frontback/*.aux
+chapters/*.aux
