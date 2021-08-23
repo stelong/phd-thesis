@@ -518,7 +518,7 @@ Because of the known identity $\mathbb{V}[Y] = \mathbb{E}[Y^2] - \mathbb{E}^2[Y]
 \end{equation}
 
 \noindent
-where the second term is equal to $\mathbb{E}^2[Y]2$, while the first term can be rewritten by expressing the integral argument as an integral in $2(D - 1)$ dimensions:
+where the second term is equal to $\mathbb{E}^2[Y]$, while the first term can be rewritten by expressing the integral argument as an integral in $2(D - 1)$ dimensions:
 %
 \begin{align}
     \mathbb{E}^2_{\mathbf{X}_{\sim i}}[Y|X_i] &= \int f(\mathbf{X}_{\sim i},\, X_i)d\mathbf{X}_{\sim i}\,\cdot\,\int f(\mathbf{X}_{\sim i},\, X_i)d\mathbf{X}_{\sim i} \\
@@ -554,7 +554,7 @@ Estimators that have been developed to replace the brute force MC estimator comm
 \end{equation}
 
 \noindent
-Finally, additional $D$ matrices of size $N\times D$ are also built starting from matrix $\mathbf{A}$ and each time replacing a different $i$-th column with the $i$-th column from matrix $\mathbf{B}$:
+Finally, additional $D$ matrices of size $N\times D$ are also built starting from matrix $\mathbf{A}$, by replacing each time a different $i$-th column with the $i$-th column from matrix $\mathbf{B}$:
 %
 \begin{align}
     & \mathbf{A}_{\mathbf{B}}^{(i)} := [A_1,\,\dots,\,A_{i-1},\,B_i,\,A_{i+1},\,\dots,\,A_{D}]\,, \\
@@ -562,22 +562,33 @@ Finally, additional $D$ matrices of size $N\times D$ are also built starting fro
 \end{align}
 
 \noindent
-In total, only $N\times (D + 2)$ model evaluations, corresponding to $f(\mathbf{A})$, $f(\mathbf{B})$ and $f(\mathbf{A}_{\mathbf{B}}^{(i)}),\,i=1,\dots,D$, will be needed to estimate Sobol' indices, compared to the $2\times D\times N^2$ for the brute force approach. parla degli stimatori che hai usato, prima fai vedere come usare quegli integrali e poi vaffanculo con i gpe
-
-\vspace{0.5cm}
-In order to understand the input parameters impact on the output features total variance we performed a global sensitivity analysis. Model outputs sensitivity to parameters was characterised by Sobol' first-order and total effects~\cite{Kucherenko:2005}. These indexes were estimated using the Saltelli method~\cite{Saltelli:2010} with SaLib Python library~\cite{Herman:2017}. gpytGPE tool~\cite{Longobardi:2021} was used to incorporate full GPE's posterior distribution samples to account for emulators uncertainty in Sobol' indexes estimates. Parameters whose resulting indexes were below the threshold $0.01$ were determined to have negligible effect.
-
+In total, only $N\times (D + 2)$ model evaluations, corresponding to $f(\mathbf{A})$, $f(\mathbf{B})$ and $f(\mathbf{A}_{\mathbf{B}}^{(i)}),\,i=1,\dots,D$, will be needed to estimate the Sobol' sensitivity indices, compared to the $2\times D\times N^2$ for the brute force approach. In fact, the two integrals appearing in the numerator of equations~\eqref{eq:mainintform}--\eqref{eq:totalintform} can be approximated by:
+%
 \begin{align}
-    & \mathbf{X} = [X_1,\dots,\,X_d] \in\mathbb{R}^{n\,\times\,d}\,,\qquad Y = f(X_1,\dots,\,X_d) \\
-    & S_i = \frac{\mathbb{V}_{X_i}(\mathbb{E}_{\mathbf{X}_{\sim i}}(Y|X_i))}{\mathbb{V}(Y)} \\
-    & S_{Ti} = \frac{\mathbb{E}_{\mathbf{X}_{\sim i}}(\mathbb{V}_{X_i}(Y|\mathbf{X}_{\sim i}))}{\mathbb{V}(Y)} \\
-    & \mathbb{V}_{X_i}(\mathbb{E}_{\mathbf{X}_{\sim i}}(Y|X_i))\,\,\approx\,\,\frac{1}{n}\sum_{j=1}^{n}f(\mathbf{B})_j\,(f(\mathbf{A}_{\mathbf{B}}^{(i)})_j - f(\mathbf{A})_j) \\
-    & \mathbb{E}_{\mathbf{X}_{\sim i}}(\mathbb{V}_{X_i}(Y|\mathbf{X}_{\sim i}))\,\,\approx\,\,\frac{1}{2n}\sum_{j=1}^{n}(f(\mathbf{A})_j-f(\mathbf{A}_{\mathbf{B}}^{(i)})_j)^2 \\
-    & \,,\quad \text{for}\,\,i=1,\dots,d \\
+    & (S_{i})\quad \int\int f(\mathbf{X}_{\sim i},\, X_i)f(\mathbf{X'}_{\sim i},\, X_i)d\mathbf{X}d\mathbf{X'}_{\sim i} \approx \frac{1}{N}\sum_{j=1}^{N} f(\mathbf{B})_{j}f(\mathbf{A}_{\mathbf{B}}^{(i)})_{j} \\
+    & (S_{Ti})\quad \int\int f(\mathbf{X}_{\sim i},\, X_i)f(\mathbf{X}_{\sim i},\, X_i')d\mathbf{X}dX' \approx \frac{1}{N}\sum_{j=1}^{N} f(\mathbf{A})_{j}f(\mathbf{A}_{\mathbf{B}}^{(i)})_{j}
 \end{align}
+
+
+\noindent
+We will make use of the Sobol-Saltelli~\cite{Saltelli:2010} estimator for the main effect's and of the Jansen [REF] estimator for the total effect's numerators calculation:
+%
+\begin{align}\label{eq:gsaestimators}
+    & \mathbb{V}_{X_i}[\mathbb{E}_{\mathbf{X}_{\sim i}}[Y|X_i]] \approx \frac{1}{N}\sum_{j=1}^{N}f(\mathbf{B})_j\,(f(\mathbf{A}_{\mathbf{B}}^{(i)})_j - f(\mathbf{A})_j) \\
+    & \mathbb{E}_{\mathbf{X}_{\sim i}}[\mathbb{V}_{X_i}[Y|\mathbf{X}_{\sim i}]] \approx \frac{1}{2N}\sum_{j=1}^{N}(f(\mathbf{A})_j-f(\mathbf{A}_{\mathbf{B}}^{(i)})_j)^2 \\
+    & \text{for}\,\,i=1,\,\dots,\,D
+\end{align}
+
+\noindent
+while for both the effects' denominators we will use the following estimate:
+%
+\begin{equation}
+    \mathbb{V}[Y] \approx \frac{1}{2N} \sum_{j=1}^{2N} f([A^\mathsf{T}\,|\,B^\mathsf{T}]^\mathsf{T})_j
+\end{equation}
 
 
 %
 %
 %
 \subsection{Emulator-based estimates}
+In order to understand the input parameters impact on the output features total variance we performed a global sensitivity analysis. Model outputs sensitivity to parameters was characterised by Sobol' first-order and total effects~\cite{Kucherenko:2005}. These indexes were estimated using the Saltelli method~\cite{Saltelli:2010} with SaLib Python library~\cite{Herman:2017}. gpytGPE tool~\cite{Longobardi:2021} was used to incorporate full GPE's posterior distribution samples to account for emulators uncertainty in Sobol' indexes estimates. Parameters whose resulting indexes were below the threshold $0.01$ were determined to have negligible effect.
