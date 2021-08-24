@@ -468,7 +468,7 @@ and so forth for higher orders, where $\mathbf{X}_{\sim i}$ indicates all compon
     \begin{split}
         & V_{ij} = \mathbb{V}[f_{ij}] = \mathbb{V}_{X_iX_j}[\mathbb{E}_{\mathbf{X}_{\sim ij}}[Y|(X_i,\,X_j)]]\,\,+ \\
         & - \mathbb{V}_{X_i}[\mathbb{E}_{\mathbf{X}_{\sim i}}[Y|X_i]] - \mathbb{V}_{X_j}[\mathbb{E}_{\mathbf{X}\sim j}[Y|X_i]]
-    \end{split} \\
+    \end{split} \label{eq:varelements}\\
     &\dots
 \end{align}
 
@@ -570,8 +570,8 @@ In total, only $N\times (D + 2)$ model evaluations, corresponding to $f(\mathbf{
 \end{align}
 
 
-\noindent
-We will make use of the Sobol-Saltelli~\cite{Saltelli:2010} estimator for the main effect's and of the Jansen [REF] estimator for the total effect's numerators calculation:
+\vspace{0.2cm}
+We will make use of the Sobol-Saltelli~\cite{Saltelli:2010} estimator for the main effect's and of the Jansen \todo{REF} estimator for the total effect's numerators calculation:
 %
 \begin{align}\label{eq:gsaestimators}
     & \mathbb{V}_{X_i}[\mathbb{E}_{\mathbf{X}_{\sim i}}[Y|X_i]] \approx \frac{1}{N}\sum_{j=1}^{N}f(\mathbf{B})_j\,(f(\mathbf{A}_{\mathbf{B}}^{(i)})_j - f(\mathbf{A})_j) \\
@@ -582,13 +582,64 @@ We will make use of the Sobol-Saltelli~\cite{Saltelli:2010} estimator for the ma
 \noindent
 while for both the effects' denominators we will use the following estimate:
 %
-\begin{equation}
+\begin{equation}\label{eq:varianceestimate}
     \mathbb{V}[Y] \approx \frac{1}{2N} \sum_{j=1}^{2N} f([A^\mathsf{T}\,|\,B^\mathsf{T}]^\mathsf{T})_j
 \end{equation}
+
+\noindent
+In addition, the initial matrix $\mathbf{M}$ will not be sampled uniformely in the unit hypercube $\Omega$, but it will be sampled in the same space using a low-discrepancy, quasi-random Sobol' sequence \todo{REF}, in order to obtain better estimates as described in~\cite{Saltelli:2010}. It is worth mentioning that every column of the obtained matrices $\mathbf{A}$ and $\mathbf{B}$ will be rescaled to the respective original interval $[p_i^{inf}, p_i^{sup}]$ of the component $X_i$ it represents, before calculating $f(\mathbf{A})$, $f(\mathbf{B})$ and $f(\mathbf{A}_{\mathbf{B}}^{(i)})s$. This is done by using the simple bijection:
+%
+\begin{align}
+    b \colon [0,\,1] &\to [p_i^{inf}, p_i^{sup}] \\
+    X_i &\mapsto (1 - X_i)\,p_i^{inf} + X_i\,p_i^{sup}
+\end{align}
+
+\vspace{0.2cm}
+Model components' second-order interactions are often of interest as well. These can be analysed by calculating Sobol' second-order effects which, by recalling equation~\eqref{eq:varelements}, are given by:
+%
+\begin{align}\label{eq:secondordereffects}
+    S_{ij} = \frac{V_{ij}}{\mathbb{V}[Y]}\,,\quad\text{for}\,\,i,j=1,\,\dots,\,D
+\end{align}
+
+\noindent
+The numerator in~\eqref{eq:secondordereffects} will be calculated using the Saltelli estimator proposed in~\cite{Saltelli:2002}:
+%
+\begin{equation}{}
+   V_{ij} \approx \frac{1}{N}\sum_{k}^{N}f(\mathbf{B}_{\mathbf{A}}^{(i)})_k\,f(\mathbf{A}_{\mathbf{B}}^{(j)})_k - f(\mathbf{A})_k\,f(\mathbf{B})_k
+\end{equation}
+
+\noindent
+while the denominator will be estimated again using~\eqref{eq:varianceestimate}.
 
 
 %
 %
 %
 \subsection{Emulator-based estimates}
-In order to understand the input parameters impact on the output features total variance we performed a global sensitivity analysis. Model outputs sensitivity to parameters was characterised by Sobol' first-order and total effects~\cite{Kucherenko:2005}. These indexes were estimated using the Saltelli method~\cite{Saltelli:2010} with SaLib Python library~\cite{Herman:2017}. gpytGPE tool~\cite{Longobardi:2021} was used to incorporate full GPE's posterior distribution samples to account for emulators uncertainty in Sobol' indexes estimates. Parameters whose resulting indexes were below the threshold $0.01$ were determined to have negligible effect.
+In order to understand the input parameters impact on the output features total variance we performed{} a global sensitivity analysis. Model outputs sensitivity to parameters was characterised by Sobol' first-order and total effects~\cite{Kucherenko:2005}. These indexes were estimated using the Saltelli method~\cite{Saltelli:2010} with SaLib Python library~\cite{Herman:2017}. gpytGPE tool~\cite{Longobardi:2021} was used to incorporate full GPE's posterior distribution samples to account for emulators uncertainty in Sobol' indexes estimates. Parameters whose resulting indexes were below the threshold $0.01$ were determined to have negligible effect.
+
+In Section 2(h) of the main manuscript, we mentioned that global sensitivity indices were estimated by neglecting the emulator's uncertainty and using the emulator's mean as a pointwise approximation of the model's output. This was addressed as a model limitation (discussed in Section 5) and partially motivated by the fact the emulator uncertainty around the predictions was small.
+
+\vspace{0.2cm}
+In this Section, we provide additional information to show that this choice does not affect the final sensitivity indices estimates.
+
+\vspace{0.2cm}
+The Sobol sensitivity indices were estimated using Saltelli method \cite{Saltelli2010} which efficiently estimates first- and second-order and total effects using full model evaluations at a specific set of points belonging to low-discrepancy quasi-random Sobol sequences. Without going into details, let's suppose that the Saltelli estimator can be described by a function $\mathcal{S}$ that takes as an input model $f$ evaluations $Y$ at specific points $X$ ($Y=f(X)$) and gives as an output the sensitivity indices $S_i,\,S_{ij},\,S_{T}$:
+
+\begin{equation}
+    Y\xrightarrow[]{\mathcal{S}(\cdot)} S_i,\,S_{ij},\,S_{Ti}
+\end{equation}
+
+In this study, we use the GPE posterior distribution to replace the function $f$ for Sobol' indices estimates calculation.
+
+\begin{equation}\label{eq:emulmean}
+    \mathbb{E}[\mathbf{f}_{emul}(X)]\xrightarrow[]{\mathcal{S}(\cdot)} S_i,\,S_{ij},\,S_{Ti}
+\end{equation}
+
+In order to show that small uncertainties do not affect sensitivity indices estimates, we performed an additional example simulation in which we took into account the emulator posterior variance in the estimation of the SHAM rat model ejection fraction (EF) global sensitivities to model parameters. This was performed by evaluating the Saltelli estimator $\mathcal{S}$ at full emulator posterior predictions $\hat{Y}$, which correspond to values randomly sampled from a multivariate normal distribution with mean vector given by the specific emulator of EF feature ($f_{emul,\,3}$) posterior mean $\boldsymbol{\mu}=\mathbb{E}[f_{emul,\,3}(X)]$, and covariance matrix given by the same emulator posterior covariance matrix $\Sigma=\textrm{Cov}[f_{emul,\,3}(X)]$, namely:
+
+\begin{equation}
+    \mathcal{N}(\boldsymbol{\mu},\,\Sigma)\sim\hat{Y}\xrightarrow[]{\mathcal{S}(\cdot)} S_i,\,S_{ij},\,S_{Ti}
+\end{equation}
+
+We sampled $1,000$ emulator posterior predictions ($\hat{Y}_k,\,\,\textrm{for}\,\,k=1,\dots,\,1000$) and we compared the obtained sensitivity indices $(S_i,\,S_{ij},\,S_{T})_k$ with the ones obtained when only the emulator posterior mean was used (equation~\eqref{eq:emulmean}). In Figure~\ref{fig:accounting4u}, each sensitivity index' distributions with $2$ STD are plotted against the single values obtained when the posterior mean only is run instead. We can see that the distributions' means are almost perfectly matching the single-valued effects for each sensitivity index. The similarities of the sensitivities is consistent with a limited impact of GPE uncertainties on GSA calculation.
