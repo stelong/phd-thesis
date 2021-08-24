@@ -247,7 +247,7 @@ where $\delta_{\mathbf{x},\,\mathbf{x}'}$ is the \textit{Kronecker delta}. The j
 
 \noindent
 and the GPE posterior distribution is therefore:
-\begin{equation}
+\begin{equation}\label{eq:gpepostdistr}
     \mathbf{f}_{*}|X_{*},\,X,\,\mathbf{y}\,\,\sim\,\,\mathcal{N}(\boldsymbol{\mu},\Sigma)
 \end{equation}
     
@@ -442,7 +442,7 @@ By assuming that for our specific biophysical system model $f$ (=$f_{simul}$) on
 \end{equation}
 
 \noindent
-If $f$ is square integrable over the unit hypercube $\Omega := [0,\,1]^{D}$, the decomposition~\eqref{eq:hdmr} is unique given that [Sobol1993]:
+If $f$ is square integrable over the unit hypercube $\Omega := [0,\,1]^{D}$, the decomposition~\eqref{eq:hdmr} is unique given that \todo{REF Sobol1993}:
 %
 \begin{align}\label{eq:integralformfi}
     & \int_0^1 f_{i_1,\,i_2,\,\dots,\,i_s}(X_{i_1},\,X_{i_2},\,\dots,\,X_{i_s})\,dX_{i_{w}} = 0\,,\quad\text{with} \\
@@ -595,51 +595,68 @@ In addition, the initial matrix $\mathbf{M}$ will not be sampled uniformely in t
 \end{align}
 
 \vspace{0.2cm}
-Model components' second-order interactions are often of interest as well. These can be analysed by calculating Sobol' second-order effects which, by recalling equation~\eqref{eq:varelements}, are given by:
+Model components' second-order interactions are often of interest as well. These can be analysed by calculating Sobol' second-order effects which, by recalling equation~\eqref{eq:varelements}, are defined as:
 %
 \begin{align}\label{eq:secondordereffects}
-    S_{ij} = \frac{V_{ij}}{\mathbb{V}[Y]}\,,\quad\text{for}\,\,i,j=1,\,\dots,\,D
+    S_{ij} := \frac{V_{ij}}{\mathbb{V}[Y]}\,,\quad\text{for}\,\,i,j=1,\,\dots,\,D
 \end{align}
 
 \noindent
 The numerator in~\eqref{eq:secondordereffects} will be calculated using the Saltelli estimator proposed in~\cite{Saltelli:2002}:
 %
-\begin{equation}{}
+\begin{equation}\label{eq:secondorderestimator}
    V_{ij} \approx \frac{1}{N}\sum_{k}^{N}f(\mathbf{B}_{\mathbf{A}}^{(i)})_k\,f(\mathbf{A}_{\mathbf{B}}^{(j)})_k - f(\mathbf{A})_k\,f(\mathbf{B})_k
 \end{equation}
 
 \noindent
-while the denominator will be estimated again using~\eqref{eq:varianceestimate}.
+while the denominator will be estimated again using~\eqref{eq:varianceestimate}. Notice that the cost for calculating Sobol' second-order sensitivity indices is $N\times (2D + 2)$ model evaluations, as we additionally need $f(\mathbf{B}_{\mathbf{A}}^{(i)})$ for $i=1,\,\dots,\,D$.
 
 
 %
 %
 %
 \subsection{Emulator-based estimates}
-In order to understand the input parameters impact on the output features total variance we performed{} a global sensitivity analysis. Model outputs sensitivity to parameters was characterised by Sobol' first-order and total effects~\cite{Kucherenko:2005}. These indexes were estimated using the Saltelli method~\cite{Saltelli:2010} with SaLib Python library~\cite{Herman:2017}. gpytGPE tool~\cite{Longobardi:2021} was used to incorporate full GPE's posterior distribution samples to account for emulators uncertainty in Sobol' indexes estimates. Parameters whose resulting indexes were below the threshold $0.01$ were determined to have negligible effect.
-
-In Section 2(h) of the main manuscript, we mentioned that global sensitivity indices were estimated by neglecting the emulator's uncertainty and using the emulator's mean as a pointwise approximation of the model's output. This was addressed as a model limitation (discussed in Section 5) and partially motivated by the fact the emulator uncertainty around the predictions was small.
-
-\vspace{0.2cm}
-In this Section, we provide additional information to show that this choice does not affect the final sensitivity indices estimates.
-
-\vspace{0.2cm}
-The Sobol sensitivity indices were estimated using Saltelli method \cite{Saltelli2010} which efficiently estimates first- and second-order and total effects using full model evaluations at a specific set of points belonging to low-discrepancy quasi-random Sobol sequences. Without going into details, let's suppose that the Saltelli estimator can be described by a function $\mathcal{S}$ that takes as an input model $f$ evaluations $Y$ at specific points $X$ ($Y=f(X)$) and gives as an output the sensitivity indices $S_i,\,S_{ij},\,S_{T}$:
-
-\begin{equation}
+Let's suppose that the considered estimators for Sobol' first- and second-order and total effects~\eqref{eq:gsaestimators}--\eqref{eq:varianceestimate}--\eqref{eq:secondorderestimator} can all be recapitulated in a single function $\mathcal{S}$ that takes as an input simulator $f_{simul}$ evaluations $Y$ at specific points $X$ ($Y=f_{simul}(X)$) and gives as an output the Sobol' sensitivity indices $S_i,\,S_{ij},\,S_{T}$:
+%
+\begin{equation}\label{eq:modelevalsgsa}
     Y\xrightarrow[]{\mathcal{S}(\cdot)} S_i,\,S_{ij},\,S_{Ti}
 \end{equation}
 
-In this study, we use the GPE posterior distribution to replace the function $f$ for Sobol' indices estimates calculation.
-
-\begin{equation}\label{eq:emulmean}
-    \mathbb{E}[\mathbf{f}_{emul}(X)]\xrightarrow[]{\mathcal{S}(\cdot)} S_i,\,S_{ij},\,S_{Ti}
+\noindent
+In this study, we use the full GPE posterior distribution $f_{emul}(X)$ as given in equation~\eqref{eq:gpepostdistr} to replace $f_{simul}$ for Sobol' indices estimates calculation. In particular, we will adopt two approaches. The first (and simpler) one consists in using the point-wise predictions given by the GPE posterior distribution expectation for estimating the Sobol' indices:
+%
+\begin{equation}\label{eq:emulmeangsa}
+    \mathbb{E}[f_{emul}(X)]\xrightarrow[]{\mathcal{S}(\cdot)} S_i,\,S_{ij},\,S_{Ti}
 \end{equation}
 
-In order to show that small uncertainties do not affect sensitivity indices estimates, we performed an additional example simulation in which we took into account the emulator posterior variance in the estimation of the SHAM rat model ejection fraction (EF) global sensitivities to model parameters. This was performed by evaluating the Saltelli estimator $\mathcal{S}$ at full emulator posterior predictions $\hat{Y}$, which correspond to values randomly sampled from a multivariate normal distribution with mean vector given by the specific emulator of EF feature ($f_{emul,\,3}$) posterior mean $\boldsymbol{\mu}=\mathbb{E}[f_{emul,\,3}(X)]$, and covariance matrix given by the same emulator posterior covariance matrix $\Sigma=\textrm{Cov}[f_{emul,\,3}(X)]$, namely:
+\noindent
+The second approach instead consists in randomly sampling points $\hat{Y}$ from $f_{emul}(X)$, which is a multivariate normal distribution, and use them to obtain many estimates of the Sobol' indices. This operation will take into account also the GPE posterior distribution covariance structure, and the resulting Sobol' sensitivity indices will be given as random variables
+%
+\begin{equation}\label{eq:emulpostsamplesgsa}
+    \left.
+        \begin{array}{ll}
+            & f_{emul}(X)\sim\hat{Y}_1\xrightarrow[]{\mathcal{S}(\cdot)} S_{i}^{1},\,S_{ij}^{1},\,S_{Ti}^{1} \\
+            & f_{emul}(X)\sim\hat{Y}_2\xrightarrow[]{\mathcal{S}(\cdot)} S_{i}^{2},\,S_{ij}^{2},\,S_{Ti}^{2} \\
+            & \vdots
+        \end{array}
+    \right\}S_i(\omega),\,S_{ij}(\omega),\,S_{Ti}(\omega)
+\end{equation}
 
+\noindent
+with sample space $\omega\in [0,\,1]$. We can finally use the expectation of these random variables as a sensitivity index in its common definition:
+%
 \begin{equation}
-    \mathcal{N}(\boldsymbol{\mu},\,\Sigma)\sim\hat{Y}\xrightarrow[]{\mathcal{S}(\cdot)} S_i,\,S_{ij},\,S_{Ti}
+    S_{i} = \mathbb{E}[S_i(\omega)],\quad S_{ij} = \mathbb{E}[S_{ij}(\omega)],\quad S_{Ti} = \mathbb{E}[S_{Ti}(\omega)]
 \end{equation}
 
-We sampled $1,000$ emulator posterior predictions ($\hat{Y}_k,\,\,\textrm{for}\,\,k=1,\dots,\,1000$) and we compared the obtained sensitivity indices $(S_i,\,S_{ij},\,S_{T})_k$ with the ones obtained when only the emulator posterior mean was used (equation~\eqref{eq:emulmean}). In Figure~\ref{fig:accounting4u}, each sensitivity index' distributions with $2$ STD are plotted against the single values obtained when the posterior mean only is run instead. We can see that the distributions' means are almost perfectly matching the single-valued effects for each sensitivity index. The similarities of the sensitivities is consistent with a limited impact of GPE uncertainties on GSA calculation.
+\noindent
+and the variance (and more generally the entire distribution) as an indicator of the sensitivity index accuracy \todo{Marrel2008 REF}.
+
+\vspace{0.2cm}
+So far we have considered Sobol' indices estimates without taking into account the numerical error which is present when expecations and variances integrals are approximated using quadrature formulas. This uncertainty in the Sobol' indices estimates is commonly quantified using the \textit{bootstrapping} technique~\cite{Archer:1997}. This consists in resampling (i.e. sampling with replacement) $B$ times the MC points from the unit hypercube $\Omega$, and each time re-calculating the Sobol' indices. A \textit{moment method} is then used to construct confidence intervals from the bootstrap distribution, giving a symmetric distribution around the mean estimate of the Sobol' index value. Good practice is to use $B=100$ \todo{REF}, although even if one would want to use a higher value for better accuracy, it is worth noticing that the most expensive part will still reside in the model evaluation process rather than in the resampling process.
+
+\vspace{0.2cm}\noindent
+If in the case of~\eqref{eq:modelevalsgsa} and \eqref{eq:emulmeangsa} the bootstrapping approach can be directly applied, the situation changes in the case where we make use of emulator samples to estimate the Sobol' indices as in~\eqref{eq:emulpostsamplesgsa}. In fact, quantifying how the uncertainty of the emulator predictions propagates into the uncertainty of the integral estimates is a non-trivial task and also an actively researched topic of probabilistic numerics \todo{REFS}. As further analysis on this topic are out of the scope for this project, we neglected the uncertainty arising from the integral estimates and only considered the uncertainty arising from the fact that we are using an emultor to replace the true forward model. This choice is consistent with the assumption that as the number of MC samples $N$ grows, the numerical error of the quadrature formulas will converge to $0$, and what is left will be only the uncertainty of the emulator which is does not change with $N$ for a fixed learning sample (training dataset).
+
+\vspace{0.2cm}
+For this study, Sobol' sensitivity indices were estimated using the SaLib Python library~\cite{Herman:2017}. GPErks tool~\cite{Longobardi:2021} was used to incorporate full GPE's posterior distribution samples to account for emulators uncertainty in Sobol' indexes estimates, as described above. Parameters whose Sobol indices' distributions' lower quartile was below the threshold $0.01$ were determined to have negligible effects.
