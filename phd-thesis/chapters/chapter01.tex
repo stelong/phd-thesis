@@ -5,7 +5,7 @@
 %
 %
 \section{Physiology of the heart}
-During each heartbeat, the chambers of the heart are activated by an electrical impulse that propagates across the entire tissue. The activation wave is initiated by a group of pacemaking cells, making up the \textit{sinoatrial node} and located in the right atria, and spreads throughout the ventricles via a specialised conduction system called \textit{His-Purkinje system}. The arrival of the activation wave at each cardiac cell or \textit{myocyte} causes a depolarisation of the cell membrane that initiates an \textit{action potential} (\acs{AP}). The electrical signal gives rise to a \textit{calcium transient} that activates the tension generating proteins inside the cell through a process called \textit{excitation-contraction} (\acs{EC}) coupling, causing concerted myocardial contraction and relaxation. \textcolor{blue}{[TODO: picture of the heart]}
+During each heartbeat, the chambers of the heart are activated by an electrical impulse that propagates across the entire tissue. The activation wave is initiated by a group of pacemaking cells, making up the \textit{sinoatrial node} and located in the right atria, and spreads throughout the ventricles via a specialised conduction system called \textit{His-Purkinje system}. The arrival of the activation wave at each cardiac cell or \textit{myocyte} causes a depolarisation of the cell membrane that initiates an \textit{action potential} (\acs{AP}). The electrical signal gives rise to a \textit{calcium transient} that activates the tension generating proteins inside the cell through a process called \textit{excitation-contraction} (\acs{EC}) coupling, causing concerted myocardial contraction and relaxation. \todo{missing picture of a full heart}
 
 
 %
@@ -32,7 +32,7 @@ Another crucial property of the sarcolemma is its capacity to respond to electri
 	\item[\textsc{Phase $4$.}] $I_{K1}$ closes upon depolarisation and reopens during repolarisation to help terminate the AP and reset the membrane potential to the resting state, which for non-pacemaker cardiac cells such as the ventricular myocytes is around $\SI{-90}{mV}$.
 \end{description}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter01/AP_phases.pdf}
     \caption{The five phases of an action potential in left ventricular myocytes.}
@@ -67,7 +67,7 @@ Every ventricular myocyte is in general not excitable (\textit{refractory}) duri
 %
 %
 \subsection{Cardiac cellular contraction}\label{sec:cardiaccellcontr}
-The basic contractile unit of each myocyte is called \textit{sarcomere} and is mainly composed of filamentous proteins (\textit{myofilaments}) between thin partitions called \textit{Z lines}. The two principal interdigitating myofilaments are composed respectively of \textit{myosin} protein (\textit{thick filament}) and of \textit{actin} protein (\textit{thin filament}). The thin filament consists of two actin strings arranged as a two-stranded helix, which groove contains two regulatory proteins: \textit{tropomyosin} (\acs{Tn}) and \textit{troponin} (\acs{Tm}). The sarcomere also contains spring-like filaments of \textit{titin}, connecting Z lines. They ensure that myosin filaments stay aligned and they confer elasticity to the heart wall along with the extracellular \textit{collagen}. \textcolor{blue}{[TODO: picture of the thin and thick filaments]}
+The basic contractile unit of each myocyte is called \textit{sarcomere} and is mainly composed of filamentous proteins (\textit{myofilaments}) between thin partitions called \textit{Z lines}. The two principal interdigitating myofilaments are composed respectively of \textit{myosin} protein (\textit{thick filament}) and of \textit{actin} protein (\textit{thin filament}). The thin filament consists of two actin strings arranged as a two-stranded helix, which groove contains two regulatory proteins: \textit{tropomyosin} (\acs{Tn}) and \textit{troponin} (\acs{Tm}). The sarcomere also contains spring-like filaments of \textit{titin}, connecting Z lines. They ensure that myosin filaments stay aligned and they confer elasticity to the heart wall along with the extracellular \textit{collagen}. \todo{missing picture of the thin and thick filaments}
 
 \vspace{0.2cm}
 Heart contraction is the result of sarcomere shortening, which is the result of thin filaments sliding into the thick filaments space. Myofilaments movement past each other is possible because of a repeated making, rotation and breaking of biochemical bonds between the thin and the thick filaments called \textit{crossbrigdes}. Crossbridges are simply myosin heads protruding from the side of the thick filament when they are attached to the thin filament. Their movement after being anchored and consequent detachment in turns shortens the sarcomere. Each single head represents an independent generator of force: the force generated within the entire sarcomere is therefore the cumulative contribution of many myosin heads.
@@ -105,7 +105,7 @@ Atria and ventricles are separated by fibrous tissue surrounding two openings ca
 \vspace{0.2cm}
 To summarise, isovolumetric contraction, ejection, isovolumetric relaxation and filling are the $4$ main phases of the cardiac cycle (summarised in Figure).
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter01/wiggers_diagram.pdf}
     \caption{Wiggers diagram representing the four main phases of the cardiac cycle in the left heart.}
@@ -116,7 +116,6 @@ To summarise, isovolumetric contraction, ejection, isovolumetric relaxation and 
 %
 %
 %
-\newpage
 \section{Mathematical modelling of the heart}
 Biophysically detailed mathematical models have been developed to better understand cardiac physiology at each different scale of the system, from cell to the whole-organ levels, and to gain insight into the pathophysiology of complex cardiovascular diseases and help interpret clinical observations to improve patients treatment.
 
@@ -519,7 +518,6 @@ Briefly, the heart is inflated to a prescribed end-diastolic pressure ($p$) and 
 %
 %
 %
-\newpage
 \section{Motivation and goals}
 The break down of the AP-driven signalling cascade within the cardiomyocyte can give rise to heart failure (\acs{HF}), affecting $920,000$ people in the UK \cite{Bhf:2021} and increasing the risk of cardiovascular disease, stroke and death \cite{Adelborg:2017, Henkel:2008}. HF can be accompanied by a diastolic dysfunction, where the ventricular myocytes retain the ability to contract, but cannot relax properly: this pathological condition is referred to as \textit{heart failure with preserved ejection fraction} (\acs{HFpEF}).
 
