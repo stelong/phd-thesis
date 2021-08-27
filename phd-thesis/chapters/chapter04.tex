@@ -282,6 +282,37 @@ For this study, the target organ-scale features' mean and standard deviation val
 \end{figure}
 
 \vspace{0.2cm}
+We started with a cutoff value of $3.0$, and we incremented it by $0.5$ units until we achieved a non-empty non-implausible set after applying the implausibility criterion using the first wave's emulators. This gave initial cutoff values of $5.5$ and $5.0$ for the SHAM and AB rat models’ fitting, respectively. The cutoff value was then decremented by $0.5$ with each HM wave down to the commonly used value of $3.0$, following the so-called Pukelsheim’s $3$-sigma rule~\cite{Pukelsheim:1994}. The decrement rate
+of $0.5$ was selected to ensure that we reached the desired final value of $3.0$ within a reasonable number waves, to maintain computational tractability, while allowing us to initialise the HM over a sufficient large search space. The final waves were run with cutoff of $3.0$, during which we continued to observe a decrease in the non-implausible parameter space size. We stoppend when the percentage of non-implausible points out of the total testing points was small (i.e. lower than $\SI{5}{\percent}$).
+
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{lXXXX}
+        \toprule
+        \tableheadline{Wave} & \multicolumn{4}{c}{\spacedlowsmallcaps{Rat}} \\
+        \midrule
+        & \multicolumn{2}{c}{\spacedlowsmallcaps{SHAM}} & \multicolumn{2}{c}{\spacedlowsmallcaps{AB}} \\
+        \midrule
+        & cutoff & NIMP ($\SI{}{\percent}$) & cutoff & NIMP ($\SI{}{\percent}$) \\
+        \midrule
+        $1$ & $5.5$ & $ 0.09$ & $5.0$ & $ 0.08$ \\
+        $2$ & $5.0$ & $41.79$ & $4.5$ & $65.66$ \\
+        $3$ & $4.5$ & $25.63$ & $4.0$ & $59.89$ \\
+        $4$ & $4.0$ & $49.47$ & $3.5$ & $61.29$ \\
+        $5$ & $3.5$ & $28.22$ & $3.0$ & $43.46$ \\
+        $6$ & $3.0$ & $12.05$ & $3.0$ & $30.59$ \\
+        $7$ & $3.0$ & $ 8.56$ & $3.0$ & $21.33$ \\
+        $8$ & $3.0$ & $ 0.09$ & $3.0$ & $12.93$ \\
+        $9$ & $-$   & $-$     & $3.0$ & $ 1.15$ \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Details of history matching progression. History matching is run for the SHAM and AB rat models. Parameter points ($400,000$ at Wave $1$ and $50,000$ at the next Waves) are tested against an implausibility criterion using the reported cutoff values, and only a percentage of these points resulted to be non-implausible (NIMP).}
+    \label{tab:hmdetails}
+\end{table}
+
+
+\vspace{0.2cm}
 Heart contraction is the result of integrated cellular, tissue and organ function. Biophysical \textit{in silico} cardiac models offer a systematic approach for studying these multi-scale interactions. The computational cost of such models is high, due to their multi-parametric and non-linear nature. This has so far made it difficult to perform model fitting and prevented global sensitivity analysis studies. We propose a machine learning approach based on Gaussian process emulation of model simulations using probabilistic surrogate models, which enables model parameter inference via a Bayesian history matching technique and global sensitivity analysis on whole-organ mechanics. This framework is applied to model healthy and aortic-banded hypertensive rats, a commonly used animal model of heart failure disease. The obtained probabilistic surrogate models accurately predicted the left ventricular pump function ($R^2=0.92$ for ejection fraction). The history matching technique allowed us to fit both the control and diseased virtual bi-ventricular rat heart models to MRI and literature data, with model outputs from the constrained parameter space falling within $2$ STD of the respective experimental values. The global sensitivity analysis identified Troponin C and cross-bridge kinetics as key parameters in determining both systolic and diastolic ventricular function.
 
 \vspace{0.2cm}
