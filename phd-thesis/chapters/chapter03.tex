@@ -392,90 +392,137 @@ We further assume that the model discrepancy is independent of $\mathbf{x}$ and 
 HM is an iterative process that allows to thoroughly explore the input space by discarding regions of input points that are unlikely to yield a simulator output match with real system observations. In order to do that, it makes use of emulators $f_{emul}$ to approximate the simulator output at many input points where the simulator would be too computationally expensive to be run. HM relies on the so-called \textit{implausibility measure}, which is calculated for each test point $\mathbf{x}$ in the input space:
 %
 \begin{equation}\label{eq:implmeasure}
-    I(\mathbf{x})^2 := \frac{(\mathbb{E}[f_{emul}(\mathbf{x})]-z)^2}{\mathbb{V}[\mathbb{E}[f_{emul}(\mathbf{x})]-z]} = \frac{(\mathbb{E}[f_{emul}(\mathbf{x})]-z)^2}{\mathbb{V}[f_{emul}(\mathbf{x})] + \mathbb{V}[d] + \mathbb{V}[e]}
+    I(\mathbf{x}) := \frac{\lvert\mathbb{E}[f_{emul}(\mathbf{x})]-z\rvert}{\sqrt{\mathbb{V}[\mathbb{E}[f_{emul}(\mathbf{x})]-z]}} = \frac{\lvert\mathbb{E}[f_{emul}(\mathbf{x})]-z\rvert}{\sqrt{\mathbb{V}[f_{emul}(\mathbf{x})] + \mathbb{V}[d] + \mathbb{V}[e]}}
 \end{equation}
 
 \noindent
-The implausibility measure is then compared against a pre-defined cutoff value to assess whether the corresponding input point will be likely to produce an acceptable match to the real system obervation. Large implausibility measures (above the chosen cutoff) will deem the related points \textit{implausible}, whether points with an implausibility measure below the cutoff value will be deemed \textit{non-implausible}.
+The implausibility measure is then compared against a pre-defined cutoff value $I_{\,\text{cutoff}}$ to assess whether the corresponding input point will be likely to produce an acceptable match to the real system obervation. A common choice (e.g.~\cite{Vernon:2010,Andrianakis:2015,Coveney:2018}) is to take a cutoff value of $3$, by following the Pukelsheim's $3$-sigma rule~\cite{Pukelsheim:1994}. By assuming the distribution $(\mathbb{E}[f_{emul}(\mathbf{x})]-z)$ to be unimodal, the rule states that the probability of $I(\mathbf{x})>3$ is at most $\sim\SI{5}{\percent}$. In HM context, large implausibility measures (i.e. values above the chosen cutoff) will deem the associated points \textit{implausible}, whether points with an implausibility measure below the cutoff value will be deemed \textit{non-implausible}. 
+
+\vspace{0.2cm}
+As one might have available observations $z_js$ for more than one feature of interest $y_js$, the implausibility measure can be naturally extended to take into account individual implausibility measures $I_j(\mathbf{x})s$ obtained using each of the corresponding univariate emulators $f_{emul,\,j}s$ of features $y_js$. A simple way to do this is to take the maximum across all the implausibility measures: 
 %
-\begin{equation}
-    I(\mathbf{x})
-\end{equation}
-
-
-\vspace{0.2cm}
-This Section \todo{write} provides the mathematical description of the HM starts by defining a dataset of observations (simulator runs). One GPE is trained for each output feature to be matched. In the first HM iteration, testing points constituting the \enquote{not-ruled-out-yet} (NROY) space are sampled from the input parameter space through a space-filling design, in our case a Latin hypercube (LHD). In the next iterations, the testing points are sampled from the NROY space of the previous iteration. A subset of NROY points is used to run simulations. The obtained simulator outputs are used to enrich the training dataset, making the GPEs more accurate in the NROY space. GPEs trained on the new space are then evaluated at the remaining points in the NROY space: if there are too few points according to the user needs (for this model: if the number of points was below $256$), then additional points are generated within NROY using the \enquote{cloud} technique described in \cite{Coveney:2018}. Briefly, every point in NROY space is used to generate new points by sampling from a multi-normal distribution centred on that point and scaled into the current range of the known NROY points, and then further scaled by a factor so that only $10\%$ of the new points were non-implausible (ensuring new points are sufficiently far from the generating points).
-
-\vspace{0.5cm}
-The so called \textit{implausibility measure} ($I$) is computed for each of the tested point $\mathbf{x}$ and for each output feature $j$:
-
-\begin{equation}\label{eq:implmeasure}
-    I_j^2(\mathbf{x}):=\frac{(\mathbb{E}[f_{emul,\, j}(\mathbf{x})]-\mathbb{E}[Y_j])^2}{\mathbb{V}\textrm{ar}[f_{emul,\, j}(\mathbf{x})] + \mathbb{V}\textrm{ar}[Y_j] + \mathbb{V}\textrm{ar}[md]}
-\end{equation}
-
-\vspace{0.2cm}
-The implausibility measure takes into account how far is the emulator mean ($\mathbb{E}[f_{emul,\, j}(\mathbf{x})]$) from the actual observation mean ($\mathbb{E}[Y_j]$), given the observation error ($\mathbb{V}\textrm{ar}[Y_j]$) and the emulator uncertainty for the prediction ($\mathbb{V}\textrm{ar}[f_{emul,\, j}(\mathbf{x})]$), and an additional model discrepancy term ($\mathbb{V}\textrm{ar}[md]$) which in this study has not been considered.
-
-\vspace{0.2cm}
-NROY space gets eventually partitioned according to a fixed threshold into two regions: the space of non-implausible points, satisfying the inequality:
-
 \begin{equation}\label{eq:nonimpl}
-    \max_{j\in\{1,\dots,\#\textrm{output features}\}}{I_j(\mathbf{x}}) \le I_{threshold}
+    I_{M}(\mathbf{x}) := \max_{j\in\{1,\,\dots,\,\#\textrm{features}\}}{I_j(\mathbf{x}})
 \end{equation}
 
-\vspace{0.2cm}
-and the space of implausible points, satisfying the reversed inequality. The non-implausible points constitute the new NROY space for the next iteration. The iterations go on while progressively scaling down the $I_{threshold}$ constant, until reaching the convergence of NROY space, i.e. the percentage of NROY space out of the total testing points space is close to zero.
+\noindent
+It follows that the parameter space will be constrained according to the worst (in terms of high implausibility value) observation match predicted by one of the emulators. As a wrong prediction from one emulator can lead to rejecting points which would have otherwise been kept according to their other individual implausibility measures, the joint implausibility measure $I_{\text{M}}$ can be modifyed to take the second to last or the third to last highest implasibility measure value to be compared against the cutoff value.
 
 
-\vspace{0.2cm}
-Let's suppose that the initial mechanics parameter space is $X\subset \mathbb{R}_+^{8}$. We would like to constrain $X$ as much as possible. The general rule for constraining $X$ will be to keep only the points $\mathbf{x}$ such that $f|{\mathbf{p}}(\mathbf{x})$ components are a good match to the values of the corresponding experimentally observed organ-scale features, and discard all the other points. We can achieve this by employing Baysian history matching (HM) technique, in the same manner as done in \cite{Coveney:2018}.
+%
+%
+%
+\subsection{Refocusing}
+After having evaluated the first, initial set of test points (sampled in the high-dimensional input parameter space) with consequent space reduction according to the implausibility criterion, we don't have to stop immediately. Instead, we can continue performing the same operation iteratively where now the initial space where to sample test points is the obtained non-implausible space from the first iteration (or \textit{wave}). In the context of HM, this operation is called \textit{refocusing}.
 
-\vspace{0.2cm}
-HM is an iterative process that allows to thoroughly explore the parameter space by discarding regions of inputs that are unlikely to match the experimental data. In order to do that, it makes use of probabilistic surrogates (emulators) of the model (in this context called \emph{simulator}). GPs are the chosen emulators for HM and, as we have seen in Section~\ref{sec:gps}, they can provide a probability distribution of sample points (thus they can predict the output with a certain accuracy), typically $10^6$ times faster than the simulator \cite{Coveney:2018}.
-
-\vspace{0.5cm}
+\vspace{0.2cm}\noindent
 Let us define:
 
-\begin{align*}
-    m &: \quad\text{number of the simulator's output features} \\
-    f_{sim} &: \quad\text{simulator ($\equiv f|{\mathbf{p}}$)} \\
-    f_{emul,\,j} &: \quad\text{emulator of the $j$-th feature, for $j=1,\,\dots,\,m$} \\
-    \mathcal{T}_j &: \quad\text{initial training set for $f_{emul,\,j}$, for $j=1,\,\dots,\,m$}
-\end{align*}
-
 \vspace{0.2cm}
-At each iteration (in this context called \emph{wave}) the HM consists in performing the following operations.
+\begin{tabular}{ll}
+    $X\subset\mathbb{R}^D$ & input parameter space \\
+    $T:=\{(\mathbf{x}^{(i)},\,f_{simul}(\mathbf{x}^{(i)})),\,\mathbf{x}^{(i)}\in\mathcal{X}\}$ & unbinding rate of $\Ca$ from TnC \\
+    $\Cai$   & representative $\Ca$ transient \\
+    $\Caift$ & $\Ca$ thin filament sensitivity \\
+    $\ntrpn$ & $\Ca$-TnC binding degree of cooperativity
+\end{tabular}
+
+
+\vspace{0.2cm}\noindent
+Then, at each wave the HM consists in performing the following operations.
 
 \begin{description}
-    \item[\textsc{Step 1.}] If this is the first wave, sample a lot of points constituting the \enquote{not-ruled-out-yet} (NROY) space from the input parameter space $X$ through a Latin hypercube design: $\text{NROY}\subset X$. If this is not the first wave, sample a lot of points from NROY.
-    \item[\textsc{Step 2.}] Choose $N$ ($N\ge10\times m$) points $\mathbf{x}\in\text{NROY}$ to be simulated: \[ \{(\mathbf{x_i}, f_{sim}(\mathbf{x_i})),\,\,i=1,\,\dots,\,N\} \]
-    \item[\textsc{Step 3.}] For each output feature $j=1,\dots,m$:
-        \begin{itemize}
-            \item[-] Define the new training set as: \[ \mathcal{T}_j:=\mathcal{T}_j\cup\{(\mathbf{x_i}, [f_{sim}(\mathbf{x_i})]_j),\,\,i=1,\,\dots,\,N\}\,. \]
-            \item[-] Train a new Gaussian process on $\mathcal{T}_j$, obtaining $f_{emul,\, j}$\,.
-        \end{itemize}
-    \item[\textsc{Step 4.}] Evaluate all the emulators in the points $\mathbf{x}\in\text{NROY}\setminus \{\mathbf{x_1},\,\dots,\,\mathbf{x_N}\}$ to predict each output feature.
-    \item[\textsc{Step 5.}] In order to quantify \enquote{how good} a point is in matching the experimental data, compute the \emph{implausibility measure} for each $\mathbf{x}\in\text{NROY}\setminus \{\mathbf{x_1},\,\dots,\,\mathbf{x_N}\}$:
-   
-    \begin{equation}
-        I_j^2(\mathbf{x}):=\frac{(\mathbb{E}[f_{emul,\, j}(\mathbf{x})]-y_j)^2}{\mathbb{V}ar[f_{emul,\, j}(\mathbf{x})] + \mathbb{V}ar[e_j] + \mathbb{V}ar[md]},\quad for\,\,j=1,\dots,m
-    \end{equation}
-    where in the numerator we have the difference between the emulator mean and the observed value, while in the denominator we have the sum of the emulator variance, the observed error and the model discrepancy error.
-    \item[\textsc{Step 6.}] Discriminate the region of implausibility as the space of points $\mathbf{x}$ the implausibility measures of which satisfy:
-    
-    \begin{equation}\label{eq:ineqcutoff}
-        \max_{j\in\{1,\dots,m\}}{I_j(\mathbf{x}}) > I_{threshold}
-    \end{equation}
-    
-    being $I_{trheshold}$ a certain fixed positive constant.
-    \item[\textsc{Step 7.}] Re-define the NROY space for next wave as the \emph{region of non-implausible points}, namely all the points that satisfy the reversed inequality:
-    
-    \begin{equation}\label{eq:revineqcutoff}
-        \max_{j\in\{1,\dots,m\}}{I_j(\mathbf{x}}) \le I_{threshold}
-    \end{equation}
-    
-    \item[\textsc{Step 8.}] Repeat the process until reaching convergence of NROY space, i.e. until the percentage of dim(NROY) decrease is small.
+    \item[\textsc{Step 1.}] If this is the first wave, sample a lot of points from the input parameter space $X$; if this is not the first wave, sample a lot of points from the current non-implausible space. The points are commonly sampled using a space-filling design (e.g. a Latin hypercube) and constitute the so-called \textit{not-ruled-out-yet} ($NROY$) space:
+    % 
+    \begin{align*}
+        & NROY\subset\begin{cases}
+        X &\text{if}\quad w=1 \\
+        X_{NIMP} &\text{if}\quad w>1
+        \end{cases}
+    \end{align*} 
+    \item[\textsc{step 2.}] Calculate the implausibility measure for each point in the NROY space and test it against the chosen cutoff value $I_{\,\text{cutoff}}$ to rule-out the NROY space into implausible $X_{IMP}$ and non-implausible $X_{NIMP}$ spaces:
+    %
+    \begin{align*}
+        & X_{IMP} := \{\mathbf{x}\in NROY\;\vert\;I_{M}(\mathbf{x}) > I_{\,\text{cutoff}}\} \\
+        & X_{NIMP} := \{\mathbf{x}\in NROY\;\vert\;I_{M}(\mathbf{x}) \le I_{\,\text{cutoff}}\}
+    \end{align*}
+    \item[\textsc{step 3.}] Determine the non-implausible part of the training space $T_{NIMP}$ and augment it with newly simulated points $T^{+}$ from the current $X_{NIMP}$ space:
+    %
+    \begin{align*}
+        & T_{NIMP} := \{(\mathbf{x},\,f_{simul}(\mathbf{x}))\in T\;\vert\;I_{M}(\mathbf{x}) \le I_{\,\text{cutoff}}\} \\
+        & T^{+} := \{(\mathbf{x},\,f_{simul}(\mathbf{x})),\,\mathbf{x}\in X_{NIMP}\} \\
+        & T = T_{NIMP}\cup T^{+}
+    \end{align*}
+    \item[\textsc{step 4.}] Cut the $X_{IMP}$ space out of the investigated parameter space and retain only the new $X_{NIMP}$ space:
+    %
+    \begin{equation*}
+        X_{NIMP} = X_{NIMP}\setminus\{\mathbf{x}\;\vert\;(\mathbf{x},\,f_{simul}(\mathbf{x}))\in T^{+}\}
+    \end{equation*}
+    \item[\textsc{step 5.}] Unless a stopping criterion has been reached, refocus on the new $X_{NIMP}$ space, i.e. repeat from \textsc{step 1} using emulators trained on the new training dataset $T$.
 \end{description}
+
+\todo{Stopping criteria!}
+
+
+    % \vspace{0.2cm}  
+    % \item[\textsc{Step 2.}] Choose $N$ ($N\ge10\times m$) points $\mathbf{x}\in\text{NROY}$ to be simulated: \[ \{(\mathbf{x_i}, f_{sim}(\mathbf{x_i})),\,\,i=1,\,\dots,\,N\} \]
+    % \item[\textsc{Step 3.}] For each output feature $j=1,\dots,m$:
+    %     \begin{itemize}
+    %         \item[-] Define the new training set as: \[ \mathcal{T}_j:=\mathcal{T}_j\cup\{(\mathbf{x_i}, [f_{sim}(\mathbf{x_i})]_j),\,\,i=1,\,\dots,\,N\}\,. \]
+    %         \item[-] Train a new Gaussian process on $\mathcal{T}_j$, obtaining $f_{emul,\, j}$\,.
+    %     \end{itemize}
+    % \item[\textsc{Step 4.}] Evaluate all the emulators in the points $\mathbf{x}\in\text{NROY}\setminus \{\mathbf{x_1},\,\dots,\,\mathbf{x_N}\}$ to predict each output feature.
+    % \item[\textsc{Step 5.}] In order to quantify \enquote{how good} a point is in matching the experimental data, compute the \emph{implausibility measure} for each $\mathbf{x}\in\text{NROY}\setminus \{\mathbf{x_1},\,\dots,\,\mathbf{x_N}\}$:
+   
+    % \begin{equation}
+    %     I_j^2(\mathbf{x}):=\frac{(\mathbb{E}[f_{emul,\, j}(\mathbf{x})]-y_j)^2}{\mathbb{V}ar[f_{emul,\, j}(\mathbf{x})] + \mathbb{V}ar[e_j] + \mathbb{V}ar[md]},\quad for\,\,j=1,\dots,m
+    % \end{equation}
+    % where in the numerator we have the difference between the emulator mean and the observed value, while in the denominator we have the sum of the emulator variance, the observed error and the model discrepancy error.
+    % \item[\textsc{Step 6.}] Discriminate the region of implausibility as the space of points $\mathbf{x}$ the implausibility measures of which satisfy:
+    
+    % \begin{equation}\label{eq:ineqcutoff}
+    %     \max_{j\in\{1,\dots,m\}}{I_j(\mathbf{x}}) > I_{threshold}
+    % \end{equation}
+    
+    % being $I_{trheshold}$ a certain fixed positive constant.
+    % \item[\textsc{Step 7.}] Re-define the NROY space for next wave as the \emph{region of non-implausible points}, namely all the points that satisfy the reversed inequality:
+    
+    % \begin{equation}\label{eq:revineqcutoff}
+    %     \max_{j\in\{1,\dots,m\}}{I_j(\mathbf{x}}) \le I_{threshold}
+    % \end{equation}
+    
+    % \item[\textsc{Step 8.}] Repeat the process until reaching convergence of NROY space, i.e. until the percentage of dim(NROY) decrease is small.
+
+
+% \vspace{0.2cm}
+% This Section provides the mathematical description of the HM starts by defining a dataset of observations (simulator runs). One GPE is trained for each output feature to be matched. In the first HM iteration, testing points constituting the \enquote{not-ruled-out-yet} (NROY) space are sampled from the input parameter space through a space-filling design, in our case a Latin hypercube (LHD). In the next iterations, the testing points are sampled from the NROY space of the previous iteration. A subset of NROY points is used to run simulations. The obtained simulator outputs are used to enrich the training dataset, making the GPEs more accurate in the NROY space. GPEs trained on the new space are then evaluated at the remaining points in the NROY space: if there are too few points according to the user needs (for this model: if the number of points was below $256$), then additional points are generated within NROY using the \enquote{cloud} technique described in \cite{Coveney:2018}. Briefly, every point in NROY space is used to generate new points by sampling from a multi-normal distribution centred on that point and scaled into the current range of the known NROY points, and then further scaled by a factor so that only $10\%$ of the new points were non-implausible (ensuring new points are sufficiently far from the generating points).
+
+% \vspace{0.5cm}
+% The so called \textit{implausibility measure} ($I$) is computed for each of the tested point $\mathbf{x}$ and for each output feature $j$:
+
+% \begin{equation}\label{eq:implmeasure}
+%     I_j^2(\mathbf{x}):=\frac{(\mathbb{E}[f_{emul,\, j}(\mathbf{x})]-\mathbb{E}[Y_j])^2}{\mathbb{V}\textrm{ar}[f_{emul,\, j}(\mathbf{x})] + \mathbb{V}\textrm{ar}[Y_j] + \mathbb{V}\textrm{ar}[md]}
+% \end{equation}
+
+% \vspace{0.2cm}
+% The implausibility measure takes into account how far is the emulator mean ($\mathbb{E}[f_{emul,\, j}(\mathbf{x})]$) from the actual observation mean ($\mathbb{E}[Y_j]$), given the observation error ($\mathbb{V}\textrm{ar}[Y_j]$) and the emulator uncertainty for the prediction ($\mathbb{V}\textrm{ar}[f_{emul,\, j}(\mathbf{x})]$), and an additional model discrepancy term ($\mathbb{V}\textrm{ar}[md]$) which in this study has not been considered.
+
+% \vspace{0.2cm}
+% NROY space gets eventually partitioned according to a fixed threshold into two regions: the space of non-implausible points, satisfying the inequality:
+
+% \begin{equation}\label{eq:nonimpl}
+%     \max_{j\in\{1,\dots,\#\textrm{output features}\}}{I_j(\mathbf{x}}) \le I_{threshold}
+% \end{equation}
+
+% \vspace{0.2cm}
+% and the space of implausible points, satisfying the reversed inequality. The non-implausible points constitute the new NROY space for the next iteration. The iterations go on while progressively scaling down the $I_{threshold}$ constant, until reaching the convergence of NROY space, i.e. the percentage of NROY space out of the total testing points space is close to zero.
+
+
+% \vspace{0.2cm}
+% Let's suppose that the initial mechanics parameter space is $X\subset \mathbb{R}_+^{8}$. We would like to constrain $X$ as much as possible. The general rule for constraining $X$ will be to keep only the points $\mathbf{x}$ such that $f|{\mathbf{p}}(\mathbf{x})$ components are a good match to the values of the corresponding experimentally observed organ-scale features, and discard all the other points. We can achieve this by employing Baysian history matching (HM) technique, in the same manner as done in \cite{Coveney:2018}.
+
+% \vspace{0.2cm}
+% HM is an iterative process that allows to thoroughly explore the parameter space by discarding regions of inputs that are unlikely to match the experimental data. In order to do that, it makes use of probabilistic surrogates (emulators) of the model (in this context called \emph{simulator}). GPs are the chosen emulators for HM and, as we have seen in Section~\ref{sec:gps}, they can provide a probability distribution of sample points (thus they can predict the output with a certain accuracy), typically $10^6$ times faster than the simulator \cite{Coveney:2018}.
 
 
 %

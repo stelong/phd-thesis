@@ -35,13 +35,27 @@ to left ventricular function non-unique mapping}\label{cha:chapter8}
 \end{figure}
 
 
+% \begin{figure}[ht!]
+%     \myfloatalign
+%     \subfloat[EF feature]
+%     {\label{fig:twoparamssameef}
+%     \includegraphics[width=\linewidth]{figures/chapter08/Ca50_koff_vs_EF.png}}\quad
+%     \subfloat[IVRT feature]
+%     {\label{fig:twoparamssameivrt}
+%     \includegraphics[width=\linewidth]{figures/chapter08/Ca50_koff_vs_IVRT.png}}
+%     \caption{Different Force-pCa curves are mapped to the same LV feature. A $2$-parameter grid is mapped using a trained GPE into the corresponding LV feature value for each pair of parameters within the grid. The same pairs of parameters are then used to simulate steady-state force-calcium relationships. Example showing ($\Caif,\,\koff$) parameters variations mapped into EF and IVRT features. The control parameter set is displayed as a red dot.}\label{fig:twoparamssamefeatdifffpca}
+% \end{figure}
+
+
+
 \begin{figure}[ht!]
     \myfloatalign
-    \subfloat[EF feature]
+    \subfloat[Same $\pCaf$ mapping to different EF.]
     {\label{fig:twoparamssameef}
-    \includegraphics[width=\linewidth]{figures/chapter08/Ca50_koff_vs_EF.png}}\quad
-    \subfloat[IVRT feature]
+    \includegraphics[width=\linewidth]{figures/chapter08/FpCa_space_mapping_Ca50_koff_vs_EF.png}}\quad
+    \subfloat[Same EF mapping to different $\pCaf$.]
     {\label{fig:twoparamssameivrt}
-    \includegraphics[width=\linewidth]{figures/chapter08/Ca50_koff_vs_IVRT.png}}
-    \caption{Different Force-pCa curves are mapped to the same LV feature. A $2$-parameter grid is mapped using a trained GPE into the corresponding LV feature value for each pair of parameters within the grid. The same pairs of parameters are then used to simulate steady-state force-calcium relationships. Example showing ($\Caif,\,\koff$) parameters variations mapped into EF and IVRT features. The control parameter set is displayed as a red dot.}\label{fig:twoparamssamefeatdifffpca}
+    \includegraphics[width=\linewidth]{figures/chapter08/LVfeats_space_mapping_Ca50_koff_vs_EF.png}}
+    \caption{FpCa non-unique mapping to LV pump function. A $2$-parameter grid is mapped using (a) the cell contraction model or (b) a trained GPE into (a) $\pCaf$ values or (b) EF feature values for each pair of parameters within the grid. Pairs of parameters belonging to the $\SI{100}{\percent}$ isoline are then used to (a) predict EF feature values or (b) simulate $\pCaf$ values. Example showing ($\Caif,\,\koff$) parameters variations mapping. The reference parameter set is displayed as a black dot.}\label{fig:twoparamssamefeatdifffpca}
 \end{figure}
+
