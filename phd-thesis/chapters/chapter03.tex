@@ -6,7 +6,7 @@ quantification}\label{cha:chapter3}
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we present the principal tools to model emulation, fitting and uncertainty quantification.
+    In this chapter, we present the principal tools we employed for model emulation, fitting and uncertainty quantification. First, the full multi-scale $3$D biventricular rat heart contraction model is represented as a non-linear mapping between selected input parameters and scalar output features. Second, the non-linear mapping is emulated using probabilistic surrogates based on Gaussian processes. Finally, two applications of emulators are presented: Bayesian history matching technique and emulator-based Sobol' global sensitivity analysis. 
 \end{remark}
 
 
@@ -41,7 +41,7 @@ The presented full rat heart contraction model is regulated by $71$, $17$, $18$ 
 %
 %
 \section{Model output features}
-We are interested in characterising the LV contractile function in the rat models A typical full rat heart contraction mechanics model's output consists in LV volume and pressure transients, along with the corresponding \textit{pressure-volume} (\acs{PV}) \textit{loop}. Multiple-beats simulations are commonly run to reach a more stable \enquote{limit cycle}, and only the last-beat's curves are analysed. In Figure~\ref{fig:examplepvloop}, an example $4$-beat simulation is shown with the limit cycle curves highlighted.
+We are interested in characterising the LV contractile function in the rat models. A typical full rat heart contraction mechanics model's output consists in LV volume and pressure transients, along with the corresponding \textit{pressure-volume} (\acs{PV}) \textit{loop}. Multiple-beats simulations are commonly run to reach a more stable \enquote{limit cycle}, and only the last-beat's curves are analysed. In Figure~\ref{fig:examplepvloop}, an example $4$-beat simulation is shown with the limit cycle curves highlighted.
 
 \begin{figure}[!ht]
     \myfloatalign
@@ -79,7 +79,7 @@ where
 \end{tabular}
 
 \vspace{0.3cm}\noindent
-The process of LV output features extraction is illustrated in Figure~\ref{fig:lvfeatsextraction}, and all the features definition are provided in Table~\ref{tab:lvfeatures}.
+The process of LV output features extraction is illustrated in Figure~\ref{fig:lvfeatsextraction}, and all the features' definitions are provided in Table~\ref{tab:lvfeatures}.
 
 \begin{figure}[!ht]
     \myfloatalign
@@ -115,7 +115,7 @@ The process of LV output features extraction is illustrated in Figure~\ref{fig:l
 %
 %
 \section{Multi-scale map}
-For a given fixed $\Ca$ transient, heart cubic-Hermite finite element mesh and fibre orientation, we can define a multi-scale function that maps every set of $8$ input parameters $\mathbf{x}$ to a set of $12$ scalar output LV features $(y_1,\,\dots,\,y_{12})$:
+For a given fixed $\Ca$ transient, heart cubic-Hermite finite element mesh and fibre orientation, we can define a multi-scale, non-linear function that maps every set of $8$ input parameters $\mathbf{x}$ to a set of $12$ scalar output LV features $(y_1,\,\dots,\,y_{12})$:
 %
 \begin{align}\label{eq:fsimul}
     f_{simul}\colon\mathbb{R}^{8} &\to\underbrace{\mathbb{R}\times\cdots\times\mathbb{R}}_{12\,\text{times}} \\
@@ -416,23 +416,10 @@ It follows that the parameter space will be constrained according to the worst (
 After having evaluated the first, initial set of test points (sampled in the high-dimensional input parameter space) with consequent space reduction according to the implausibility criterion, we don't have to stop immediately. Instead, we can continue performing the same operation iteratively where now the initial space where to sample test points is the obtained non-implausible space from the first iteration (or \textit{wave}). In the context of HM, this operation is called \textit{refocusing}.
 
 \vspace{0.2cm}\noindent
-Let us define:
-
-\vspace{0.2cm}
-\begin{tabular}{ll}
-    $X\subset\mathbb{R}^D$ & input parameter space \\
-    $T:=\{(\mathbf{x}^{(i)},\,f_{simul}(\mathbf{x}^{(i)})),\,\mathbf{x}^{(i)}\in\mathcal{X}\}$ & unbinding rate of $\Ca$ from TnC \\
-    $\Cai$   & representative $\Ca$ transient \\
-    $\Caift$ & $\Ca$ thin filament sensitivity \\
-    $\ntrpn$ & $\Ca$-TnC binding degree of cooperativity
-\end{tabular}
-
-
-\vspace{0.2cm}\noindent
-Then, at each wave the HM consists in performing the following operations.
+At each HM wave, we will perform the following operations.
 
 \begin{description}
-    \item[\textsc{Step 1.}] If this is the first wave, sample a lot of points from the input parameter space $X$; if this is not the first wave, sample a lot of points from the current non-implausible space. The points are commonly sampled using a space-filling design (e.g. a Latin hypercube) and constitute the so-called \textit{not-ruled-out-yet} ($NROY$) space:
+    \item[\textsc{Step 1.}] If this is the first wave, sample a lot of points from the input parameter space $X$; if this is not the first wave, sample a lot of points from the current non-implausible space $X_{NIMP}$. Points are commonly sampled using a space-filling design (e.g. a Latin hypercube), and constitute the so-called \textit{not-ruled-out-yet} ($NROY$) space:
     % 
     \begin{align*}
         & NROY\subset\begin{cases}
@@ -446,7 +433,7 @@ Then, at each wave the HM consists in performing the following operations.
         & X_{IMP} := \{\mathbf{x}\in NROY\;\vert\;I_{M}(\mathbf{x}) > I_{\,\text{cutoff}}\} \\
         & X_{NIMP} := \{\mathbf{x}\in NROY\;\vert\;I_{M}(\mathbf{x}) \le I_{\,\text{cutoff}}\}
     \end{align*}
-    \item[\textsc{step 3.}] Determine the non-implausible part of the training space $T_{NIMP}$ and augment it with newly simulated points $T^{+}$ from the current $X_{NIMP}$ space:
+    \item[\textsc{step 3.}] Determine the non-implausible part $T_{NIMP}$ of the training dataset $T$ and augment it with newly simulated points $T^{+}$ from the current $X_{NIMP}$ space:
     %
     \begin{align*}
         & T_{NIMP} := \{(\mathbf{x},\,f_{simul}(\mathbf{x}))\in T\;\vert\;I_{M}(\mathbf{x}) \le I_{\,\text{cutoff}}\} \\
@@ -458,78 +445,24 @@ Then, at each wave the HM consists in performing the following operations.
     \begin{equation*}
         X_{NIMP} = X_{NIMP}\setminus\{\mathbf{x}\;\vert\;(\mathbf{x},\,f_{simul}(\mathbf{x}))\in T^{+}\}
     \end{equation*}
-    \item[\textsc{step 5.}] Unless a stopping criterion has been reached, refocus on the new $X_{NIMP}$ space, i.e. repeat from \textsc{step 1} using emulators trained on the new training dataset $T$.
+    \item[\textsc{step 5.}] Unless a stopping criterion has been reached, refocus on the new $X_{NIMP}$ space, i.e. repeat from \textsc{step 1} using emulators trained on the new training dataset $T$, being these now more accurate in the non-implausible region.
 \end{description}
 
-\todo{Stopping criteria!}
+\vspace{0.2cm}
+In \textsc{step 1}, we have seen that NROY points are to be sampled such that they uniformely cover the high-dimensional input parameter space. This is a trivial task for the first wave's space where, as suggested, a Latin hypercube design can be used. In fact, the initial space is normally given as a $D$-dimensional hypercube, i.e. given as the Cartesian product of $D$ $1$-dimensional intervals. However, the situation is more complicated starting from wave $2$, as this time NROY points are to be sampled such that they uniformely cover the $X_{NIMP}$ space, which in general has a not well defined topological structure. For wave $2$ and successive waves, we therefore employ the \textit{cloud} technique as described in~\cite{Coveney:2018}. Briefly, every point in the $X_{NIMP}$ space is used to generate new points by sampling from a multivariate normal distribution centred on that point and scaled into the current range of the known $X_{NIMP}$ points, and then further scaled by a factor so that only $10\%$ of the new points are retained. These generated points are then tested against the implausibility condition using the emulators of the current wave, and only the non-implausible points are finally considered for generating the $NROY$ space.
 
 
-    % \vspace{0.2cm}  
-    % \item[\textsc{Step 2.}] Choose $N$ ($N\ge10\times m$) points $\mathbf{x}\in\text{NROY}$ to be simulated: \[ \{(\mathbf{x_i}, f_{sim}(\mathbf{x_i})),\,\,i=1,\,\dots,\,N\} \]
-    % \item[\textsc{Step 3.}] For each output feature $j=1,\dots,m$:
-    %     \begin{itemize}
-    %         \item[-] Define the new training set as: \[ \mathcal{T}_j:=\mathcal{T}_j\cup\{(\mathbf{x_i}, [f_{sim}(\mathbf{x_i})]_j),\,\,i=1,\,\dots,\,N\}\,. \]
-    %         \item[-] Train a new Gaussian process on $\mathcal{T}_j$, obtaining $f_{emul,\, j}$\,.
-    %     \end{itemize}
-    % \item[\textsc{Step 4.}] Evaluate all the emulators in the points $\mathbf{x}\in\text{NROY}\setminus \{\mathbf{x_1},\,\dots,\,\mathbf{x_N}\}$ to predict each output feature.
-    % \item[\textsc{Step 5.}] In order to quantify \enquote{how good} a point is in matching the experimental data, compute the \emph{implausibility measure} for each $\mathbf{x}\in\text{NROY}\setminus \{\mathbf{x_1},\,\dots,\,\mathbf{x_N}\}$:
-   
-    % \begin{equation}
-    %     I_j^2(\mathbf{x}):=\frac{(\mathbb{E}[f_{emul,\, j}(\mathbf{x})]-y_j)^2}{\mathbb{V}ar[f_{emul,\, j}(\mathbf{x})] + \mathbb{V}ar[e_j] + \mathbb{V}ar[md]},\quad for\,\,j=1,\dots,m
-    % \end{equation}
-    % where in the numerator we have the difference between the emulator mean and the observed value, while in the denominator we have the sum of the emulator variance, the observed error and the model discrepancy error.
-    % \item[\textsc{Step 6.}] Discriminate the region of implausibility as the space of points $\mathbf{x}$ the implausibility measures of which satisfy:
-    
-    % \begin{equation}\label{eq:ineqcutoff}
-    %     \max_{j\in\{1,\dots,m\}}{I_j(\mathbf{x}}) > I_{threshold}
-    % \end{equation}
-    
-    % being $I_{trheshold}$ a certain fixed positive constant.
-    % \item[\textsc{Step 7.}] Re-define the NROY space for next wave as the \emph{region of non-implausible points}, namely all the points that satisfy the reversed inequality:
-    
-    % \begin{equation}\label{eq:revineqcutoff}
-    %     \max_{j\in\{1,\dots,m\}}{I_j(\mathbf{x}}) \le I_{threshold}
-    % \end{equation}
-    
-    % \item[\textsc{Step 8.}] Repeat the process until reaching convergence of NROY space, i.e. until the percentage of dim(NROY) decrease is small.
+\vspace{0.2cm}
+In \textsc{step 5}, refocusing on the $X_{NIMP}$ space will not take place if a stopping criterion is reached. HM process can be stopped by observing at each wave the proportions of space's volume cut-out-of/retained-in the current $NROY$ space. If the percentage of $X_{NIMP}$ space volume out of the total $NROY$ space volume does not decrease in consecutive waves, this means that we have reached \textit{convergence of the non-implausible space}, and we can stop. A more advanced stopping criterion consists in looking at the emulator variance for each $X_{NIMP}$ point and compare it with the sum of the observation error and model discrepancy variances: if the former is significantly smaller than this sum, and the same trend is observed throughout the entire $X_{NIMP}$ space, this means that increasing the accuracy of the emulators for the next wave will not be of any use and the space will not be cut, so that we can stop. Finally, a combination of percentage of $X_{NIMP}$ space's volume reduction analysis and of variance analysis can be used to create arbitrarely complex stopping criteria.
 
 
-% \vspace{0.2cm}
-% This Section provides the mathematical description of the HM starts by defining a dataset of observations (simulator runs). One GPE is trained for each output feature to be matched. In the first HM iteration, testing points constituting the \enquote{not-ruled-out-yet} (NROY) space are sampled from the input parameter space through a space-filling design, in our case a Latin hypercube (LHD). In the next iterations, the testing points are sampled from the NROY space of the previous iteration. A subset of NROY points is used to run simulations. The obtained simulator outputs are used to enrich the training dataset, making the GPEs more accurate in the NROY space. GPEs trained on the new space are then evaluated at the remaining points in the NROY space: if there are too few points according to the user needs (for this model: if the number of points was below $256$), then additional points are generated within NROY using the \enquote{cloud} technique described in \cite{Coveney:2018}. Briefly, every point in NROY space is used to generate new points by sampling from a multi-normal distribution centred on that point and scaled into the current range of the known NROY points, and then further scaled by a factor so that only $10\%$ of the new points were non-implausible (ensuring new points are sufficiently far from the generating points).
-
-% \vspace{0.5cm}
-% The so called \textit{implausibility measure} ($I$) is computed for each of the tested point $\mathbf{x}$ and for each output feature $j$:
-
-% \begin{equation}\label{eq:implmeasure}
-%     I_j^2(\mathbf{x}):=\frac{(\mathbb{E}[f_{emul,\, j}(\mathbf{x})]-\mathbb{E}[Y_j])^2}{\mathbb{V}\textrm{ar}[f_{emul,\, j}(\mathbf{x})] + \mathbb{V}\textrm{ar}[Y_j] + \mathbb{V}\textrm{ar}[md]}
-% \end{equation}
-
-% \vspace{0.2cm}
-% The implausibility measure takes into account how far is the emulator mean ($\mathbb{E}[f_{emul,\, j}(\mathbf{x})]$) from the actual observation mean ($\mathbb{E}[Y_j]$), given the observation error ($\mathbb{V}\textrm{ar}[Y_j]$) and the emulator uncertainty for the prediction ($\mathbb{V}\textrm{ar}[f_{emul,\, j}(\mathbf{x})]$), and an additional model discrepancy term ($\mathbb{V}\textrm{ar}[md]$) which in this study has not been considered.
-
-% \vspace{0.2cm}
-% NROY space gets eventually partitioned according to a fixed threshold into two regions: the space of non-implausible points, satisfying the inequality:
-
-% \begin{equation}\label{eq:nonimpl}
-%     \max_{j\in\{1,\dots,\#\textrm{output features}\}}{I_j(\mathbf{x}}) \le I_{threshold}
-% \end{equation}
-
-% \vspace{0.2cm}
-% and the space of implausible points, satisfying the reversed inequality. The non-implausible points constitute the new NROY space for the next iteration. The iterations go on while progressively scaling down the $I_{threshold}$ constant, until reaching the convergence of NROY space, i.e. the percentage of NROY space out of the total testing points space is close to zero.
-
-
-% \vspace{0.2cm}
-% Let's suppose that the initial mechanics parameter space is $X\subset \mathbb{R}_+^{8}$. We would like to constrain $X$ as much as possible. The general rule for constraining $X$ will be to keep only the points $\mathbf{x}$ such that $f|{\mathbf{p}}(\mathbf{x})$ components are a good match to the values of the corresponding experimentally observed organ-scale features, and discard all the other points. We can achieve this by employing Baysian history matching (HM) technique, in the same manner as done in \cite{Coveney:2018}.
-
-% \vspace{0.2cm}
-% HM is an iterative process that allows to thoroughly explore the parameter space by discarding regions of inputs that are unlikely to match the experimental data. In order to do that, it makes use of probabilistic surrogates (emulators) of the model (in this context called \emph{simulator}). GPs are the chosen emulators for HM and, as we have seen in Section~\ref{sec:gps}, they can provide a probability distribution of sample points (thus they can predict the output with a certain accuracy), typically $10^6$ times faster than the simulator \cite{Coveney:2018}.
 
 
 %
 %
 %
 \section{Global sensitivity analysis}
-In order to assess the contribution of the model input parameters' uncertainty into explaining the model output features' total variance, a global sensitivity analysis can be performed.
+In order to assess the contribution of the model input parameters' uncertainty into explaining the model output features' total variance, a global sensitivity analysis can be performed. In the next paragraphs, we shall see how having fast-evaluating trained emulators enable characterisation of model sensitivities even for complex, computationally expensive simulators.
 
 \vspace{0.2cm}
 By assuming that for our specific biophysical system model $f$ (=$f_{simul}$) only low order correlations between input variables $\mathbf{X}:=(X_1,\,\dots,\,X_D)$ have an impact on the output ($Y=f(\mathbf{X})$) variance, we can make use of the \textit{high-dimensional model representation}~\cite{Rabitz:1999} to introduce a functional decomposition of our simulator of the form:
@@ -591,7 +524,7 @@ The Sobol' \textit{main effect} (first-order sensitivity index) is defined as:
 \end{equation}
 
 \noindent
-and it is a global sensitivity measure representing the amount of model output variance reduction that we would obtain if parameter $X_i$ were to be fixed. Another important global sensitivity measure is the Sobol' \textit{total effect}, defined as:
+and it is a global sensitivity measure representing the amount of model output variance reduction that we would obtain if parameter $X_i$ was to be fixed. Another important global sensitivity measure is the Sobol' \textit{total effect}, defined as:
 %
 \begin{align}\label{eq:totaleffect}
     & S_{Ti} := \frac{\mathbb{E}_{\mathbf{X}_{\sim i}}[\mathbb{V}_{X_i}[Y|\mathbf{X}_{\sim i}]]}{\mathbb{V}[Y]} = 1 - \frac{\mathbb{V}_{\mathbf{X}_{\sim i}}[\mathbb{E}_{X_i}[Y|\mathbf{X}_{\sim i}]]}{\mathbb{V}[Y]}\,, \\
@@ -605,7 +538,7 @@ and represents the total contribution of parameter $X_i$ and all its higher-orde
 %
 %
 \subsection{Estimating Sobol' sensitivity indices}
-\textit{Monte Carlo} (\acs{MC}) simulations can be used to directly estimate both the main and the total effects. However, a simple brute force approach that uses two nested \enquote{for} loops to calculate the conditional variance and expectation appearing in both equations~\eqref{eq:maineffect}--\eqref{eq:totaleffect} would cost $N^2$ model evaluations per Sobol' index, which will become prohibitively expensive as $N$ is typically taken to be between $10^2$ and $10^4$ for reliable estimates. For this reason, several integral estimators have been developed to reduce as much as possible the number of model runs need to calculate Sobol' sensitivity indices. Here, we discuss the particular approach followed by Saltelli et al.~\cite{Saltelli:2010}.
+\textit{Monte Carlo} (\acs{MC}) simulations can be used to directly estimate both the main and the total effects. However, a simple brute force approach that uses two nested \enquote{for} loops to calculate the conditional variance and expectation appearing in both equations~\eqref{eq:maineffect}--\eqref{eq:totaleffect} would cost $N^2$ model evaluations per Sobol' index, which will become prohibitively expensive as $N$ is typically taken to be between $10^2$ and $10^4$ for reliable estimates. For this reason, several integral estimators have been developed to reduce as much as possible the number of model runs needed to calculate Sobol' sensitivity indices. Here, we discuss the particular approach followed by Saltelli et al.~\cite{Saltelli:2010}.
 
 \vspace{0.2cm}
 Because of the known identity $\mathbb{V}[Y] = \mathbb{E}[Y^2] - \mathbb{E}^2[Y]$, the numerator in equations~\eqref{eq:maineffect} can be written as:
@@ -706,7 +639,7 @@ The numerator in~\eqref{eq:secondordereffects} will be calculated using the Salt
 \end{equation}
 
 \noindent
-while the denominator will be estimated again using~\eqref{eq:varianceestimate}. Notice that the cost for calculating Sobol' second-order sensitivity indices is $N\times (2D + 2)$ model evaluations, as we additionally need $f(\mathbf{B}_{\mathbf{A}}^{(i)})$ for $i=1,\,\dots,\,D$.
+while the denominator will be estimated using again~\eqref{eq:varianceestimate}. Notice that the cost for calculating Sobol' second-order sensitivity indices is $N\times (2D + 2)$ model evaluations, as we additionally need to calculate $f(\mathbf{B}_{\mathbf{A}}^{(i)})$ for $i=1,\,\dots,\,D$.
 
 
 %
@@ -753,7 +686,7 @@ and the variance (and more generally the entire distribution) as an indicator of
 So far we have considered Sobol' indices estimates without taking into account the numerical error which is present when expecations and variances integrals are approximated using quadrature formulas. This uncertainty in the Sobol' indices estimates is commonly quantified using the \textit{bootstrapping} technique~\cite{Archer:1997}. This consists in resampling (i.e. sampling with replacement) $B$ times the MC points from the unit hypercube $\Omega$, and each time re-calculating the Sobol' indices. A \textit{moment method} is then used to construct confidence intervals from the bootstrap distribution, giving a symmetric distribution around the mean estimate of the Sobol' index value. Good practice is to use $B=100$ \todo{REF}, although even if one would want to use a higher value for better accuracy, it is worth noticing that the most expensive part will still reside in the model evaluation process rather than in the resampling process.
 
 \vspace{0.2cm}\noindent
-If in the case of~\eqref{eq:modelevalsgsa} and \eqref{eq:emulmeangsa} the bootstrapping approach can be directly applied, the situation changes in the case where we make use of emulator samples to estimate the Sobol' indices as in~\eqref{eq:emulpostsamplesgsa}. In fact, quantifying how the uncertainty of the emulator predictions propagates into the uncertainty of the integral estimates is a non-trivial task and also an actively researched topic of probabilistic numerics \todo{REFS}. As further analysis on this topic are out of the scope for this project, we neglected the uncertainty arising from the integral estimates and only considered the uncertainty arising from the fact that we are using an emultor to replace the true forward model. This choice is consistent with the assumption that as the number of MC samples $N$ grows, the numerical error of the quadrature formulas will converge to $0$, and what is left will be only the uncertainty of the emulator which is does not change with $N$ for a fixed learning sample (training dataset).
+If in the case of~\eqref{eq:modelevalsgsa} and \eqref{eq:emulmeangsa} the bootstrapping approach can be directly applied, the situation changes in the case where we make use of emulator samples to estimate the Sobol' indices as in~\eqref{eq:emulpostsamplesgsa}. In fact, quantifying how the uncertainty of the emulator predictions propagates into the uncertainty of the integral estimates is a non-trivial task and also an actively researched topic of probabilistic numerics \todo{REFS}. As further analysis on this topic are out of the scope for this project, we neglected the uncertainty arising from the integral estimates and only considered the uncertainty arising from the fact that we are using an emultor to replace the true forward model. This choice is consistent with the assumption that as the number of MC samples $N$ grows, the numerical error of the quadrature formulas will converge to $0$, and what is left will be only the uncertainty of the emulator which does not change with $N$ for a fixed learning sample (training dataset).
 
 \vspace{0.2cm}
-For this study, Sobol' sensitivity indices were estimated using the SaLib Python library~\cite{Herman:2017}. GPErks tool~\cite{Longobardi:2021} was used to incorporate full GPE's posterior distribution samples to account for emulators uncertainty in Sobol' indexes estimates, as described above. Parameters whose Sobol indices' distributions' lower quartile was below the threshold $0.01$ were determined to have negligible effects.
+\todo{Do we mention specific used libraries here or in application results as done for GPE?} For this study, Sobol' sensitivity indices were estimated using the SaLib Python library~\cite{Herman:2017}. GPErks tool~\cite{Longobardi:2021} was used to incorporate full GPE's posterior distribution samples to account for emulators uncertainty in Sobol' indexes estimates, as described above. Parameters whose Sobol indices' distributions' lower quartile was below the threshold $0.01$ were determined to have negligible effects.
