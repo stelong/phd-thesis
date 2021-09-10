@@ -128,7 +128,7 @@ We employed two variants~\cite{Gattoni:2017} of the original ionic model~\cite{G
 %
 %
 \subsection{Input parameter space}
-The bounds of the selected model input parameters were defined from prior experimental and modelling studies, summarised in Tables~\ref{tab:shamranges}--\ref{tab:abranges}. The same finally chosen parameter bounds (Table) were used for both the SHAM and AB models to construct the initial parameter space $X\subset\mathbb{R}^{8}$ where to sample points to be simulated to then generate the emulators' training datasets. 
+The input parameter space $X\subset\mathbb{R}^{8}$ of the simulator map $f_{simul}$ introduced in equation~\eqref{eq:fsimul} was defined as the Cartesian product of $8$ one-dimensional parameter ranges. These ranges were determined using prior information collected from both experimental and modelling literature studies, summarised in Tables~\ref{tab:shamranges}--\ref{tab:abranges}. The finally adopted parameter ranges are reported in Table~\ref{tab:finalshamabranges}. To avoid bias, we used the same input parameter space $X$ for both the SHAM and the AB rat models when from where to sample points to be simulated, which are then used to build the emulators' training datasets.
 
 \newpage
 \begin{landscape}
@@ -204,71 +204,16 @@ The bounds of the selected model input parameters were defined from prior experi
 %
 %
 \subsection{Training dataset}
-$8$ LHDs of $1,024$ input parameter points each were simulated and the successfully completed simulations were collected to form the training dataset, with final size of $825$ and $850$ points for the SHAM and AB models, respectively. The low number of successful runs relates to a combination of failure of the mechanics simulations converging or completing a full cardiac cycle, which may happen if the contraction is insufficient to reach the aortic pressure. One GPE was trained for each output feature (Table~\ref{tab:lvfeatures}), for a total of $12$ GPEs. The obtained cross-validation $R^2$ test scores (GPEs' accuracy) are reported in Table~$1$ in the Supplementary materials. Emulator evaluation at a new parameter set took $\sim 1.2$ seconds against a full simulator single-core run of $\sim 4$ hours, for a total gained speedup of $12,000$ fold.
-
-\begin{table}[!ht]
-    \myfloatalign
-    \begin{tabularx}{\textwidth}{XXX}
-    \toprule
-    \tableheadline{LV feature} & \tableheadline{$R^2$} & \tableheadline{$ISE_2 (\SI{}{\percent})$} \\
-    \midrule
-    $\textrm{EDV}$    & $0.9712 \pm 0.0046$ & $87.7576 \pm 1.1752$ \\
-    $\textrm{ESV}$    & $0.9736 \pm 0.0023$ & $86.4242 \pm 2.5310$ \\
-    $\textrm{EF}$     & $0.9342 \pm 0.0155$ & $87.6364 \pm 2.4424$ \\
-    $\textrm{IVCT}$   & $0.9658 \pm 0.0122$ & $88.0000 \pm 4.5094$ \\
-    $\textrm{ET}$     & $0.9408 \pm 0.0054$ & $88.2424 \pm 1.6531$ \\
-    $\textrm{IVRT}$   & $0.9135 \pm 0.0128$ & $87.6364 \pm 4.3804$ \\
-    $\textrm{Tdiast}$ & $0.9412 \pm 0.0056$ & $86.6667 \pm 1.9917$ \\
-    $\textrm{PeakP}$  & $0.9867 \pm 0.0027$ & $86.7879 \pm 1.0427$ \\
-    $\textrm{Tpeak}$  & $0.9659 \pm 0.0117$ & $85.6970 \pm 5.8207$ \\
-    $\textrm{ESP}$    & $0.9973 \pm 0.0004$ & $86.6667 \pm 2.2350$ \\
-    $\textrm{maxdP}$  & $0.9792 \pm 0.0064$ & $86.6667 \pm 4.8937$ \\
-    $\textrm{mindP}$  & $0.7437 \pm 0.0283$ & $93.4545 \pm 1.6442$ \\
-    \bottomrule
-    \end{tabularx}
-    \caption{The SHAM rat GPEs' accuracy. The GPEs' accuracy was evaluated using the average $R^{2}$ score and $ISE_2$ obtained with a $5$-fold cross-validation. Values are reported as mean$\pm$std.}
-    \label{tab:gpescores1_sham}
-\end{table}
-
-\begin{figure}[!ht]
-    \myfloatalign
-    \includegraphics[width=\textwidth]{figures/chapter04/bgpes_vs_bsplit_sham.pdf}
-    \caption{For each LV feature, the GPE with the highest $R^2$ split test score is used to make predictions at the respective left-out subset of test points. Predictions are sorted in ascending order for the sake of a better visualisation and joined with a thick blue line, and the respective observations (empty dots) are sorted accordingly. $2$ STD confidence intervals (shaded regions) are also plotted around predicted mean lines.}
-    \label{fig:gpesexampleinferencesham}
-\end{figure}
-
-\begin{table}[!ht]
-    \myfloatalign
-    \begin{tabularx}{\textwidth}{XXX}
-    \toprule
-    \tableheadline{LV feature} & \tableheadline{$R^2$} & \tableheadline{$ISE_2 (\SI{}{\percent})$} \\
-    \midrule
-    $\textrm{EDV}$    & $0.9461 \pm 0.0273$ & $87.8824 \pm 4.0516$ \\
-    $\textrm{ESV}$    & $0.9714 \pm 0.0050$ & $87.2941 \pm 2.3705$ \\
-    $\textrm{EF}$     & $0.9661 \pm 0.0101$ & $86.2353 \pm 3.6376$ \\
-    $\textrm{IVCT}$   & $0.9906 \pm 0.0021$ & $84.4706 \pm 2.5123$ \\     
-    $\textrm{ET}$     & $0.9593 \pm 0.0159$ & $89.2941 \pm 3.4979$ \\
-    $\textrm{IVRT}$   & $0.8559 \pm 0.0165$ & $85.8824 \pm 1.7842$ \\
-    $\textrm{Tdiast}$ & $0.9473 \pm 0.0197$ & $88.1176 \pm 4.0652$ \\
-    $\textrm{PeakP}$  & $0.9871 \pm 0.0077$ & $85.2941 \pm 2.1372$ \\
-    $\textrm{Tpeak}$  & $0.9542 \pm 0.0150$ & $86.0000 \pm 7.7092$ \\
-    $\textrm{ESP}$    & $0.9959 \pm 0.0024$ & $86.2353 \pm 2.5936$ \\
-    $\textrm{maxdP}$  & $0.9860 \pm 0.0039$ & $87.4118 \pm 3.0814$ \\
-    $\textrm{mindP}$  & $0.7474 \pm 0.0687$ & $89.7647 \pm 2.3705$ \\
-    \bottomrule
-    \end{tabularx}
-    \caption{The AB rat GPEs' accuracy. The GPEs' accuracy was evaluated using the average $R^{2}$ score and $ISE_2$ obtained with a $5$-fold cross-validation. Values are reported as mean$\pm$std.}
-    \label{tab:gpescores1_ab}
-\end{table}
-
-\begin{figure}[!ht]
-    \myfloatalign
-    \includegraphics[width=\textwidth]{figures/chapter04/bgpes_vs_bsplit_ab.pdf}
-    \caption{For each LV feature, the GPE with the highest $R^2$ split test score is used to make predictions at the respective left-out subset of test points. Predictions are sorted in ascending order for the sake of a better visualisation and joined with a thick blue line, and the respective observations (empty dots) are sorted accordingly. $2$ STD confidence intervals (shaded regions) are also plotted around predicted mean lines.}
-    \label{fig:fig:gpesexampleinferencesham}
-\end{figure}
+$8$ LHDs of $1,024$ input parameter points each were simulated and the successfully completed simulations were collected to form the training dataset, with final size of $825$ and $850$ points for the SHAM and AB models, respectively. The low number of successful runs relates to a combination of failure of the mechanics simulations converging or completing a full cardiac cycle, which may happen if the contraction is insufficient to reach the aortic pressure.
 
 \vspace{0.2cm}
+One GPE was trained for each output feature (Table~\ref{tab:lvfeatures}), for a total of $12$ GPEs. The trained GPEs were firstly employed to perform an entirely \textit{in silico} global sensitivity analysis. A subset of $7$ GPEs (specifically the ones predicting the features for which we had experimental values to match) was then used in combination with the related experimental target values to fit the rat models.
+
+
+%
+%
+%
+\subsection{Real system observations to match}
 For this study, the target organ-scale features' mean and standard deviation values for HM come from two different sources. Whenever it was not possible to get information about a specific organ-scale feature from the available MRI data \cite{Roe:2017}, the information was obtained from available literature data from experimental studies performed in male rats at body temperature with abdominal/ascending aortic banding \cite{Nemeth:2016, Sato:1990, Schunkert:1995, Loot:2005, Liu:2014, Ku:2014, Ruppert:2018, Schunkert:1990, Ruppert:2016}. In particular, EDV, ESV, ET and IVRT features were immediately available from the MRI data, while information about PeakP, maxdP and mindP features was collected from literature. Mean and standard deviation values for the volume-related features come from recordings performed on the cohort of rats ($n=8$, $n=15$ from SHAM, AB groups, respectively) that underwent MRI examination \cite{Roe:2017}. Mean and standard deviation values for each pressure-related feature were calculated from the set of experimental mean values collected from each of above-mentioned literature studies. We did not have specific values for IVCT, Tdiast, Tpeak and ESP, and we chose not to match EF explicitly as this is derived form EDV and ESV. This resulted in $7$ organ-scale phenotypes (see Table \ref{tab:values2match}) used to constrain the model parameters.
 
 \begin{table}[!ht]
@@ -293,36 +238,91 @@ For this study, the target organ-scale features' mean and standard deviation val
 \end{table}
 
 
+%
+%
+%
+\subsection{History matching}
+We started with a cutoff value of $3.0$, and we incremented it by $0.5$ units until we achieved a non-empty non-implausible set after applying the implausibility criterion using the first wave's emulators. This gave initial cutoff values of $5.5$ and $5.0$ for the SHAM and AB rat models’ fitting, respectively. The cutoff value was then decremented by $0.5$ units with each HM wave down to the commonly used value of $3.0$ (see Section~\ref{sec:ch3hm}). The decrement rate of $0.5$ was selected to ensure that we reached the desired final value of $3.0$ within a reasonable number waves, to maintain computational tractability, while allowing us to initialise the HM over a sufficient large search space. The final waves were run with cutoff of $3.0$, during which we continued to observe a decrease in the non-implausible parameter space size. We stoppend when the percentage of non-implausible points out of the total testing points was small (i.e. lower than $\SI{5}{\percent}$).
+
+
+%
+%
+%
+\section{Results}\label{sec:ch4results}
+
+%
+%
+%
+\subsection{Trained emulators}
+The obtained cross-validation GPEs' test scores (as a measure of the overall accuracy, as described in Section~\ref{sec:ch3gpe}) are reported in Tables~\ref{tab:gpescores1_sham}--\ref{tab:gpescores1_ab} for the SHAM and AB models' emulators, respectively. Each emulator evaluation at a new imput parameter point took $\sim 1.2$ seconds against a full simulator single-core run of $\sim 4$ hours, for a total gained speedup of $12,000$ fold. An example illustration of emulators doing inference on a test set from the cross-validation process is provided in Figures~\ref{fig:gpesexampleinferencesham}--\ref{fig:gpesexampleinferenceab} for the SHAM and AB models' emulators, respectively.
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XXX}
+    \toprule
+    \tableheadline{LV feature} & \tableheadline{$R^2$} & \tableheadline{$ISE_2 (\SI{}{\percent})$} \\
+    \midrule
+    $\textrm{EDV}$    & $0.9712 \pm 0.0046$ & $87.75 \pm 1.17$ \\
+    $\textrm{ESV}$    & $0.9736 \pm 0.0023$ & $86.42 \pm 2.53$ \\
+    $\textrm{EF}$     & $0.9342 \pm 0.0155$ & $87.63 \pm 2.44$ \\
+    $\textrm{IVCT}$   & $0.9658 \pm 0.0122$ & $88.00 \pm 4.50$ \\
+    $\textrm{ET}$     & $0.9408 \pm 0.0054$ & $88.24 \pm 1.65$ \\
+    $\textrm{IVRT}$   & $0.9135 \pm 0.0128$ & $87.63 \pm 4.38$ \\
+    $\textrm{Tdiast}$ & $0.9412 \pm 0.0056$ & $86.66 \pm 1.99$ \\
+    $\textrm{PeakP}$  & $0.9867 \pm 0.0027$ & $86.78 \pm 1.04$ \\
+    $\textrm{Tpeak}$  & $0.9659 \pm 0.0117$ & $85.69 \pm 5.82$ \\
+    $\textrm{ESP}$    & $0.9973 \pm 0.0004$ & $86.66 \pm 2.23$ \\
+    $\textrm{maxdP}$  & $0.9792 \pm 0.0064$ & $86.66 \pm 4.89$ \\
+    $\textrm{mindP}$  & $0.7437 \pm 0.0283$ & $93.45 \pm 1.64$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{The SHAM rat GPEs' accuracy. The GPEs' accuracy was evaluated using the average $R^{2}$ score and $ISE_2$ obtained with a $5$-fold cross-validation. Values are reported as mean$\pm$std.}
+    \label{tab:gpescores1_sham}
+\end{table}
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XXX}
+    \toprule
+    \tableheadline{LV feature} & \tableheadline{$R^2$} & \tableheadline{$ISE_2 (\SI{}{\percent})$} \\
+    \midrule
+    $\textrm{EDV}$    & $0.9461 \pm 0.0273$ & $87.88 \pm 4.05$ \\
+    $\textrm{ESV}$    & $0.9714 \pm 0.0050$ & $87.29 \pm 2.37$ \\
+    $\textrm{EF}$     & $0.9661 \pm 0.0101$ & $86.23 \pm 3.63$ \\
+    $\textrm{IVCT}$   & $0.9906 \pm 0.0021$ & $84.47 \pm 2.51$ \\     
+    $\textrm{ET}$     & $0.9593 \pm 0.0159$ & $89.29 \pm 3.49$ \\
+    $\textrm{IVRT}$   & $0.8559 \pm 0.0165$ & $85.88 \pm 1.78$ \\
+    $\textrm{Tdiast}$ & $0.9473 \pm 0.0197$ & $88.11 \pm 4.06$ \\
+    $\textrm{PeakP}$  & $0.9871 \pm 0.0077$ & $85.29 \pm 2.13$ \\
+    $\textrm{Tpeak}$  & $0.9542 \pm 0.0150$ & $86.00 \pm 7.70$ \\
+    $\textrm{ESP}$    & $0.9959 \pm 0.0024$ & $86.23 \pm 2.59$ \\
+    $\textrm{maxdP}$  & $0.9860 \pm 0.0039$ & $87.41 \pm 3.08$ \\
+    $\textrm{mindP}$  & $0.7474 \pm 0.0687$ & $89.76 \pm 2.37$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{The AB rat GPEs' accuracy. The GPEs' accuracy was evaluated using the average $R^{2}$ score and $ISE_2$ obtained with a $5$-fold cross-validation. Values are reported as mean$\pm$std.}
+    \label{tab:gpescores1_ab}
+\end{table}
 
 \begin{figure}[!ht]
     \myfloatalign
-    \includegraphics[width=\textwidth]{figures/chapter04/hm_sham.png}
-    \caption{High-dimensional input parameter space reduction during SHAM history matching. SHAM HM completed within eight waves.}
-\end{figure}
-
-
-\begin{figure}[!ht]
-    \myfloatalign
-    \includegraphics[width=\textwidth]{figures/chapter04/hm_ab.png}
-    \caption{High-dimensional input parameter space reduction during AB history matching. AB HM completed within nine waves.}
+    \includegraphics[width=\textwidth]{figures/chapter04/bgpes_vs_bsplit_sham.pdf}
+    \caption{For each LV feature, the GPE with the highest $R^2$ split test score is used to make predictions at the respective left-out subset of test points. Predictions are sorted in ascending order for the sake of a better visualisation and joined with a thick blue line, and the respective observations (empty dots) are sorted accordingly. $2$ STD confidence intervals (shaded regions) are also plotted around predicted mean lines.}
+    \label{fig:gpesexampleinferencesham}
 \end{figure}
 
 \begin{figure}[!ht]
     \myfloatalign
-    \includegraphics[width=\textwidth]{figures/chapter04/sham_vs_ab_final_ranges.pdf}
-    \caption{Input parameters’ one-dimensional ranges after completing HM procedure. Comparison between SHAM (blue) and AB (red) rat models’ fittings. For each input parameter, the displayed intervals are scaled according to the initial range for that specific parameter. When SHAM and AB intervals’ intersection is non-empty, this is also provided with dotted lines.}
+    \includegraphics[width=\textwidth]{figures/chapter04/bgpes_vs_bsplit_ab.pdf}
+    \caption{For each LV feature, the GPE with the highest $R^2$ split test score is used to make predictions at the respective left-out subset of test points. Predictions are sorted in ascending order for the sake of a better visualisation and joined with a thick blue line, and the respective observations (empty dots) are sorted accordingly. $2$ STD confidence intervals (shaded regions) are also plotted around predicted mean lines.}
+    \label{fig:gpesexampleinferenceab}
 \end{figure}
 
-\begin{figure}[!ht]
-    \myfloatalign
-    \includegraphics[width=\textwidth]{figures/chapter04/sham_vs_ab_fit.pdf}
-    \caption{Simulator runs using the HM last wave’s parameter points as an input. (A) Obtained LV features’ (empty, coloured dots) distributions around experimental mean values (filled, black dots) for SHAM (.$1$) and AB (.$2$). $2$ standard deviations confidence intervals are shown as vertical straight lines centred in their respective mean value. All the displayed values (including confidence intervals) are normalized by the respective experimental mean values. (B) Simulated LV volume (.$1$) and pressure (.$2$) curves which the features in (A) were extracted from, for SHAM (blue) and AB (red). The average curves are displayed in darker colour variant. (C) Resulting SHAM (.$1$) and AB (.$2$) pressure-volume loops with approximately $\SI{95}{\percent}$ EDV, ESV, PeakP features’ experimental confidence intervals.}
-\end{figure}
 
-\vspace{0.2cm}
-We started with a cutoff value of $3.0$, and we incremented it by $0.5$ units until we achieved a non-empty non-implausible set after applying the implausibility criterion using the first wave's emulators. This gave initial cutoff values of $5.5$ and $5.0$ for the SHAM and AB rat models’ fitting, respectively. The cutoff value was then decremented by $0.5$ units with each HM wave down to the commonly used value of $3.0$, following the so-called Pukelsheim’s $3$-sigma rule~\cite{Pukelsheim:1994}. The decrement rate
-of $0.5$ was selected to ensure that we reached the desired final value of $3.0$ within a reasonable number waves, to maintain computational tractability, while allowing us to initialise the HM over a sufficient large search space. The final waves were run with cutoff of $3.0$, during which we continued to observe a decrease in the non-implausible parameter space size. We stoppend when the percentage of non-implausible points out of the total testing points was small (i.e. lower than $\SI{5}{\percent}$).
-
+%
+%
+%
+\subsection{Fitted models}
 
 \begin{table}[!ht]
     \myfloatalign
@@ -349,58 +349,71 @@ of $0.5$ was selected to ensure that we reached the desired final value of $3.0$
     \label{tab:hmdetails}
 \end{table}
 
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter04/hm_sham.png}
+    \caption{High-dimensional input parameter space reduction during SHAM history matching. SHAM HM completed within eight waves.}
+    \label{fig:shamspacered}
+\end{figure}
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter04/hm_ab.png}
+    \caption{High-dimensional input parameter space reduction during AB history matching. AB HM completed within nine waves.}
+    \label{fig:abspacered}
+\end{figure}
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter04/sham_vs_ab_final_ranges.pdf}
+    \caption{Input parameters’ one-dimensional ranges after completing HM procedure. Comparison between SHAM (blue) and AB (red) rat models’ fittings. For each input parameter, the displayed intervals are scaled according to the initial range for that specific parameter. When SHAM and AB intervals’ intersection is non-empty, this is also provided with dotted lines.}
+\end{figure}
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter04/sham_vs_ab_fit.pdf}
+    \caption{Simulator runs using the HM last wave’s parameter points as an input. (A) Obtained LV features’ (empty, coloured dots) distributions around experimental mean values (filled, black dots) for SHAM (.$1$) and AB (.$2$). $2$ standard deviations confidence intervals are shown as vertical straight lines centred in their respective mean value. All the displayed values (including confidence intervals) are normalized by the respective experimental mean values. (B) Simulated LV volume (.$1$) and pressure (.$2$) curves which the features in (A) were extracted from, for SHAM (blue) and AB (red). The average curves are displayed in darker colour variant. (C) Resulting SHAM (.$1$) and AB (.$2$) pressure-volume loops with approximately $\SI{95}{\percent}$ EDV, ESV, PeakP features’ experimental confidence intervals.}
+\end{figure}
 
 \vspace{0.2cm}
-Heart contraction is the result of integrated cellular, tissue and organ function. Biophysical \textit{in silico} cardiac models offer a systematic approach for studying these multi-scale interactions. The computational cost of such models is high, due to their multi-parametric and non-linear nature. This has so far made it difficult to perform model fitting and prevented global sensitivity analysis studies. We propose a machine learning approach based on Gaussian process emulation of model simulations using probabilistic surrogate models, which enables model parameter inference via a Bayesian history matching technique and global sensitivity analysis on whole-organ mechanics. This framework is applied to model healthy and aortic-banded hypertensive rats, a commonly used animal model of heart failure disease. The obtained probabilistic surrogate models accurately predicted the left ventricular pump function ($R^2=0.92$ for ejection fraction). The history matching technique allowed us to fit both the control and diseased virtual bi-ventricular rat heart models to MRI and literature data, with model outputs from the constrained parameter space falling within $2$ STD of the respective experimental values. The global sensitivity analysis identified Troponin C and cross-bridge kinetics as key parameters in determining both systolic and diastolic ventricular function.
-
-\vspace{0.2cm}
-With each beat, cardiac myocytes generate tension and relax. Cellular tension is transduced into a coordinated, global whole-heart deformation resulting in an effective, system-level pump function. The integration of cellular, tissue and organ-scale mechanisms is essential for achieving efficient transduction of work into concerted myocardial contraction and relaxation. The break down of this system of integrated mechanisms can give rise to heart failure (HF). 
-
-Cardiac biophysical models provide a useful tool for studying whole-organ contraction \cite{Niederer:2019} by simulation, and can therefore be used to understand how impaired cell level function is linked with impaired organ level activity. Building a virtual representation of the real system requires tuning the cardiac model's properties and boundary conditions to experimental data. Global sensitivity analysis (GSA) studies are also needed to determine the role of cellular, tissue and haemodynamics properties on whole-organ function.
-
-However, the high simulation cost and the multi-scale nature of the cardiac system have limited the formal parameter estimation and sensitivity analysis for this type of model. Different techniques have been employed for global parameter inference on cardiac cell models, including gradient descent \cite{Dokos:2004}, genetic algorithms \cite{Groenendaal:2015}, multivariate regression \cite{Sarkar:2010} and Markov chain Monte Carlo (MCMC) \cite{Johnstone:2016}. Most of these approaches are computationally intensive, and the computation burden is even higher when going from single to multiple scales.
-
-Surrogate models (or \textit{emulators}) can be used to replace the computationally expensive real model with a statistical representation of it, allowing rapid predictions of the model's output. Using emulators we can thus perform the high number of model evaluations required to estimate global sensitivities. In this study, we use Gaussian process emulators (GPEs), which provide confidence bounds on predictions and can therefore be used for Bayesian history matching (HM). Previously employed for fitting models of galaxy formation \cite{Vernon:2010}, infectious disease transmission \cite{Andrianakis:2015} and, more recently, human atrial cell~\cite{Coveney:2018}, HM has shown to be a valuable tool for global parameter inference.
-
-To demonstrate the capacity of GPE and HM to fit a virtual heart model, we tune model mechanics-related parameters to data from control and left ventricular (LV) hypertrophied rat hearts. LV hypertrophy is induced surgically by constricting the ascending aorta over $4$ to $6$ weeks and represents a common pathway to HF development. Aortic-banded (AB) rats are commonly used as an experimental animal model for HF pathology~\cite{Camacho:2016}.
-
-We also seek to quantitatively characterise the AB rats' impaired LV contractile function. We therefore fit the virtual bi-ventricular rat model to changes in function that we measured or were recorded by others, using HM. Finally, we perform a GSA to understand how uncertainty in cell, tissue and haemodynamics model properties affect LV function.
-
-The present work is organised as follows. Section presents the rat experimental data and describes the $3$D multi-scale bi-ventricular mathematical model of rat heart contraction and the developed machine learning framework based on GPE. Section shows results of the emulation and fitting processes and the GSA. Section provides a discussion and Section addresses some model limitations, while Section closes with a brief summary. Additional details can be found in the Supplementary materials.
-
-\vspace{0.2cm}
-The \textit{in silico} rat heart biophysical model should aim to achieve the best representation of the real system. This requires tuning the model input parameters such that the model output features reflect the available experimental data. We trained GPEs on model simulations to replace the multi-scale model map (Section) with a surrogate, fast evaluating map. Each GPE was defined as a combination of a mean function in the form of a linear regression model and a zero-mean GP (see equations ($1$)--($2$)--($3$) in the Supplementary materials). The GPE training is performed in two steps as described previously~\cite{Vernon:2010,Vernon:2018}. Firstly, the linear regression model's coefficients are fitted to the data by minimising the residual sum of squares; secondly, the GP's hyperparameters are fitted to the residuals (data minus predicted mean) by maximisation of the log-marginal likelihood function \todo{REF Rasmussen}. Tested mean functions were all the linear regression models (with intercept and interaction terms) with higher than first degree polynomials up to the third degree, while tested GP kernels were anisotropic covariance functions among the squared exponential kernel, Matern kernels \todo{REF Rasmussen}. The accuracy of a GPE was evaluated using the averaged $R^2$ (coefficient of determination) test score obtained in a $5$-fold cross-validation. Briefly, one fifth of the training dataset was excluded and the GPE was trained on the remaining points. The left-out part was then used for testing the GPE accuracy, and an $R^2$ score was calculated. This process was repeated for each of the five subsets, randomly selected from the full training dataset. The final accuracy was determined by averaging the $R^2$ scores obtained in predicting the five different left-out parts. The developed framework is outlined in Figure
-
+The \textit{in silico} rat heart biophysical model should aim to achieve the best representation of the real system. This requires tuning the model input parameters such that the model output features reflect the available experimental data. We trained GPEs on model simulations to replace the multi-scale model map (Section) with a surrogate, fast evaluating map. Each GPE was defined as a combination of a mean function in the form of a linear regression model and a zero-mean GP (see equations ($1$)--($2$)--($3$) in the Supplementary materials). The GPE training is performed in two steps as described previously~\cite{Vernon:2010,Vernon:2018}. Firstly, the linear regression model's coefficients are fitted to the data by minimising the residual sum of squares; secondly, the GP's hyperparameters are fitted to the residuals (data minus predicted mean) by maximisation of the log-marginal likelihood function \todo{REF Rasmussen}. The developed framework is outlined in Figure \todo{insert emulation schematic (maybe a renewed one?)}.
 
 \vspace{0.2cm}
 We constrained the model parameters based on model read-outs that describe key features in the LVV and LVP transients, and pressure-volume loop (Table~\ref{tab:lvfeats}). In our study, the target phenotypes' mean and standard deviation came from two different sources. Specific organ-scale feature unavailable in the MRI data \cite{Roe:2017} were deduced from literature experimental studies all performed on male rats at body temperature with abdominal/ascending aortic banding. In particular, EDV, ESV, ET and IVRT features were immediately available from the MRI data, while information about PeakP, maxdP and mindP features was collected from literature. We did not have specific values for IVCT, Tdiast, Tpeak and ESP, and we chose not to match EF explicitly as this is derived from EDV and ESV. This gave us $7$ organ-scale phenotypes (see Table~$2$ in the Supplementary materials) to constrain our model parameters.
 
 
 \vspace{0.2cm}
-To constrain the initial mechanics-related parameter space to include only points that generate multi-scale models that are consistent with experimentally observed organ-scale LV features, we adopted the HM approach described in \cite{Coveney:2018}. HM proceeds iteratively in \enquote{waves}. For each wave, the currently defined \enquote{not-ruled-out-yet} (NROY) parameter space, defined by a large cloud of points, is tested with respect to an implausibility criterion: GPEs are evaluated for each NROY point, and an implausibility score reflecting the discrepancy between emulators' predictions and data (see equations ($4$)--($5$) in the Supplementary materials) is assigned to each point. Points with an implausibility score above a chosen \enquote{cutoff} are deemed implausible, and the remaining \enquote{non-implausible} subset becomes NROY for the next wave. The initial NROY space for the first wave is a large Latin hypercube design (LHD). For each following wave, the emulators are updated with data from simulations using a subset of points from the current NROY space, becoming more accurate and thus allowing NROY to be reduced further. Additional NROY points can be generated using the \enquote{cloud} technique described in \cite{Coveney:2018} if too few points remain for the next wave. The implausibility cutoff is reduced in each wave down to a predefined threshold, and HM continues until NROY converges.
-
+To constrain the initial mechanics-related parameter space to include only points that generate multi-scale models that are consistent with experimentally observed organ-scale LV features, we adopted the HM approach described in Section
 
 \vspace{0.2cm}
 To assess how uncertainty in the model's output can be attributed to different sources of uncertainty in the model input factors, we performed a variance-based sensitivity analysis. Variance-based methods of probabilistic sensitivity analysis quantify the sensitivity of the output to the model inputs in terms of a reduction in the variance of the output. We measured this reduction by estimating the Sobol sensitivity indices \cite{Sobol:2001} through the Saltelli method \cite{Saltelli:2010} using the SALib Python library \cite{Herman:2017}. We followed the simple approach of estimating first-, second-order and total effect indices by neglecting the emulator's uncertainty and using the emulator's mean as a point-wise approximation of the model's output. The employed emulators were trained on model simulations from the whole input parameter space before performing HM (first wave). Given the initial parameters' ranges, quasi-random low-discrepancy Sobol sequences were produced and the emulators were evaluated at points belonging to these sequences in order to obtain sensitivity indices estimates.
 
-\vspace{0.2cm}
-$8$ LHDs of $1,024$ input parameter points each were simulated and the successfully completed simulations were collected to form the training dataset, with final size of $825$ and $850$ points for the SHAM and AB models, respectively. The low number of successful runs relates to a combination of failure of the mechanics simulations converging or completing a full cardiac cycle, which may happen if the contraction is insufficient to reach the aortic pressure. One GPE was trained for each output feature, for a total of $12$ GPEs. The obtained cross-validation $R^2$ test scores (GPEs' accuracy) are reported in Table~$1$ in the Supplementary materials. Emulator evaluation at a new parameter set took $\sim 1.2$ seconds against a full simulator single-core run of $\sim 4$ hours, for a total gained speedup of $12,000$ fold.
-
-\vspace{0.2cm}
-The trained GPEs were firstly employed to perform an entirely \textit{in silico} global sensitivity analysis. A subset of $7$ GPEs (specifically the ones predicting the features for which we had experimental values to match) was then used in combination with the related experimental target values to fit the rat models.
-
-\vspace{0.2cm}
-Figure shows how input parameters contribute to explaining each LV feature's total variance in SHAM and AB rat models. The $ca_{50}$ parameter is the most influential across all the LV features. The $k_{\textrm{off}}$, $T_{\textrm{ref}}$ and $ap$ parameters also play a key role. All these statements are true for both rat phenotypes. In contrast, $c_1$ is more important for AB than for SHAM, explaining a fraction of the total variance of $9$ out of $12$ LV features (in SHAM, $c_1$ is important for only $5$ features). In particular, this parameter has a significant contribution in explaining end-diastolic volume in AB (and not in SHAM). The $k_{\textrm{xb}}$ parameter affects the AB more than the SHAM features, albeit only moderately ($5$ out of $12$ against $4$ out of $12$, respectively). Finally, we observe an increased contribution of $ap$ in explaining end-systolic pressure when going from SHAM to AB. A complete description of all the first- and second-order parameters' interactions can be found in the Supplementary materials.
-
 
 %
 %
 %
-\section{Results}\label{sec:ch4results}
+\subsection{Global sensitivity analysis}
+Figure shows how input parameters contribute to explaining each LV feature's total variance in SHAM and AB rat models. The $\Caif$ parameter is the most influential across all the LV features. The $\koff$, $\tref$ and $ap$ parameters also play a key role. All these statements are true for both rat phenotypes. In contrast, $\Cone$ is more important for AB than for SHAM, explaining a fraction of the total variance of $9$ out of $12$ LV features (in SHAM, $\Cone$ is important for only $5$ features). In particular, this parameter has a significant contribution in explaining end-diastolic volume in AB (and not in SHAM). The $\kxb$ parameter affects the AB more than the SHAM features, albeit only moderately ($5$ out of $12$ against $4$ out of $12$, respectively). Finally, we observe an increased contribution of $ap$ in explaining end-systolic pressure when going from SHAM to AB. A complete description of all the first- and second-order parameters' interactions can be found in the Supplementary materials.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter04/gsa_sham.pdf}
+    \caption{High-dimensional input parameter space reduction during SHAM history matching. SHAM HM completed within eight waves.}
+    \label{fig:shamgsa}
+\end{figure}
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter04/gsa_ab.pdf}
+    \caption{High-dimensional input parameter space reduction during AB history matching. AB HM completed within nine waves.}
+    \label{fig:abgsa}
+\end{figure}
+
+\vspace{0.2cm}
 HM is illustrated in Figure~\ref{fig:hmspacered}A for the SHAM and AB rat models. The $8$-dimensional input parameter space is plotted as a $2$D projection for each pair of parameters. An initial set (lightest colour variant) consisting of $400,000$ points sampled with a LHD in the input parameter space was tested against an \textit{implausibility criterior} (see equation $(5)$ in the Supplementary materials) and became progressively constrained to smaller regions (darker colour variants) as the HM process went forward. The initial parameters' $1$D ranges were determined after a literature search which included both experimental and modelling papers (see Tables $3$--$4$ in the Supplementary materials). At each successive wave, $256$ points uniformly sampled from the non-implausible region of the previous wave were simulated to build the new emulators' training dataset along with the previously used training dataset, while the remaining points from the non-implausible region of the previous wave plus $50,000$ new points sampled in the same region constituted the testing set. The threshold constant used for discerning whether or not a point was to be discarded (respectively implausible and non-implausible point), started from $5.5$ and $5.0$ in the SHAM and AB models' tuning respectively, and was progressively reduced by $0.5$ units in each wave, until reaching the commonly used value of $3.0$ (see e.g. \cite{Vernon:2010}). The choice of these specific starting values ensured that a nonempty non-implausible set was obtained after the first wave (see Supplementary materials for additional information on the cutoff initial tuning). The process was terminated when the fraction of non-implausible points became small (namely $0.1\%$ and $1.1\%$ of the total testing set for SHAM and AB models respectively), completing SHAM and AB models' fitting in $8$ and $9$ waves respectively. A total of $4,352$ model simulations (without considering the two initial waves, this is equivalent to a total of $15\,\text{waves}\times 256\,\text{points}$) and $1,550,000$ emulator evaluations ($2\,\text{LHDs}\,\times 400,000\,\text{points}+15\,\text{waves}\times 50,000\,\text{points}$) were performed.
 
 \vspace{0.2cm}
-Although HM does not ensure the reduction in individual parameters' ranges but rather a whole high-dimensional space reduction \cite{Coveney:2018}, the diagonal plots in Figure~\ref{fig:hmspacered}A suggest that all the parameters underwent reduction (to different degrees) along their $1$D domain, both in the SHAM and AB models. We therefore analysed whether these parameters had been constrained to lie in spaces which differ according to the rat phenotype. This phenomenon was observed in $5$ of the $8$ total parameters, as highlighted in FigureB. We can see that $z$, $ca_{50}$, $k_{\textrm{xb}}$, $k_{\textrm{off}}$ and $T_{\textrm{ref}}$ take values in completely separated spaces for the SHAM and AB models. The biggest space separation is observed for $ca_{50}$ and $T_{\textrm{ref}}$.
+Although HM does not ensure the reduction in individual parameters' ranges but rather a whole high-dimensional space reduction \cite{Coveney:2018}, the diagonal plots in Figure~\ref{fig:hmspacered}A suggest that all the parameters underwent reduction (to different degrees) along their $1$D domain, both in the SHAM and AB models. We therefore analysed whether these parameters had been constrained to lie in spaces which differ according to the rat phenotype. This phenomenon was observed in $5$ of the $8$ total parameters, as highlighted in FigureB. We can see that $z$, $\Caif$, $\kxb$, $\koff$ and $\tref$ take values in completely separated spaces for the SHAM and AB models. The biggest space separation is observed for $\Caif$ and $\tref$.
 
 We finally investigated whether the constrained input parameter space was mapped by the simulator into model read-outs that matched experimental observations. For this purpose, we sampled and simulated $1,024$ non-implausible points in the HM final wave's parameter space of both SHAM and AB models. This was performed using rejection sampling, i.e. randomly selecting new points with components in the final wave's reduced parameter ranges and checking their implausibility measure, eventually discarding the points with implausibility measure above the current cutoff value. Of these, only $264$ and $178$ points led to a successfully completed simulation for SHAM and AB models respectively. After extracting the LV features from the simulator outputs, we examined their distributions around the related experimentally observed mean values (see Table~$2$ in the Supplementary materials).
 
@@ -433,3 +446,20 @@ Finally, global sensitivity indices were estimated using the mean of the availab
 
 \vspace{0.2cm}
 We have shown that GPE can effectively be used to robustly and rapidly constrain multi-scale cardiac models from organ-scale measurements. The obtained virtual bi-ventricular rat hearts are a valuable system to be used for further investigation of heart failure. Moreover, we demonstrated that our GPE-based GSA approach enables the computationally efficient identification of key components in 3D ventricular mechanics, giving a deeper insight into the link between cell, tissue, shape and boundary conditions properties and organ-scale function.
+
+
+\vspace{0.2cm}
+Heart contraction is the result of integrated cellular, tissue and organ function. Biophysical \textit{in silico} cardiac models offer a systematic approach for studying these multi-scale interactions. The computational cost of such models is high, due to their multi-parametric and non-linear nature. This has so far made it difficult to perform model fitting and prevented global sensitivity analysis studies. We propose a machine learning approach based on Gaussian process emulation of model simulations using probabilistic surrogate models, which enables model parameter inference via a Bayesian history matching technique and global sensitivity analysis on whole-organ mechanics. This framework is applied to model healthy and aortic-banded hypertensive rats, a commonly used animal model of heart failure disease. The obtained probabilistic surrogate models accurately predicted the left ventricular pump function ($R^2=0.92$ for ejection fraction). The history matching technique allowed us to fit both the control and diseased virtual bi-ventricular rat heart models to MRI and literature data, with model outputs from the constrained parameter space falling within $2$ STD of the respective experimental values. The global sensitivity analysis identified Troponin C and cross-bridge kinetics as key parameters in determining both systolic and diastolic ventricular function.
+
+\vspace{0.2cm}
+With each beat, cardiac myocytes generate tension and relax. Cellular tension is transduced into a coordinated, global whole-heart deformation resulting in an effective, system-level pump function. The integration of cellular, tissue and organ-scale mechanisms is essential for achieving efficient transduction of work into concerted myocardial contraction and relaxation. The break down of this system of integrated mechanisms can give rise to heart failure (HF). 
+
+Cardiac biophysical models provide a useful tool for studying whole-organ contraction \cite{Niederer:2019} by simulation, and can therefore be used to understand how impaired cell level function is linked with impaired organ level activity. Building a virtual representation of the real system requires tuning the cardiac model's properties and boundary conditions to experimental data. Global sensitivity analysis (GSA) studies are also needed to determine the role of cellular, tissue and haemodynamics properties on whole-organ function.
+
+However, the high simulation cost and the multi-scale nature of the cardiac system have limited the formal parameter estimation and sensitivity analysis for this type of model. Different techniques have been employed for global parameter inference on cardiac cell models, including gradient descent \cite{Dokos:2004}, genetic algorithms \cite{Groenendaal:2015}, multivariate regression \cite{Sarkar:2010} and Markov chain Monte Carlo (MCMC) \cite{Johnstone:2016}. Most of these approaches are computationally intensive, and the computation burden is even higher when going from single to multiple scales.
+
+Surrogate models (or \textit{emulators}) can be used to replace the computationally expensive real model with a statistical representation of it, allowing rapid predictions of the model's output. Using emulators we can thus perform the high number of model evaluations required to estimate global sensitivities. In this study, we use Gaussian process emulators (GPEs), which provide confidence bounds on predictions and can therefore be used for Bayesian history matching (HM). Previously employed for fitting models of galaxy formation \cite{Vernon:2010}, infectious disease transmission \cite{Andrianakis:2015} and, more recently, human atrial cell~\cite{Coveney:2018}, HM has shown to be a valuable tool for global parameter inference.
+
+To demonstrate the capacity of GPE and HM to fit a virtual heart model, we tune model mechanics-related parameters to data from control and left ventricular (LV) hypertrophied rat hearts. LV hypertrophy is induced surgically by constricting the ascending aorta over $4$ to $6$ weeks and represents a common pathway to HF development. Aortic-banded (AB) rats are commonly used as an experimental animal model for HF pathology~\cite{Camacho:2016}.
+
+We also seek to quantitatively characterise the AB rats' impaired LV contractile function. We therefore fit the virtual bi-ventricular rat model to changes in function that we measured or were recorded by others, using HM. Finally, we perform a GSA to understand how uncertainty in cell, tissue and haemodynamics model properties affect LV function.

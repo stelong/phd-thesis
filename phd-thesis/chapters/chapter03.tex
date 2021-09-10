@@ -129,7 +129,7 @@ Equation~\eqref{eq:fsimul} effectively constitutes a quantitative link between c
 %
 %
 %
-\section{Gaussian process emulation}
+\section{Gaussian process emulation}\label{sec:ch3gpe}
 Let's consider $N$ realisations $y^{(i)},\,i=1,\,\dots,\,N$ of a computer code $f$ ($=f_{simul}$) for $N$ different input parameter points $\mathbf{x}^{(i)},\,i=1,\,\dots,\,N$ each one with dimension $D$: $\mathbf{x}^{(i)}=(x_{1}^{(i)},\,\dots,\,x_{D}^{(i)})^\mathsf{T}$. More concisely, this can be written as $f(X)$ (or $\mathbf{f}$) where $X=(\mathbf{x}^{(1)},\,\dots,\,\mathbf{x}^{(N)})$ is the input matrix. The pair $(X,\,f(X))$ is called \textit{learning sample}. A \textit{Gaussian process emulator} (\acs{GPE}) treats the deterministic response $f(\mathbf{x})$ as a realisation of a random function $f(\mathbf{x},\,\omega)$ which can be written as the sum of a regression model and a stochastic process~\cite{OHagan:2006}:
 \begin{equation}
     f(\mathbf{x},\,\omega) = h(\mathbf{x}) + Z(\mathbf{x},\,\omega), \quad (\mathbf{x},\,\omega)\in\mathbb{R}^D\times\Omega
@@ -361,7 +361,7 @@ Having available trained $f_{emul,\,j}s$ emulators is powerful as they enable pe
 %
 %
 %
-\section{History matching}
+\section{History matching}\label{sec:ch3hm}
 A first application of emulators is in the \textit{history matching} (\acs{HM}) technique. In the case where real system observations are available, HM can be used to learn about the input space characterising the simulator $f_{simul}$ which is being used to describe the real system.
 
 \vspace{0.2cm}
