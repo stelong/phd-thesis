@@ -1,12 +1,12 @@
 %==============================================================================
-\chapter{Model emulation, parameter fitting and uncertainty 
+\chapter{Model emulation, fitting and uncertainty 
 quantification}\label{cha:chapter3}
 %==============================================================================
 %
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we present the principal tools we employed for model emulation, fitting and uncertainty quantification. First, the full multi-scale $3$D biventricular rat heart contraction model is represented as a non-linear mapping between selected input parameters and scalar output features. Second, the non-linear mapping is emulated using probabilistic surrogates based on Gaussian processes. Finally, two applications of emulators are presented: Bayesian history matching technique and emulator-based Sobol' global sensitivity analysis. 
+    In this chapter, we present the principal tools we employed for model emulation, fitting and uncertainty quantification. First, the full multi-scale $3$D biventricular rat heart contraction model is represented as a non-linear mapping between selected input parameters and scalar output features of interest. Second, the non-linear mapping is emulated using probabilistic surrogates based on Gaussian process emulation. Finally, two applications of emulators are presented: Bayesian history matching technique for model fitting and emulator-based Sobol' global sensitivity analysis for model uncertainty quantification. 
 \end{remark}
 
 
@@ -423,8 +423,8 @@ At each HM wave, we will perform the following operations.
     % 
     \begin{align*}
         & NROY\subset\begin{cases}
-        X &\text{if}\quad w=1 \\
-        X_{NIMP} &\text{if}\quad w>1
+        X &\text{if}\quad \text{wave}=1 \\
+        X_{NIMP} &\text{if}\quad \text{wave}>1
         \end{cases}
     \end{align*} 
     \item[\textsc{step 2.}] Calculate the implausibility measure for each point in the NROY space and test it against the chosen cutoff value $I_{\,\text{cutoff}}$ to rule-out the NROY space into implausible $X_{IMP}$ and non-implausible $X_{NIMP}$ spaces:
@@ -440,12 +440,8 @@ At each HM wave, we will perform the following operations.
         & T^{+} := \{(\mathbf{x},\,f_{simul}(\mathbf{x})),\,\mathbf{x}\in X_{NIMP}\} \\
         & T = T_{NIMP}\cup T^{+}
     \end{align*}
-    \item[\textsc{step 4.}] Cut the $X_{IMP}$ space out of the investigated parameter space and retain only the new $X_{NIMP}$ space:
-    %
-    \begin{equation*}
-        X_{NIMP} = X_{NIMP}\setminus\{\mathbf{x}\;\vert\;(\mathbf{x},\,f_{simul}(\mathbf{x}))\in T^{+}\}
-    \end{equation*}
-    \item[\textsc{step 5.}] Unless a stopping criterion has been reached, refocus on the new $X_{NIMP}$ space, i.e. repeat from \textsc{step 1} using emulators trained on the new training dataset $T$, being these now more accurate in the non-implausible region.
+    \item[\textsc{step 4.}] Cut the $X_{IMP}$ space out of the investigated parameter space and retain only the $X_{NIMP}$ space.
+    \item[\textsc{step 5.}] Unless a stopping criterion has been reached, refocus on the $X_{NIMP}$ space, i.e. repeat from \textsc{step 1} using emulators trained on the new training dataset $T$, being these now more accurate in the non-implausible parameter region.
 \end{description}
 
 \vspace{0.2cm}

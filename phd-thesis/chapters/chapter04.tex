@@ -1,12 +1,11 @@
 %==============================================================================
-\chapter{In silico personalised rat heart contraction models: the role of $\Ca$ 
-and sarcomere dynamics in diastolic heart failure}\label{cha:chapter4}
+\chapter{In silico personalised rat heart contraction models: the role of sarcomere kinetics in diastolic heart failure}\label{cha:chapter4}
 %==============================================================================
 %
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we personalise the rat heart contraction mechanics mathematical model to the specific SHAM and AB rat data.
+    In this chapter, we personalise the $3$D biventricular rat heart contraction mechanics mathematical model to the specific clinical data obtained from a cohort of sham-operated and $6$-weeks-post-surgery aortic banded rats. We specifically fit one representative model for each cohort (control and diseased ones). Models' sensitivities are then characterised. Differences in the parameter space between the two models confirm that impaired cardiac function is linked to altered sarcomere kinetics. 
 \end{remark}
 
 
@@ -14,9 +13,18 @@ and sarcomere dynamics in diastolic heart failure}\label{cha:chapter4}
 %
 %
 \section{Rat data}
-We used healthy control and diseased rat data from experimental studies conducted by R{\o}e et al. \cite{Roe:2017}. Briefly, \textit{aortic banding} (\acs{AB}) was performed in male Wistar rats ($n=29$), while \textit{sham-operated} (\acs{SHAM}) rats ($n=23$) served as controls. \textit{In vivo} cardiac function was characterised by echocardiography six weeks after surgery. The criterion for inclusion in the AB group was posterior wall thickening ($>1.9$ mm). A cohort of rats ($n=8$, $n=15$ from SHAM, AB groups, respectively) underwent an examination with \textit{magnetic resonance imaging} (\acs{MRI}). Rats in the AB cohort showed a preserved systolic function (ejection fraction and fractional shortening). Concentric LV hypertrophy arose, as an increase in LV mass and wall thickness (WT) was observed. Moreover, evidence of reduced peak early diastolic velocity (e’) and increased early mitral inflow velocity / mitral annular early diastolic velocity (E/e’) confirmed an impaired diastolic function in the rats.
+We used healthy control and diseased rat data from experimental studies conducted by R{\o}e et al. \cite{Roe:2017}. Briefly, \textit{aortic banding} (\acs{AB}) was performed in male Wistar rats ($n=29$), while \textit{sham-operated} (\acs{SHAM}) rats ($n=23$) served as controls. \textit{In vivo} cardiac function was characterised by echocardiography six weeks after surgery. The criterion for inclusion in the AB group was posterior wall thickening ($>1.9$ mm). A cohort of rats ($n=8$, $n=15$ from SHAM, AB groups, respectively) underwent an examination with \textit{magnetic resonance imaging} (\acs{MRI}). Rats in the AB cohort showed a preserved systolic function (ejection fraction and fractional shortening). Concentric LV hypertrophy arose, as an increase in LV mass and wall thickness was observed. Moreover, evidence of reduced peak early diastolic velocity (e’) and increased early mitral inflow velocity / mitral annular early diastolic velocity (E/e’) confirmed an impaired diastolic function in the rats.
 
-\vspace{0.2cm}
+
+%
+%
+%
+\section{Methods}
+
+%
+%
+%
+\subsection{Mesh generation}
 One representative cine MRI scan was obtained for both the SHAM and the AB rat cohorts. Each image set consisted of $47$ equally, $\SI{2.779}{\milli\second}$-spaced time frames. Example apicobasal slices are shown in Figure~\ref{fig:ratrepimag}, while MRI characteristics are reported in Table~\ref{tab:mrichar}.
 
 \begin{figure}[hbt!]
@@ -47,12 +55,12 @@ One representative cine MRI scan was obtained for both the SHAM and the AB rat c
 \end{table}
 
 \vspace{0.2cm}
-For each rat, we segmented the LV blood pool at each time frame and collected the corresponding volume estimates based on voxels size/count. This allowed to extract the entire experimental LV volume transient for each rat, displayed in Figure~\ref{fig:lvvexptransients}.
+For each rat, we segmented the LV blood pool at each time frame and collected the corresponding volume estimates based on voxels size/count. This allowed to extract LV volume transient for each rat, displayed in Figure~\ref{fig:lvvexptransients}.
 
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=0.8\textwidth]{figures/chapter04/lvv_experimental_transient.pdf}
-    \caption{LV volume experimental transient obtained by segmenting the LV blood pool of $47$ consecutive time frames images for the SHAM (blue) and the AB (red) reference rat images. Dashed lines indicate approximately diastasis time during the cardiac cycle.}
+    \caption{LV volume transients obtained by segmenting the LV blood pool of $47$ consecutive time frames images for the SHAM (blue) and the AB (red) reference rat images. Dashed lines indicate approximately diastasis time during the cardiac cycle.}
     \label{fig:lvvexptransients}
 \end{figure}
 
@@ -101,11 +109,12 @@ Rat meshes with fibres were generated from the representative MRI scans segmenta
     \label{fig:ratrepgeom}
 \end{figure}
 
+
 %
 %
 %
-\section{Specific Methods}
-We made use of two variants~\cite{Gattoni:2017} of the original ionic model the same authors developed in order to describe the control SHAM and the diseased AB rats specific calcium dynamics. The experimental data the authors used to re-fit the original model comes from exactly the same experimental study (\cite{Roe:2017}) which we obtained the MRI scans from. For this reason, we were able have both sham-operated and aortic-banded rat cohorts-specific anatomy and electrophysiology mathematical descriptions at the same time. Simulated action potentials and calcium transients from the two different models are shown in Figure~\ref{fig:shamvsabcaap}.
+\subsection{Ionic model}
+We employed two variants~\cite{Gattoni:2017} of the original ionic model~\cite{Gattoni:2016} the same authors developed in order to describe the control SHAM and the diseased AB rats specific calcium dynamics. The experimental data the authors used to re-fit the original model comes from exactly the same experimental study (\cite{Roe:2017}) which we obtained the MRI scans from. For this reason, we were able have both sham-operated and aortic-banded rat cohorts-specific anatomy and electrophysiology mathematical descriptions at the same time. Simulated action potentials and calcium transients from the two different models are shown in Figure~\ref{fig:shamvsabcaap}.
 
 \begin{figure}[!ht]
     \myfloatalign
@@ -118,8 +127,84 @@ We made use of two variants~\cite{Gattoni:2017} of the original ionic model the 
 %
 %
 %
-\section{Results}\label{sec:ch4results}
-$8$ LHDs of $1,024$ input parameter points each were simulated and the successfully completed simulations were collected to form the training dataset, with final size of $825$ and $850$ points for the SHAM and AB models, respectively. The low number of successful runs relates to a combination of failure of the mechanics simulations converging or completing a full cardiac cycle, which may happen if the contraction is insufficient to reach the aortic pressure. One GPE was trained for each output feature, for a total of $12$ GPEs. The obtained cross-validation $R^2$ test scores (GPEs' accuracy) are reported in Table~$1$ in the Supplementary materials. Emulator evaluation at a new parameter set took $\sim 1.2$ seconds against a full simulator single-core run of $\sim 4$ hours, for a total gained speedup of $12,000$ fold.
+\subsection{Input parameter space}
+The bounds of the selected model input parameters were defined from prior experimental and modelling studies, summarised in Tables~\ref{tab:shamranges}--\ref{tab:abranges}. The same finally chosen parameter bounds (Table) were used for both the SHAM and AB models to construct the initial parameter space $X\subset\mathbb{R}^{8}$ where to sample points to be simulated to then generate the emulators' training datasets. 
+
+\newpage
+\begin{landscape}
+\begin{table}
+    \vspace{-\marginparsep}
+    \vspace{-\marginparwidth}
+    \begin{tabularx}{2\textwidth}{llllll}
+    \toprule
+    \tableheadline{Parameter} & \tableheadline{Units} & \multicolumn{2}{l}{\spacedlowsmallcaps{Value from experimental studies}} & \multicolumn{2}{l}{\spacedlowsmallcaps{Value from modelling studies}} \\ \midrule
+     & & \tableheadline{Range} & \tableheadline{Reference} & \tableheadline{Range} & \tableheadline{Reference} \\ \midrule
+    $\Caif$ & $\SI{}{\micro\Molar}$                 & $-$ & $-$ & $[0.8,\,1.56]$ & \cite{Land:2012*a, Lewalle:2018, Niederer:2006, Wei-Dong-Gao:1994, Gao:1995, Backx:1995} \\
+    $\koff$                                & $\SI{}{\per\milli\second}$            & $[0.0013,\,1.2]$ & \cite{Rosenfeld:1985, Tikunova:2004, Davis:2007} & $[0.05,\,0.2]$ & \cite{Land:2012*a, Lewalle:2018, Niederer:2006} \\
+    $\kxb$                                  & $\SI{}{\per\milli\second}$            & $0.1$ & \cite{Blanchard:1999, Stull:2002} & $[0.008,\,0.2]$ & \cite{Land:2012*a, Lewalle:2018} \\
+    $\tref$                                 & $\SI{}{\kilo\pascal}$                 & $-$ & $-$ & $[20,\, 160]$ & \cite{Land:2012*a, Lewalle:2018, Niederer:2006, Niederer:2009, Blanchard:1999, Stuyvers:2002, Palmer:2004, Kreutziger:2011, Rice:2008, Bovendeerd:2009} \\
+    $\p$                                                & $\SI{}{\kilo\pascal}$                 & $[0.2,\,1.4]$ & \cite{Nemeth:2016, Sato:1990, Schunkert:1995, Loot:2005, Liu:2014, Ku:2014, Ruppert:2018, Schunkert:1990, Ruppert:2016} & $1.0$ & \cite{Land:2012*a, Lewalle:2018} \\
+    $\pao$                                              & $\SI{}{\kilo\pascal}$                 & $[12,\,21]$ & \cite{Nemeth:2016, Ku:2014, Ruppert:2018, Kovacs:2015, Lee:2017, Olah:2015, Ruppert:2016, Toledo:2017} & $[8,\,9]$ & \cite{Land:2012*a, Lewalle:2018} \\
+    $\Z$                                                & $\SI{}{\mmHg\second\per\milli\litre}$ & $[1.5,\,16]$ & \cite{Kobayashi:1996, Levy:1988, Zuckerman:1989, Lin:2004, Yin:1980, Ioannou:2009, Chang:2015} & $[6,\,20]$ & \cite{Land:2012*a, Lewalle:2018, Westerhof:1991} \\
+    $\Cone$                                              & $\SI{}{\kilo\pascal}$                 & $[0.1,\,3.0]$ & \cite{Nordbo:2014} (review paper) & $[0.4,\,1.1]$ & \cite{Land:2012*a, Lewalle:2018, Niederer:2009, Omens:1993} \\
+    \bottomrule
+    \end{tabularx}
+    \caption{SHAM rat model input parameters' values from experimental and modelling studies.}
+    \label{tab:shamranges}
+\end{table}
+\end{landscape}
+
+\newpage
+\begin{landscape}
+\begin{table}
+    \vspace{-\marginparsep}
+    \vspace{-\marginparwidth}
+    \begin{tabularx}{2\textwidth}{llllll}
+    \toprule
+    \tableheadline{Parameter} & \tableheadline{Units} & \multicolumn{2}{l}{\spacedlowsmallcaps{Value from experimental studies}} & \multicolumn{2}{l}{\spacedlowsmallcaps{Value from modelling studies}} \\ \midrule
+     & & \tableheadline{Range} & \tableheadline{Reference} & \tableheadline{Range} & \tableheadline{Reference} \\ \midrule
+    $\Caif$ & $\SI{}{\micro\Molar}$                 & $-$ & $-$ & $[0.8,\,1.0]$ & \cite{Lewalle:2018} \\
+    $\koff$                                & $\SI{}{\per\milli\second}$            & $-$ & $-$ & $0.1$ & \cite{Lewalle:2018} \\
+    $\kxb$                                  & $\SI{}{\per\milli\second}$            & $-$ & $-$ & $0.02$ & \cite{Lewalle:2018} \\
+    $\tref$                                 & $\SI{}{\kilo\pascal}$                 & $-$ & $-$ & $120$ & \cite{Lewalle:2018} \\
+    $\p$                                                & $\SI{}{\kilo\pascal}$                 & $[0.3,\,1.6]$ & \cite{Nemeth:2016, Sato:1990, Schunkert:1995, Loot:2005, Liu:2014, Ku:2014, Ruppert:2018, Schunkert:1990, Ruppert:2016} & $1.0$ & \cite{Lewalle:2018} \\
+    $\pao$                                              & $\SI{}{\kilo\pascal}$                 & $[21,\,26]$ & \cite{Nemeth:2016, Ku:2014, Ruppert:2018, Ruppert:2016} & $[7,\,20]$ & \cite{Lewalle:2018} \\
+    $\Z$                                                & $\SI{}{\mmHg\second\per\milli\litre}$ & $[5.5,\,23]$ & \cite{Kobayashi:1996, Yin:1980, Ioannou:2009} & $9.5$ & \cite{Lewalle:2018} \\
+    $\Cone$                                              & $\SI{}{\kilo\pascal}$                 & $-$ & $-$ & $[0.2,\,1.6]$ & \cite{Lewalle:2018} \\
+    \bottomrule
+    \end{tabularx}
+    \caption{AB rat model input parameters' values from experimental and modelling studies.}
+    \label{tab:abranges}
+\end{table}
+\end{landscape}
+
+\newpage
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XXX}
+        \toprule
+        \tableheadline{Parameter} & \tableheadline{Units} & \tableheadline{Range} \\
+        \midrule
+        $\Caif$ & $\SI{}{\micro\Molar\tothe{1/2}}$      & $[0.25,\,3.25]$ \\
+        $\koff$ & $\SI{}{\per\milli\second}$            & $[0.05,\,0.20]$ \\
+        $\kxb$  & $\SI{}{\per\milli\second}$            & $[0.008,\,0.200]$ \\
+        $\tref$ & $\SI{}{\kilo\pascal}$                 & $[80,\,160]$ \\
+        $\p$    & $\SI{}{\kilo\pascal}$                 & $[0.3,\,1.4]$ \\
+        $\pao$  & $\SI{}{\kilo\pascal}$                 & $[6.0,\,21.0]$ \\
+        $\Z$    & $\SI{}{\mmHg\second\per\milli\litre}$ & $[5.5,\,20.0]$ \\
+        $\Cone$ & $\SI{}{\kilo\pascal}$                 & $[0.1,\,3.0]$ \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Final adopted input parameter ranges for both the SHAM and AB rat models.}
+    \label{tab:finalshamabranges}
+\end{table}
+
+
+%
+%
+%
+\subsection{Training dataset}
+$8$ LHDs of $1,024$ input parameter points each were simulated and the successfully completed simulations were collected to form the training dataset, with final size of $825$ and $850$ points for the SHAM and AB models, respectively. The low number of successful runs relates to a combination of failure of the mechanics simulations converging or completing a full cardiac cycle, which may happen if the contraction is insufficient to reach the aortic pressure. One GPE was trained for each output feature (Table~\ref{tab:lvfeatures}), for a total of $12$ GPEs. The obtained cross-validation $R^2$ test scores (GPEs' accuracy) are reported in Table~$1$ in the Supplementary materials. Emulator evaluation at a new parameter set took $\sim 1.2$ seconds against a full simulator single-core run of $\sim 4$ hours, for a total gained speedup of $12,000$ fold.
 
 \begin{table}[!ht]
     \myfloatalign
@@ -207,53 +292,6 @@ For this study, the target organ-scale features' mean and standard deviation val
     \label{tab:values2match}
 \end{table}
 
-\newpage
-\begin{landscape}
-\begin{table}
-    \vspace{-\marginparsep}
-    \vspace{-\marginparwidth}
-    \begin{tabularx}{2\textwidth}{llllll}
-    \toprule
-    \tableheadline{Parameter} & \tableheadline{Units} & \multicolumn{2}{l}{\spacedlowsmallcaps{Value from experimental papers}} & \multicolumn{2}{l}{\spacedlowsmallcaps{Value from modelling papers}} \\ \midrule
-     & & \tableheadline{Range} & \tableheadline{Reference} & \tableheadline{Range} & \tableheadline{Reference} \\ \midrule
-    $\Caif$ & $\SI{}{\micro\Molar}$                 & $-$ & $-$ & $[0.8,\,1.56]$ & \cite{Land:2012*a, Lewalle:2018, Niederer:2006, Wei-Dong-Gao:1994, Gao:1995, Backx:1995} \\
-    $\koff$                                & $\SI{}{\per\milli\second}$            & $[0.0013,\,1.2]$ & \cite{Rosenfeld:1985, Tikunova:2004, Davis:2007} & $[0.05,\,0.2]$ & \cite{Land:2012*a, Lewalle:2018, Niederer:2006} \\
-    $\kxb$                                  & $\SI{}{\per\milli\second}$            & $0.1$ & \cite{Blanchard:1999, Stull:2002} & $[0.008,\,0.2]$ & \cite{Land:2012*a, Lewalle:2018} \\
-    $\tref$                                 & $\SI{}{\kilo\pascal}$                 & $-$ & $-$ & $[20,\, 160]$ & \cite{Land:2012*a, Lewalle:2018, Niederer:2006, Niederer:2009, Blanchard:1999, Stuyvers:2002, Palmer:2004, Kreutziger:2011, Rice:2008, Bovendeerd:2009} \\
-    $\p$                                                & $\SI{}{\kilo\pascal}$                 & $[0.2,\,1.4]$ & \cite{Nemeth:2016, Sato:1990, Schunkert:1995, Loot:2005, Liu:2014, Ku:2014, Ruppert:2018, Schunkert:1990, Ruppert:2016} & $1.0$ & \cite{Land:2012*a, Lewalle:2018} \\
-    $\pao$                                              & $\SI{}{\kilo\pascal}$                 & $[12,\,21]$ & \cite{Nemeth:2016, Ku:2014, Ruppert:2018, Kovacs:2015, Lee:2017, Olah:2015, Ruppert:2016, Toledo:2017} & $[8,\,9]$ & \cite{Land:2012*a, Lewalle:2018} \\
-    $\Z$                                                & $\SI{}{\mmHg\second\per\milli\litre}$ & $[1.5,\,16]$ & \cite{Kobayashi:1996, Levy:1988, Zuckerman:1989, Lin:2004, Yin:1980, Ioannou:2009, Chang:2015} & $[6,\,20]$ & \cite{Land:2012*a, Lewalle:2018, Westerhof:1991} \\
-    $\Cone$                                              & $\SI{}{\kilo\pascal}$                 & $[0.1,\,3.0]$ & \cite{Nordbo:2014} (review paper) & $[0.4,\,1.1]$ & \cite{Land:2012*a, Lewalle:2018, Niederer:2009, Omens:1993} \\
-    \bottomrule
-    \end{tabularx}
-    \caption{SHAM rat model input parameters' ranges. The initial range of each parameter will be given by the union of experimental and modelling papers' ranges, intersected with the range resulting for the AB rat model (Table~\ref{tab:abranges}).}
-    \label{tab:shamranges}
-\end{table}
-\end{landscape}
-
-\newpage
-\begin{landscape}
-\begin{table}
-    \vspace{-\marginparsep}
-    \vspace{-\marginparwidth}
-    \begin{tabularx}{2\textwidth}{llllll}
-    \toprule
-    \tableheadline{Parameter} & \tableheadline{Units} & \multicolumn{2}{l}{\spacedlowsmallcaps{Value from experimental papers}} & \multicolumn{2}{l}{\spacedlowsmallcaps{Value from modelling papers}} \\ \midrule
-     & & \tableheadline{Range} & \tableheadline{Reference} & \tableheadline{Range} & \tableheadline{Reference} \\ \midrule
-    $\Caif$ & $\SI{}{\micro\Molar}$                 & $-$ & $-$ & $[0.8,\,1.0]$ & \cite{Lewalle:2018} \\
-    $\koff$                                & $\SI{}{\per\milli\second}$            & $-$ & $-$ & $0.1$ & \cite{Lewalle:2018} \\
-    $\kxb$                                  & $\SI{}{\per\milli\second}$            & $-$ & $-$ & $0.02$ & \cite{Lewalle:2018} \\
-    $\tref$                                 & $\SI{}{\kilo\pascal}$                 & $-$ & $-$ & $120$ & \cite{Lewalle:2018} \\
-    $\p$                                                & $\SI{}{\kilo\pascal}$                 & $[0.3,\,1.6]$ & \cite{Nemeth:2016, Sato:1990, Schunkert:1995, Loot:2005, Liu:2014, Ku:2014, Ruppert:2018, Schunkert:1990, Ruppert:2016} & $1.0$ & \cite{Lewalle:2018} \\
-    $\pao$                                              & $\SI{}{\kilo\pascal}$                 & $[21,\,26]$ & \cite{Nemeth:2016, Ku:2014, Ruppert:2018, Ruppert:2016} & $[7,\,20]$ & \cite{Lewalle:2018} \\
-    $\Z$                                                & $\SI{}{\mmHg\second\per\milli\litre}$ & $[5.5,\,23]$ & \cite{Kobayashi:1996, Yin:1980, Ioannou:2009} & $9.5$ & \cite{Lewalle:2018} \\
-    $\Cone$                                              & $\SI{}{\kilo\pascal}$                 & $-$ & $-$ & $[0.2,\,1.6]$ & \cite{Lewalle:2018} \\
-    \bottomrule
-    \end{tabularx}
-    \caption{AB rat model input parameters' ranges. The initial range for each parameter will be given by the union of experimental and modelling papers' ranges, intersected with the range resulting for the SHAM rat model (Table \ref{tab:shamranges}).}
-    \label{tab:abranges}
-\end{table}
-\end{landscape}
 
 
 \begin{figure}[!ht]
@@ -354,7 +392,11 @@ The trained GPEs were firstly employed to perform an entirely \textit{in silico}
 \vspace{0.2cm}
 Figure shows how input parameters contribute to explaining each LV feature's total variance in SHAM and AB rat models. The $ca_{50}$ parameter is the most influential across all the LV features. The $k_{\textrm{off}}$, $T_{\textrm{ref}}$ and $ap$ parameters also play a key role. All these statements are true for both rat phenotypes. In contrast, $c_1$ is more important for AB than for SHAM, explaining a fraction of the total variance of $9$ out of $12$ LV features (in SHAM, $c_1$ is important for only $5$ features). In particular, this parameter has a significant contribution in explaining end-diastolic volume in AB (and not in SHAM). The $k_{\textrm{xb}}$ parameter affects the AB more than the SHAM features, albeit only moderately ($5$ out of $12$ against $4$ out of $12$, respectively). Finally, we observe an increased contribution of $ap$ in explaining end-systolic pressure when going from SHAM to AB. A complete description of all the first- and second-order parameters' interactions can be found in the Supplementary materials.
 
-\vspace{0.2cm}
+
+%
+%
+%
+\section{Results}\label{sec:ch4results}
 HM is illustrated in Figure~\ref{fig:hmspacered}A for the SHAM and AB rat models. The $8$-dimensional input parameter space is plotted as a $2$D projection for each pair of parameters. An initial set (lightest colour variant) consisting of $400,000$ points sampled with a LHD in the input parameter space was tested against an \textit{implausibility criterior} (see equation $(5)$ in the Supplementary materials) and became progressively constrained to smaller regions (darker colour variants) as the HM process went forward. The initial parameters' $1$D ranges were determined after a literature search which included both experimental and modelling papers (see Tables $3$--$4$ in the Supplementary materials). At each successive wave, $256$ points uniformly sampled from the non-implausible region of the previous wave were simulated to build the new emulators' training dataset along with the previously used training dataset, while the remaining points from the non-implausible region of the previous wave plus $50,000$ new points sampled in the same region constituted the testing set. The threshold constant used for discerning whether or not a point was to be discarded (respectively implausible and non-implausible point), started from $5.5$ and $5.0$ in the SHAM and AB models' tuning respectively, and was progressively reduced by $0.5$ units in each wave, until reaching the commonly used value of $3.0$ (see e.g. \cite{Vernon:2010}). The choice of these specific starting values ensured that a nonempty non-implausible set was obtained after the first wave (see Supplementary materials for additional information on the cutoff initial tuning). The process was terminated when the fraction of non-implausible points became small (namely $0.1\%$ and $1.1\%$ of the total testing set for SHAM and AB models respectively), completing SHAM and AB models' fitting in $8$ and $9$ waves respectively. A total of $4,352$ model simulations (without considering the two initial waves, this is equivalent to a total of $15\,\text{waves}\times 256\,\text{points}$) and $1,550,000$ emulator evaluations ($2\,\text{LHDs}\,\times 400,000\,\text{points}+15\,\text{waves}\times 50,000\,\text{points}$) were performed.
 
 \vspace{0.2cm}
