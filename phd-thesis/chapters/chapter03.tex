@@ -13,7 +13,7 @@ quantification}\label{cha:chapter3}
 %
 %
 %
-\section{Model input parameters}
+\section{Model input parameters}\label{sec:ch3modelinputparameters}
 The presented full rat heart contraction model is regulated by $71$, $17$, $18$ parameters for respectively the ionic, cell contraction, tissue $+$ boundary components. We selected specific parameters as representative regulators of each of these sub-models, for a total of $8$ parameters. Specifically, $2$ parameters ($\Caif$, $\koff$) described the thin filament kinetics, $2$ parameters ($\kxb$, $\tref$) described the thick filament kinetics, and $4$ parameters ($\p$, $\pao$, $\Z$, $\Cone$) described boundary conditions and tissue properties. The $8$ parameters considered are described in Table~\ref{tab:paramswithdef}. A fixed calcium transient simulated using the adopted ionic model was used as electrical stimulus for the whole heart activation.
 
 \begin{table}[!ht]
@@ -40,7 +40,7 @@ The presented full rat heart contraction model is regulated by $71$, $17$, $18$ 
 %
 %
 %
-\section{Model output features}
+\section{Model output features}\label{sec:ch3modeloutputfeatures}
 We are interested in characterising the LV contractile function in the rat models. A typical full rat heart contraction mechanics model's output consists in LV volume and pressure transients, along with the corresponding \textit{pressure-volume} (\acs{PV}) \textit{loop}. Multiple-beats simulations are commonly run to reach a more stable \enquote{limit cycle}, and only the last-beat's curves are analysed. In Figure~\ref{fig:examplepvloop}, an example $4$-beat simulation is shown with the limit cycle curves highlighted.
 
 \begin{figure}[!ht]
@@ -114,7 +114,7 @@ The process of LV output features extraction is illustrated in Figure~\ref{fig:l
 %
 %
 %
-\section{Multi-scale map}
+\section{Multi-scale map}\label{sec:ch3multiscalemap}
 For a given fixed $\Ca$ transient, heart cubic-Hermite finite element mesh and fibre orientation, we can define a multi-scale, non-linear function that maps every set of $8$ input parameters $\mathbf{x}$ to a set of $12$ scalar output LV features $(y_1,\,\dots,\,y_{12})$:
 %
 \begin{align}\label{eq:fsimul}
@@ -123,13 +123,23 @@ For a given fixed $\Ca$ transient, heart cubic-Hermite finite element mesh and f
 \end{align}
 
 \noindent
-Equation~\eqref{eq:fsimul} effectively constitutes a quantitative link between cellular, tissue and hemodynamic properties to whole-organ function. The multi-scale mapping $f_{simul}$ takes the name of \textit{simulator}. One simulator evaluation at a new input parameter set requires the full forward model of rat heart contraction mechanics to be run. However, this is computationally expensive ($\sim 4$-$10$ CPU hours per evaluation). We overcome the computational burden of running such a complex model by replacing it with a probabilistic surrogate based on \textit{Gaussian process emulation}, as we shall see in the next section.
+Equation~\eqref{eq:fsimul} effectively constitutes a quantitative link between cellular, tissue and hemodynamic properties to whole-organ function. The multi-scale mapping $f_{simul}$ takes the name of \textit{simulator}. A schematic of the simulator input-to-output map is provided in Figure~\ref{fig:simulatorframework}.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter03/simulator_framework.pdf}
+    \caption{\todo{Renew figure and write caption}}
+    \label{fig:simulatorframework}
+\end{figure}
+
+\vspace{0.2cm}
+One simulator evaluation at a new input parameter set requires the full forward model of rat heart contraction mechanics to be run. However, this is computationally expensive ($\sim 4$-$10$ CPU hours per evaluation). We overcome the computational burden of running such a complex model by replacing it with a probabilistic surrogate based on \textit{Gaussian process emulation}, as we shall see in the next section.
 
 
 %
 %
 %
-\section{Gaussian process emulation}\label{sec:ch3gpe}
+\section{Gaussian process emulation}\label{sec:ch3gaussianprocessemulation}
 Let's consider $N$ realisations $y^{(i)},\,i=1,\,\dots,\,N$ of a computer code $f$ ($=f_{simul}$) for $N$ different input parameter points $\mathbf{x}^{(i)},\,i=1,\,\dots,\,N$ each one with dimension $D$: $\mathbf{x}^{(i)}=(x_{1}^{(i)},\,\dots,\,x_{D}^{(i)})^\mathsf{T}$. More concisely, this can be written as $f(X)$ (or $\mathbf{f}$) where $X=(\mathbf{x}^{(1)},\,\dots,\,\mathbf{x}^{(N)})$ is the input matrix. The pair $(X,\,f(X))$ is called \textit{learning sample}. A \textit{Gaussian process emulator} (\acs{GPE}) treats the deterministic response $f(\mathbf{x})$ as a realisation of a random function $f(\mathbf{x},\,\omega)$ which can be written as the sum of a regression model and a stochastic process~\cite{OHagan:2006}:
 \begin{equation}
     f(\mathbf{x},\,\omega) = h(\mathbf{x}) + Z(\mathbf{x},\,\omega), \quad (\mathbf{x},\,\omega)\in\mathbb{R}^D\times\Omega
@@ -298,7 +308,7 @@ we obtain:
 
 \noindent
 We can notice that the convolution of two Gaussian distributions is still Gaussian. We are normally interested in taking the logarithm of the obtained distribution: this is the \textit{log marginal likelihood}
-\begin{equation}
+\begin{equation}\label{eq:logmarginallikelihood}
 \begin{split}
     \log{p(\mathbf{y}\;\vert\; X,\,\boldsymbol{\theta}}) = -\frac{1}{2}(\mathbf{y}-H_X\boldsymbol{\beta})^\mathsf{T}(\Sigma_{XX}+\sigma_n^2I)^{-1}(\mathbf{y}-H_X\boldsymbol{\beta}) + \\ -\frac{1}{2}\log{\;\vert\; \Sigma_{XX}+\sigma_n^2I\;\vert\; } - \frac{N}{2}\log{2\pi}
 \end{split}
@@ -328,7 +338,7 @@ This is done iteratively by updating at every step (or \textit{epoch}) the param
 %
 %
 %
-\subsection{Regression accuracy}
+\subsection{Regression accuracy}\label{sec:ch3regressionaccuracy}
 The accuracy of each \textit{univariate} GPE for regression tasks is evaluated using a $k$-fold cross-validation process. At each split, a GPE is trained on the current $(k-1)/k$ fraction of the entire dataset, and it is then evaluated in all the points $\mathbf{x}_i,\,i=1,\,\dots,\,M$ of the held-out $1/k$ fraction of the dataset, with dimensions $M\times D$. The obtained point-wise predictions $y_{i}^{\textrm{mean}}$s (corresponding to the posterior distribution mean values) are then compared with the true function output values $y_{i}^{\textrm{true}}$s. We use the \textit{coefficient of determination} (or $R^2$-score) to measure how well the regression predictions approximate the real data points. This is defined as:
 %
 \begin{align}
@@ -361,7 +371,7 @@ Having available trained $f_{emul,\,j}s$ emulators is powerful as they enable pe
 %
 %
 %
-\section{History matching}\label{sec:ch3hm}
+\section{History matching}\label{sec:ch3historymatching}
 A first application of emulators is in the \textit{history matching} (\acs{HM}) technique. In the case where real system observations are available, HM can be used to learn about the input space characterising the simulator $f_{simul}$ which is being used to describe the real system.
 
 \vspace{0.2cm}
@@ -401,7 +411,7 @@ The implausibility measure is then compared against a pre-defined cutoff value $
 \vspace{0.2cm}
 As one might have available observations $z_js$ for more than one feature of interest $y_js$, the implausibility measure can be naturally extended to take into account individual implausibility measures $I_j(\mathbf{x})s$ obtained using each of the corresponding univariate emulators $f_{emul,\,j}s$ of features $y_js$. A simple way to do this is to take the maximum across all the implausibility measures: 
 %
-\begin{equation}\label{eq:nonimpl}
+\begin{equation}\label{eq:maximplmeasure}
     I_{M}(\mathbf{x}) := \max_{j\in\{1,\,\dots,\,\#\textrm{features}\}}{I_j(\mathbf{x}})
 \end{equation}
 
@@ -412,7 +422,7 @@ It follows that the parameter space will be constrained according to the worst (
 %
 %
 %
-\subsection{Refocusing}
+\subsection{Refocusing}\label{sec:ch3refocusing}
 After having evaluated the first, initial set of test points (sampled in the high-dimensional input parameter space) with consequent space reduction according to the implausibility criterion, we don't have to stop immediately. Instead, we can continue performing the same operation iteratively where now the initial space where to sample test points is the obtained non-implausible space from the first iteration (or \textit{wave}). In the context of HM, this operation is called \textit{refocusing}.
 
 \vspace{0.2cm}\noindent
@@ -456,7 +466,7 @@ In \textsc{step 5}, refocusing on the $X_{NIMP}$ space will not take place if a 
 %
 %
 %
-\section{Global sensitivity analysis}
+\section{Global sensitivity analysis}\label{sec:ch3globalsensitivityanalysis}
 In order to assess the contribution of the model input parameters' uncertainty into explaining the model output features' total variance, a global sensitivity analysis can be performed. In the next paragraphs, we shall see how having fast-evaluating trained emulators enable characterisation of model sensitivities even for complex, computationally expensive simulators.
 
 \vspace{0.2cm}
@@ -532,7 +542,7 @@ and represents the total contribution of parameter $X_i$ and all its higher-orde
 %
 %
 %
-\subsection{Estimating Sobol' sensitivity indices}
+\subsection{Estimating Sobol' sensitivity indices}\label{sec:ch3estimatingsobolsensitivityindices}
 \textit{Monte Carlo} (\acs{MC}) simulations can be used to directly estimate both the main and the total effects. However, a simple brute force approach that uses two nested \enquote{for} loops to calculate the conditional variance and expectation appearing in both equations~\eqref{eq:maineffect}--\eqref{eq:totaleffect} would cost $N^2$ model evaluations per Sobol' index, which will become prohibitively expensive as $N$ is typically taken to be between $10^2$ and $10^4$ for reliable estimates. For this reason, several integral estimators have been developed to reduce as much as possible the number of model runs needed to calculate Sobol' sensitivity indices. Here, we discuss the particular approach followed by Saltelli et al.~\cite{Saltelli:2010}.
 
 \vspace{0.2cm}
@@ -640,7 +650,7 @@ while the denominator will be estimated using again~\eqref{eq:varianceestimate}.
 %
 %
 %
-\subsection{Emulator-based estimates}
+\subsection{Emulator-based estimates}\label{sec:ch3emulatorbasedestimates}
 Let's suppose that the considered estimators for Sobol' first- and second-order and total effects~\eqref{eq:gsaestimators}--\eqref{eq:varianceestimate}--\eqref{eq:secondorderestimator} can all be recapitulated in a single function $\mathcal{S}$ that takes as an input simulator $f_{simul}$ evaluations $Y$ at specific points $X$ ($Y=f_{simul}(X)$) and gives as an output the Sobol' sensitivity indices $S_i,\,S_{ij},\,S_{T}$:
 %
 \begin{equation}\label{eq:modelevalsgsa}
@@ -682,6 +692,3 @@ So far we have considered Sobol' indices estimates without taking into account t
 
 \vspace{0.2cm}\noindent
 If in the case of~\eqref{eq:modelevalsgsa} and \eqref{eq:emulmeangsa} the bootstrapping approach can be directly applied, the situation changes in the case where we make use of emulator samples to estimate the Sobol' indices as in~\eqref{eq:emulpostsamplesgsa}. In fact, quantifying how the uncertainty of the emulator predictions propagates into the uncertainty of the integral estimates is a non-trivial task and also an actively researched topic of probabilistic numerics \todo{REFS}. As further analysis on this topic are out of the scope for this project, we neglected the uncertainty arising from the integral estimates and only considered the uncertainty arising from the fact that we are using an emultor to replace the true forward model. This choice is consistent with the assumption that as the number of MC samples $N$ grows, the numerical error of the quadrature formulas will converge to $0$, and what is left will be only the uncertainty of the emulator which does not change with $N$ for a fixed learning sample (training dataset).
-
-\vspace{0.2cm}
-\todo{Do we mention specific used libraries here or in application results as done for GPE?} For this study, Sobol' sensitivity indices were estimated using the SaLib Python library~\cite{Herman:2017}. GPErks tool~\cite{Longobardi:2021} was used to incorporate full GPE's posterior distribution samples to account for emulators uncertainty in Sobol' indexes estimates, as described above. Parameters whose Sobol indices' distributions' lower quartile was below the threshold $0.01$ were determined to have negligible effects.
