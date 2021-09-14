@@ -128,7 +128,7 @@ Equation~\eqref{eq:fsimul} effectively constitutes a quantitative link between c
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter03/simulator_framework.pdf}
-    \caption{\todo{Renew figure and write caption}}
+    \caption{Multi-scale $3$D biventricular rat heart contraction model. Given a fixed calcium transient (a) and mesh with fibres (b), parameters representing cell, tissue and haemodynamics properties (left grey column, described in Table~\ref{tab:paramswithdef}) constitutes the input for the model. LV volume and pressure transients and PV loop are obtained after a four-beats model run. The LV features (right grey column, described in Table~\ref{tab:lvfeatures}), extracted from the fourth-beat curves (c1-c2), constitutes the output for the model. \todo{renew figure}}
     \label{fig:simulatorframework}
 \end{figure}
 
@@ -685,7 +685,7 @@ with sample space $\omega\in [0,\,1]$. We can finally use the expectation of the
 \end{equation}
 
 \noindent
-and the variance (and more generally the entire distribution) as an indicator of the sensitivity index accuracy \todo{Marrel2008 REF}.
+and the variance (and more generally the entire distribution) as an indicator of the sensitivity index accuracy \todo{REF Marrel2008}.
 
 \vspace{0.2cm}
 So far we have considered Sobol' indices estimates without taking into account the numerical error which is present when expecations and variances integrals are approximated using quadrature formulas. This uncertainty in the Sobol' indices estimates is commonly quantified using the \textit{bootstrapping} technique~\cite{Archer:1997}. This consists in resampling (i.e. sampling with replacement) $B$ times the MC points from the unit hypercube $\Omega$, and each time re-calculating the Sobol' indices. A \textit{moment method} is then used to construct confidence intervals from the bootstrap distribution, giving a symmetric distribution around the mean estimate of the Sobol' index value. Good practice is to use $B=100$ \todo{REF}, although even if one would want to use a higher value for better accuracy, it is worth noticing that the most expensive part will still reside in the model evaluation process rather than in the resampling process.

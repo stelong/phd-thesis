@@ -1,6 +1,5 @@
 %==============================================================================
-\chapter{Model validation: encoding $\Ca$ transient variations to map pharmaceutical modulations from the whole-cell to whole-organ in the healthy rat 
-heart}\label{cha:chapter6}
+\chapter{Encoding $\Ca$ transient variations to in silico map calcium pharmacological modulations to whole-organ function and to validate the fitted rat heart contraction model}\label{cha:chapter6}
 %==============================================================================
 %
 %
@@ -13,7 +12,13 @@ heart}\label{cha:chapter6}
 %
 %
 %
-\section{Encoding calcium transient variations}
+\section{Motivation}\label{sec:ch6motivation}
+
+
+%
+%
+%
+\section{Encoding calcium transient variations}\label{sec:ch6encodingcalciumtransientvariations}
 We used a $4$-feature parametric representation of the calcium transient that maps to common experimentally measured features. The calcium transient was characterised using diastolic concentration (\acs{DCA}), amplitude (\acs{AMPL}), time to peak concentration (\acs{TP}) and time to half-relaxation from peak concentration (\acs{RT$_{50}$}) features. We wish to sample random sets of these features such that the final samples will uniformly cover the feature space, in order to possibly cover both healthy and pathological calcium transient phenotypes. For this purpose, we used linear weighs to scale each of the four features from a representative calcium transient. This parametric encoding of calcium transient variation ensured that all transients maintained a characteristic calcium transient morphology.
 
 \vspace{0.2cm}
@@ -69,11 +74,10 @@ The employed ionic model generates a calcium transient for a fixed pacing rate (
 The existing coupling between $\tp$ and $\rtf$ calcium features manifests as regions of the feature space that can not be captured by our calcium transient scaling strategy. These are indiecated by the blank triangels in the $p_3$-vs-$\rtf$ and $p_4$-vs-$\tp$ subplots, visible in Fig.~\ref{fig:scalersvscafeatures}.
 
 
-
 %
 %
 %
-\section{Model validation}\label{sec:validmethod}
+\section{Model validation}\label{sec:ch6modelvalidation}
 To test if the rat heart contraction model and its probabilistic surrogate can predict how changes in calcium transients impact the whole heart function, we validated the computational framework by comparing qualitative measurements and predictions of changes in cardiac mechanics in the presence of drugs that manipulate the calcium transient. This provides a multi-scale test on the ability of the model to map from changes in ion channels conductances to changes in calcium transient and the resulting changes in whole heart function.
 
 \vspace{0.2cm}
@@ -81,7 +85,7 @@ Briefly, we selected $8$ compounds, which were well characterised for multiple i
 
 \vspace{0.2cm}
 The affinity of each compound for each channel was taken from CiPA project datasets~\cite{Li:2018, Li:2019}, summarised in Table~\ref{tab:drugporeblock}.
-%
+
 \begin{table}[!ht]
     \myfloatalign
     \begin{tabularx}{\textwidth}{lllll}
@@ -137,7 +141,6 @@ For each given drug, we calculated $B$ for each channel when $C$ was set to equa
     \label{fig:calciumverapamil}
 \end{figure}
 
-
 \noindent
 The used approach simulates the drug induced changes in calcium transients, thereby overcoming the issue when no directly recorded calcium transients are available. In so doing, we created a fully simulated map from drug properties to whole organ function. As the calcium transients obtained in the presence of the drug at different concentrations can be encoded by the presented $4$ features of interest ($\dca$, $\ampl$, $\tp$ and $\rtf$), the same $4$ features' dose-response curves can be plotted as well. These are shown in~Figure~\ref{fig:cafeatsverapamilrespcurve}.
 
@@ -151,14 +154,13 @@ The used approach simulates the drug induced changes in calcium transients, ther
 \noindent
 We can notice that in the $\tp$ and $\rtf$ cases the response is not following a fully logistic trend on the right branches. This is because for high drug concentrations we have seen (Figure~\ref{fig:calciumverapamil}) that the calcium signal had almost vanished, making the analysis of these curves challenging.
 
-
 \vspace{0.2cm}
 We finally used the full multi-scale healthy rat model (Section) to simulate the LV features values using as an input the obtained calcium transients and the remaining parameters fixed to the SHAM rat model reference values. This allowed us to obtain the LV features' change from baseline values in a dose-dependent manner. PeakP, maxdP and mindP features' simulated responses to different doses of all the tested drugs are reported in Figure~\ref{fig:LVfeatsalldrugsrespcurves}
 
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=1\textwidth]{figures/chapter06/lvp_features_responses_to_all_drugs.pdf}
-    \caption{LV pressure features' dose-response curves for the eight CiPA compounds. Simulated PeakP, maxdP and mindP features are given as percentages of the respective control values, and are displayed as dots in blue variants colour-coded with the drug doses. \todo{improve}}
+    \caption{LV pressure features' dose-response curves for the eight CiPA compounds. Simulated PeakP, maxdP and mindP features are given as percentages of the respective control values, and are displayed as dots in blue variants colour-coded with the drug doses. \todo{improve figure}}
     \label{fig:LVfeatsalldrugsrespcurves}
 \end{figure}
 
@@ -186,7 +188,6 @@ These features' qualitative responses after \textit{in silico} drug ``administra
     \caption{Qualitative change in three LV pressure features observed in literature rat experiments for eight different CiPA compounds. Down-facing arrow means that the specific LV feature decreases from its control value with the specific drug; left-right arrow means that the drug has no effect on that feature; dash symbol means that the specific information could not be retrieved from literature.}
     \label{tab:drugvalidationrefs}
 \end{table}
-
 
 \noindent
 The entire validation workflow is summarised in Fig.~\ref{fig:validationschematic}.

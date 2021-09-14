@@ -8,11 +8,28 @@
     In this chapter, we personalise the $3$D biventricular rat heart contraction mechanics mathematical model to the specific clinical data obtained from a cohort of sham-operated and $6$-weeks-post-surgery aortic banded rats. We specifically fit one representative model for each cohort (control and diseased ones). Models' sensitivities are then characterised. Differences in the parameter space between the two models confirm that impaired cardiac function is linked to altered sarcomere kinetics. 
 \end{remark}
 
+
 %
 %
 %
 \section{Motivation}
+% Heart contraction is the result of integrated cellular, tissue and organ function. Biophysical \textit{in silico} cardiac models offer a systematic approach for studying these multi-scale interactions. The computational cost of such models is high, due to their multi-parametric and non-linear nature. This has so far made it difficult to perform model fitting and prevented global sensitivity analysis studies. We propose a machine learning approach based on Gaussian process emulation of model simulations using probabilistic surrogate models, which enables model parameter inference via a Bayesian history matching technique and global sensitivity analysis on whole-organ mechanics. This framework is applied to model healthy and aortic-banded hypertensive rats, a commonly used animal model of heart failure disease. The obtained probabilistic surrogate models accurately predicted the left ventricular pump function ($R^2=0.92$ for ejection fraction). The history matching technique allowed us to fit both the control and diseased virtual bi-ventricular rat heart models to MRI and literature data, with model outputs from the constrained parameter space falling within $2$ STD of the respective experimental values. The global sensitivity analysis identified Troponin C and cross-bridge kinetics as key parameters in determining both systolic and diastolic ventricular function.
 
+
+\todo{this is Introduction copy-pasted from the paper: adapt it to thesis}
+
+\noindent
+With each beat, cardiac myocytes generate tension and relax. Cellular tension is transduced into a coordinated, global whole-heart deformation resulting in an effective, system-level pump function. The integration of cellular, tissue and organ-scale mechanisms is essential for achieving efficient transduction of work into concerted myocardial contraction and relaxation. The break down of this system of integrated mechanisms can give rise to heart failure (HF). 
+
+Cardiac biophysical models provide a useful tool for studying whole-organ contraction \cite{Niederer:2019} by simulation, and can therefore be used to understand how impaired cell level function is linked with impaired organ level activity. Building a virtual representation of the real system requires tuning the cardiac model's properties and boundary conditions to experimental data. Global sensitivity analysis (GSA) studies are also needed to determine the role of cellular, tissue and haemodynamics properties on whole-organ function.
+
+However, the high simulation cost and the multi-scale nature of the cardiac system have limited the formal parameter estimation and sensitivity analysis for this type of model. Different techniques have been employed for global parameter inference on cardiac cell models, including gradient descent \cite{Dokos:2004}, genetic algorithms \cite{Groenendaal:2015}, multivariate regression \cite{Sarkar:2010} and Markov chain Monte Carlo (MCMC) \cite{Johnstone:2016}. Most of these approaches are computationally intensive, and the computation burden is even higher when going from single to multiple scales.
+
+Surrogate models (or \textit{emulators}) can be used to replace the computationally expensive real model with a statistical representation of it, allowing rapid predictions of the model's output. Using emulators we can thus perform the high number of model evaluations required to estimate global sensitivities. In this study, we use Gaussian process emulators (GPEs), which provide confidence bounds on predictions and can therefore be used for Bayesian history matching (HM). Previously employed for fitting models of galaxy formation \cite{Vernon:2010}, infectious disease transmission \cite{Andrianakis:2015} and, more recently, human atrial cell~\cite{Coveney:2018}, HM has shown to be a valuable tool for global parameter inference.
+
+To demonstrate the capacity of GPE and HM to fit a virtual heart model, we tune model mechanics-related parameters to data from control and left ventricular (LV) hypertrophied rat hearts. LV hypertrophy is induced surgically by constricting the ascending aorta over $4$ to $6$ weeks and represents a common pathway to HF development. Aortic-banded (AB) rats are commonly used as an experimental animal model for HF pathology~\cite{Camacho:2016}.
+
+We also seek to quantitatively characterise the AB rats' impaired LV contractile function. We therefore fit the virtual bi-ventricular rat model to changes in function that we measured or were recorded by others, using HM. Finally, we perform a GSA to understand how uncertainty in cell, tissue and haemodynamics model properties affect LV function.
 
 
 
@@ -135,7 +152,7 @@ We employed two variants~\cite{Gattoni:2017} of the original ionic model~\cite{G
 %
 %
 \subsection{Input parameter space}\label{sec:ch4inputparameterspace}
-The input parameter space $X\subset\mathbb{R}^{8}$ of the simulator map $f_{simul}$ introduced in equation~\eqref{eq:fsimul} was defined as the Cartesian product of $8$ one-dimensional parameter ranges. These ranges were determined using prior information collected from both experimental and modelling literature studies, summarised in Tables~\ref{tab:shamranges}--\ref{tab:abranges}. The finally adopted parameter ranges are reported in Table~\ref{tab:finalshamabranges}. To avoid bias, we used the same input parameter space $X$ for both the SHAM and the AB rat models from where to sample points to be simulated, which are then used to build the emulators' training datasets.
+The input parameter space $X\subset\mathbb{R}^{8}$ of the simulator map $f_{simul}$ introduced in equation~\eqref{eq:fsimul} was defined as the Cartesian product of $8$ one-dimensional parameter ranges. These ranges were determined using prior information collected from both experimental and modelling literature studies, summarised in Tables~\ref{tab:shamranges}--\ref{tab:abranges}. The finally adopted parameter ranges are reported in Table~\ref{tab:finalshamabranges}. To avoid bias, we used the same input parameter space $X$ for both the SHAM and AB rat models from where to sample points to be simulated, which are then used to build the emulators' training datasets.
 
 \newpage
 \begin{landscape}
@@ -219,7 +236,7 @@ The emulation framework is outlined in Figure~\ref{fig:emulatorframework}. Brief
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter04/emulator_framework.pdf}
-    \caption{\todo{Renew figure and write caption}}
+    \caption{Building the surrogate model. Input points (a) are sampled in the parameter space using a Latin hypercube design (b). The model (simulator) is run using these points. The simulator output is composed of features extracted from the LV volume and pressure transients and PV loop (c). The initial input matrix and the corresponding output matrix represent the training dataset for the surrogate model (emulator) based on Gaussian processes. The trained emulator (d) is used to predict the simulator output at a new point in the input parameter space. \todo{renew figure}}
     \label{fig:emulatorframework}
 \end{figure}
 
@@ -244,7 +261,7 @@ Sobol' sensitivity indices were estimated using the \texttt{SALib} Python librar
 The \textit{in silico} rat heart biophysical model should aim to achieve the best representation of the real system. This requires tuning the model input parameters such that the model output features reflect the available experimental data.
 
 \vspace{0.2cm}
-We constrained the model parameters based on model read-outs that describe key features in the LV volume and pressure transients, and pressure-volume loop (Table~\ref{tab:lvfeatures}). For this purpose, we adopted the HM approach described in Section~\ref{sec:ch3historymatching}. The maximum implausibility measure (equation~\eqref{eq:maximplmeasure}) across multiple target features was used, with the model discrepancy term (and its corresponding variance) set to zero in equation~\eqref{eq:implmeasure}. The real system observation $z$ and the related observation error $\mathbb{V}[e]$ were taken to be equal to the mean $\mu_j$ and the square of the standard deviation $\sigma_j$ characterising the experimental variability $\mu_j\pm\sigma_j\in\mathbb{R}$ of each given $j$-th feature.
+We constrained the model parameters based on model read-outs that describe key features in the LV volume and pressure transients, and PV loop (Table~\ref{tab:lvfeatures}). For this purpose, we adopted the HM approach described in Section~\ref{sec:ch3historymatching}. The maximum implausibility measure (equation~\eqref{eq:maximplmeasure}) across multiple target features was used, with the model discrepancy term (and its corresponding variance) set to zero in equation~\eqref{eq:implmeasure}. The real system observation $z$ and the related observation error $\mathbb{V}[e]$ were taken to be equal to the mean $\mu_j$ and the square of the standard deviation $\sigma_j$ characterising the experimental variability $\mu_j\pm\sigma_j\in\mathbb{R}$ of each given $j$-th feature.
 
 \vspace{0.2cm}
 Target features' mean and standard deviation experimental values to match came from two different sources. Specific organ-scale feature unavailable in the MRI data \cite{Roe:2017} were deduced from literature experimental studies all performed on male rats at body temperature with abdominal/ascending aortic banding~\cite{Nemeth:2016, Sato:1990, Schunkert:1995, Loot:2005, Liu:2014, Ku:2014, Ruppert:2018, Schunkert:1990, Ruppert:2016}. In particular, EDV, ESV, ET and IVRT features were immediately available from the MRI data, while information about PeakP, maxdP and mindP features was collected from literature. We did not have specific values for IVCT, Tdiast, Tpeak and ESP, and we chose not to match EF explicitly as this is derived from EDV and ESV. This gave us $7$ organ-scale features to constrain our model parameters. Their experimental variability is reported in Table~\ref{tab:values2match}.
@@ -286,7 +303,7 @@ The cutoff value $I_{\,\text{cutoff}}$ was initialised to $3.0$, and incremented
 %
 %
 \subsection{Model emulation}
-The obtained cross-validation GPEs' test scores (as a measure of the overall accuracy, as described in Section~\ref{sec:ch3gaussianprocessemulation}) are reported in Tables~\ref{tab:gpescores1_sham}--\ref{tab:gpescores1_ab} for the SHAM and AB models' emulators, respectively. Each emulator evaluation at a new imput parameter point took $\sim 1.2$ seconds against a full simulator single-core run of $\sim 4$ hours, for a total gained speedup of $12,000$ fold per evaluation. An example illustration of emulators doing inference on a test set from the cross-validation process is provided in Figures~\ref{fig:gpesexampleinferencesham}--\ref{fig:gpesexampleinferenceab} for the SHAM and AB models' emulators, respectively.
+The obtained cross-validation GPEs' test scores used as a measure of accuracy as described in Section~\ref{sec:ch3gaussianprocessemulation} are reported in Tables~\ref{tab:gpescores1_sham}--\ref{tab:gpescores1_ab} for the SHAM and AB models' emulators, respectively. Each emulator evaluation at a new imput parameter point took $\sim 1.2$ seconds against a full simulator single-core run of $\sim 4$ hours, for a total gained speedup of $12,000$ fold per evaluation. An example illustration of emulators doing inference on a test set from the cross-validation process is provided in Figures~\ref{fig:gpesexampleinferencesham}--\ref{fig:gpesexampleinferenceab} for the SHAM and AB models' emulators, respectively.
 
 \begin{table}[!ht]
     \myfloatalign
@@ -355,7 +372,7 @@ The obtained cross-validation GPEs' test scores (as a measure of the overall acc
 %
 %
 \subsection{Model output sensitivity to model input}
-Figures~\ref{fig:shamgsa}--\ref{fig:abgsa} show how input parameters contribute to explaining each LV feature's total variance in SHAM and AB rat models.
+Figures~\ref{fig:shamgsa}--\ref{fig:abgsa} show how input parameters contribute to explaining each LV feature's total variance in the SHAM and AB models.
 
 \begin{figure}[!ht]
     \myfloatalign
@@ -372,14 +389,14 @@ Figures~\ref{fig:shamgsa}--\ref{fig:abgsa} show how input parameters contribute 
 \end{figure}
 
 \noindent
-The $\Caif$ parameter is the most influential across all the LV features. The $\koff$, $\tref$ and $\pao$ parameters also play a key role. All these statements are true for both rat phenotypes. In contrast, $\Cone$ is more important for AB than for SHAM, explaining a fraction of the total variance of $9$ out of $12$ LV features (in SHAM, $\Cone$ is important for only $5$ features). In particular, this parameter has a significant contribution in explaining end-diastolic volume in AB (and not in SHAM). The $\kxb$ parameter affects the AB more than the SHAM features, albeit only moderately ($5$ out of $12$ against $4$ out of $12$, respectively). Finally, we observe an increased contribution of $\pao$ in explaining end-systolic pressure when going from SHAM to AB.
+The $\Caif$ parameter is the most influential across all the LV features. The $\koff$, $\tref$ and $\pao$ parameters also play a key role. All these statements are true for both rat phenotypes. In contrast, $\Cone$ is more important for AB than for SHAM, explaining a fraction of the total variance of $9$ out of $12$ LV features (in SHAM, $\Cone$ is important for only $5$ features). In particular, this parameter has an important contribution in explaining end-diastolic volume in AB (and not in SHAM). The $\kxb$ parameter affects the AB more than the SHAM features, albeit only moderately ($5$ out of $12$ against $4$ out of $12$, respectively). Finally, we observe an increased contribution of $\pao$ in explaining end-systolic pressure when going from SHAM to AB.
 
 
 %
 %
 %
 \subsection{Model fitting}\label{sec:ch4modelfitting}
-The HM process is illustrated in Figures~\ref{fig:shamhm}--\ref{fig:abhm} for the SHAM and AB rat models. The input parameter points in $8$D are plotted as a $2$D projection for each pair of parameters. The initial $X_{NIMP}$ space (lightest colour variants) became progressively constrained to smaller regions (darker colour variants) as the HM process went forward. During the last waves, as we continued to observe a decrease in the $X_{NIMP}$ space volume, we stopped the process when the percentage of $X_{NIMP}$ points out of the total testing $NROY$ points fell below $\SI{5}{\percent}$. This prevented exhaustion of computational resources, although convergence of the $X_{NIMP}$ space had not yet been reached, completing SHAM and AB models' fitting in $8$ and $9$ waves, respectively. Details of HM progression including cutoff values and percentages of space reduction are given in Table~\ref{tab:hmdetails}.
+The HM process is illustrated in Figures~\ref{fig:shamhm}--\ref{fig:abhm} for the SHAM and AB rat models. The input parameter points in $8$D are plotted as a $2$D projection for each pair of parameters. The initial $X$ space (lightest colour variants) became progressively constrained to smaller $X_{NIMP}$ regions (darker colour variants) as the HM process went forward. During the last waves, as we continued to observe a decrease in the $X_{NIMP}$ space volume, we stopped the process when the percentage of $X_{NIMP}$ points out of the total testing $NROY$ points fell below $\SI{5}{\percent}$. This prevented exhaustion of computational resources, although convergence of the $X_{NIMP}$ space had not yet been reached, completing SHAM and AB models' fitting in $8$ and $9$ waves, respectively. Details of HM progression including cutoff values and percentages of space reduction are given in Table~\ref{tab:hmdetails}.
 
 \begin{figure}[!ht]
     \myfloatalign
@@ -446,20 +463,26 @@ We finally investigated whether the constrained input parameter space was mapped
 
 \vspace{0.2cm}\noindent
 Figures~\ref{fig:simulatormatchtoexpvar}A.$1$--$2$ show that points belonging to the reduced input parameter space reproduce the majority of the emerging organ-scale LV features except $\textrm{ESV}$, $\textrm{maxdP}$ and $\textrm{mindP}$ which distribute far from the experimentally observed mean values. The simulated LV volume and pressure transients which the features were extracted from are also reported (Figures~\ref{fig:simulatormatchtoexpvar}B.$1$--$2$). The resulting pressure-volume loops are provided in Figures~\ref{fig:simulatormatchtoexpvar}C.$1$--$2$.
-By comparing the highlighted average curves, we can notice smaller end-diastolic and end-systolic volumes for AB, which in turn still preserve the ejection fraction observed in the control. Diastolic-time is increased in AB due to an increase in the isovolumetric relaxation time. LV peak pressure is visibly higher in AB.
+By comparing the highlighted average curves, we can notice smaller end-diastolic and end-systolic volumes for AB, which in turn still preserve the ejection fraction observed in the control. Diastolic time is increased in AB due to an increase in IVRT. LV peak pressure is visibly higher in AB.
 
 
 %
 %
 %
 \section{Discussion}\label{sec:ch4discussion}
+\todo{this is Discussion copy-pasted from the paper: adapt it to thesis}
+
+\noindent
 In this study, we have shown how GPEs can be used to rapidly and robustly tune a multi-scale rat heart model to organ-scale functional measurements and characterise the global sensitivity of the model. This is the first example, to the best of our knowledge, of the use of HM to constrain multi-scale cardiac mechanics models. Previous attempts to tune cardiac mechanics model parameters have sequentially fitted parameters \cite{Wang:2009} or fitted a maximum of $2$--$4$ parameters using deterministic approaches \cite{Lewalle:2018}. Here we fitted $8$ parameters concurrently. This means that error is evenly distributed across parameters and does not accumulate in the latter parameters as occurs in sequential fitting. We showed that active and passive parameters can be fitted simultaneously, avoiding potential confounding effects of slow relaxation, as occurs in heart failure models \cite{Xi:2013}. In addition, by providing bounds on model parameters (therefore an estimate of parameter uncertainty), the HM technique is compatible with verification, validation and uncertainty quantification (VVUQ) methods \cite{Patten:2009} supported by the ASME V$\&$V40 standards and the FDA \cite{Asme:2019}.
 
 HM produced different constraints for the SHAM and AB models, even if starting from the same hypercube in the input parameter space. Interestingly, the separation across the two rat phenotypes in the $1$D parameters' ranges occurs mostly for parameters describing active tension development at the cellular level. We interpret this result as a confirmation that impaired whole-organ function in the AB rat is linked to altered properties at the cell level.
 
 We have performed the first GSA of cardiac mechanics. Previous models have performed local sensitivity analysis \cite{Sher:2013}, or attempted GSA on simplified cardiac cell models \cite{Pathmanathan:2019}. Our GSA approach highlighted that left ventricular function is mostly influenced by cellular-level properties, consistent with our HM results.
 
-\vspace{0.2cm}
+\vspace{0.2cm}\noindent
+\todo{this is Limitations copy-pasted from the paper: adapt it to thesis}
+
+\noindent
 We have developed a detailed biophysical rat heart model. However, this model is inherently a simplification of the underlying system, with four specific limitations.
 
 Firstly, the boundary conditions do not account for the pericardium that may be important in constraining cardiac mechanics \cite{Strocchi:2020}. We have not accounted for potential spatial variations in cellular properties and $\textrm{Ca}^{2+}$ transients, and the latter homogeneously activates contraction throughout ventricular walls. Extending the sensitivity analysis to include $\textrm{Ca}^{2+}$ transient features would allow us to estimate if this has a major effect on our results.
@@ -476,22 +499,8 @@ In the implausibility measure (equation ($4$) in the Supplementary materials) ca
 
 Finally, global sensitivity indices were estimated using the mean of the available emulator, ignoring the uncertainty of the emulator itself. However, the emulator's uncertainty was small, therefore the estimated sensitivity indices were still able to capture the parameters' influence on the model outputs (see Supplementary materials for an example on ejection fraction feature). This can be further improved in future studies by looking for alternative estimations of the sensitivity indices which directly make use of the emulator mean and variance.
 
-\vspace{0.2cm}
+\vspace{0.2cm}\noindent
+\todo{this is Conclusion copy-pasted from the paper: adapt it to thesis}
+
+\noindent
 We have shown that GPE can effectively be used to robustly and rapidly constrain multi-scale cardiac models from organ-scale measurements. The obtained virtual bi-ventricular rat hearts are a valuable system to be used for further investigation of heart failure. Moreover, we demonstrated that our GPE-based GSA approach enables the computationally efficient identification of key components in 3D ventricular mechanics, giving a deeper insight into the link between cell, tissue, shape and boundary conditions properties and organ-scale function.
-
-
-\vspace{0.2cm}
-Heart contraction is the result of integrated cellular, tissue and organ function. Biophysical \textit{in silico} cardiac models offer a systematic approach for studying these multi-scale interactions. The computational cost of such models is high, due to their multi-parametric and non-linear nature. This has so far made it difficult to perform model fitting and prevented global sensitivity analysis studies. We propose a machine learning approach based on Gaussian process emulation of model simulations using probabilistic surrogate models, which enables model parameter inference via a Bayesian history matching technique and global sensitivity analysis on whole-organ mechanics. This framework is applied to model healthy and aortic-banded hypertensive rats, a commonly used animal model of heart failure disease. The obtained probabilistic surrogate models accurately predicted the left ventricular pump function ($R^2=0.92$ for ejection fraction). The history matching technique allowed us to fit both the control and diseased virtual bi-ventricular rat heart models to MRI and literature data, with model outputs from the constrained parameter space falling within $2$ STD of the respective experimental values. The global sensitivity analysis identified Troponin C and cross-bridge kinetics as key parameters in determining both systolic and diastolic ventricular function.
-
-\vspace{0.2cm}
-With each beat, cardiac myocytes generate tension and relax. Cellular tension is transduced into a coordinated, global whole-heart deformation resulting in an effective, system-level pump function. The integration of cellular, tissue and organ-scale mechanisms is essential for achieving efficient transduction of work into concerted myocardial contraction and relaxation. The break down of this system of integrated mechanisms can give rise to heart failure (HF). 
-
-Cardiac biophysical models provide a useful tool for studying whole-organ contraction \cite{Niederer:2019} by simulation, and can therefore be used to understand how impaired cell level function is linked with impaired organ level activity. Building a virtual representation of the real system requires tuning the cardiac model's properties and boundary conditions to experimental data. Global sensitivity analysis (GSA) studies are also needed to determine the role of cellular, tissue and haemodynamics properties on whole-organ function.
-
-However, the high simulation cost and the multi-scale nature of the cardiac system have limited the formal parameter estimation and sensitivity analysis for this type of model. Different techniques have been employed for global parameter inference on cardiac cell models, including gradient descent \cite{Dokos:2004}, genetic algorithms \cite{Groenendaal:2015}, multivariate regression \cite{Sarkar:2010} and Markov chain Monte Carlo (MCMC) \cite{Johnstone:2016}. Most of these approaches are computationally intensive, and the computation burden is even higher when going from single to multiple scales.
-
-Surrogate models (or \textit{emulators}) can be used to replace the computationally expensive real model with a statistical representation of it, allowing rapid predictions of the model's output. Using emulators we can thus perform the high number of model evaluations required to estimate global sensitivities. In this study, we use Gaussian process emulators (GPEs), which provide confidence bounds on predictions and can therefore be used for Bayesian history matching (HM). Previously employed for fitting models of galaxy formation \cite{Vernon:2010}, infectious disease transmission \cite{Andrianakis:2015} and, more recently, human atrial cell~\cite{Coveney:2018}, HM has shown to be a valuable tool for global parameter inference.
-
-To demonstrate the capacity of GPE and HM to fit a virtual heart model, we tune model mechanics-related parameters to data from control and left ventricular (LV) hypertrophied rat hearts. LV hypertrophy is induced surgically by constricting the ascending aorta over $4$ to $6$ weeks and represents a common pathway to HF development. Aortic-banded (AB) rats are commonly used as an experimental animal model for HF pathology~\cite{Camacho:2016}.
-
-We also seek to quantitatively characterise the AB rats' impaired LV contractile function. We therefore fit the virtual bi-ventricular rat model to changes in function that we measured or were recorded by others, using HM. Finally, we perform a GSA to understand how uncertainty in cell, tissue and haemodynamics model properties affect LV function.
