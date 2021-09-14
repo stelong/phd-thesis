@@ -71,7 +71,7 @@ We employed the Gattoni et al.~\cite{Gattoni:2016} model to simulate rat left ve
 %
 %
 %
-\section{Contraction model}\label{sec:contractionmodel}
+\section{Contraction model}\label{sec:ch2contractionmodel}
 We employed the Land et al.~\cite{Land:2012} myocyte contraction model to simulate active tension generation at sarcomere level and isometric steady-state force-calcium relationship in the rat heart. This model describes the cooperative binding of calcium to troponin C, which in turn causes unblocking of the actin sites for myosin cross-bridge cycling.
 
 \vspace{0.2cm}
@@ -149,7 +149,7 @@ Normalised force (equation~\eqref{eq:normforce}) is then scaled to actual tensio
 %
 %
 %
-\subsection{Length-dependence}
+\subsection{Length-dependence}\label{sec:ch2lengthdependence}
 The active tension dependence on sarcomere length was based on filament overlap modelling:
 %
 \begin{align}
@@ -195,7 +195,7 @@ At the resting sarcomere configuration ($\lambda=1$), length-dependence effects 
 %
 %
 %
-\subsection{Velocity-dependence}
+\subsection{Velocity-dependence}\label{sec:ch2velocitydependence}
 To phenomenologically represent the tension development dependence on cross-bridge kinetics, the \emph{fading memory model} was employed as previously done in~\cite{Niederer:2006}, describing the velocity response as several strain-rate-dependent variables decay with time. In particular, this model describes the relationship between tension and sarcomere sliding velocity, by separating tension development into a non-linear static component and a linear time-dependent component, as described by the following two equations:
 %
 \begin{equation}
@@ -243,7 +243,7 @@ Land et al.~\cite{Land:2012} cell contraction model's main mechanisms are summar
 %
 %
 %
-\subsection{Uncoupling binding and unbinding rates}
+\subsection{Uncoupling binding and unbinding rates}\label{sec:ch2uncouplingbindingandunbindingrates}
 We modified equation~\eqref{eq:landodesys1} in order to uncouple the unbinding rate from the binding rate of the $\Ca$-TnC relationship. This was achieved by fixing the binding rate to a predefined value which was shown to characterise the intact rat muscle in literature experiments~\cite{Niederer:2006}, namely $\overline{\kon}=\SI{0.1}{\micro\Molar\per\milli\second}$, while at the same time re-scaling the calcium sensitivity parameter $\Caift$. By recalling equation~\eqref{eq:landodesys1}, we have that:
 
 \begin{align}
@@ -281,7 +281,7 @@ To simplify notation, we will keep using $\kon$ for $\overline{\kon}$ and $\Caif
 %
 %
 %
-\subsection{The force-calcium relationship}
+\subsection{The force-calcium relationship}\label{sec:ch2theforcecalciumrelationship}
 The steady-state solutions of Equations~\eqref{eq:landodesys1mod}--\eqref{eq:landodesys2} are:
 %
 \begin{equation}\label{eq:landodesys1_ss}
