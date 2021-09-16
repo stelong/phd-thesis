@@ -448,10 +448,7 @@ Although HM does not ensure the reduction in individual parameters' ranges but r
 \end{figure}
 
 
-%
-%
-%
-\subsection{Fitted models}\label{sec:ch4fittedmodels}
+\vspace{0.2cm}
 We finally investigated whether the constrained input parameter space was mapped by the simulator into model read-outs that matched experimental observations. For this purpose, we sampled using the cloud technique and simulated $1,024$ points in the HM final wave's $X_{NIMP}$ parameter space of both the SHAM and AB models. Of these, only $264$ and $178$ points led to a successfully completed simulation for SHAM and AB models, respectively. After extracting the LV features from the simulator outputs, we examined their distributions and compared them to the same features' experimentally observed variability (Table~\ref{tab:values2match}). This is summarised in Figure~\ref{fig:simulatormatchtoexpvar}.
 
 \begin{figure}[!ht]
@@ -465,59 +462,59 @@ We finally investigated whether the constrained input parameter space was mapped
 Figures~\ref{fig:simulatormatchtoexpvar}A.$1$--$2$ show that points belonging to the reduced input parameter space reproduce the majority of the emerging organ-scale LV features except $\textrm{ESV}$, $\textrm{maxdP}$ and $\textrm{mindP}$ which distribute far from the experimentally observed mean values. The simulated LV volume and pressure transients which the features were extracted from are also reported (Figures~\ref{fig:simulatormatchtoexpvar}B.$1$--$2$). The resulting pressure-volume loops are provided in Figures~\ref{fig:simulatormatchtoexpvar}C.$1$--$2$.
 By comparing the highlighted average curves, we can notice smaller end-diastolic and end-systolic volumes for AB, which in turn still preserve the ejection fraction observed in the control. Diastolic time is increased in AB due to an increase in IVRT. LV peak pressure is visibly higher in AB.
 
-\vspace{0.2cm}
-\todo{Talk about best fit rep models}
+
+%
+%
+%
+\subsection{Fitted models}\label{sec:ch4fittedmodels}
+Unlike classical optimisation algorithms that converge to a single set of parameters possibly representing a global minimum of the chosen loss function, the HM procedure proposes an entire cloud of points (belonging to the last wave's non-implausible, restricted parameter space) which are all possible candidates to yield a model features' match to experimental observation within experimental uncertainty. In order to have one representative model for the SHAM rat and one for the AB rat to be used respectively as baseline, reference models of a healthy and diseased rat hearts, we selected one candidate represented by the best-fit according to the $L_2$ norm of the difference between the simulated features' values vector and the correspoding experimental mean values vector. The complete sets of fitted model parameters and corresponding LV features for both the reference SHAM and AB rat models are reported in Tables~\ref{tab:shamabbestfitparamvalues}--\ref{tab:shamabbestfitfeatvalues}.
 
 \begin{table}[!ht]
     \myfloatalign
-    \begin{tabular}{@{}llll}
+    \begin{tabularx}{\textwidth}{XXXl}
     \toprule
-    \tableheadline{Parameter} & \tableheadline{Units}                        & \multicolumn{2}{c}{\spacedlowsmallcaps{Value}} \\ \midrule
-                       &                                       & \tableheadline{SHAM} & \tableheadline{ZSF1} \\ \midrule
-    $\dca$     & $\SI{}{\micro\Molar}$                 & $0.4632$      & $0.5870$ \\
-    $\ampl$    & $\SI{}{\micro\Molar}$                 & $1.0341$      & $1.0317$ \\
-    $\tp$      & $\SI{}{\milli\second}$                & $25.9474$     & $25.9474$ \\
-    $\rtf$    & $\SI{}{\milli\second}$                & $40.0807$     & $40.0807$ \\
-    $\Caif$            & $\SI{}{\micro\Molar\tothe{1-1/\ntrpn}}$                 & $2.1723$      & $2.1723$ \\
-    $\beta_1$          & $-$                             & $-1.5$        & $-1.5$ \\
-    $\koff$            & $\SI{}{\per\milli\second}$            & $0.0515$      & $0.0515$ \\
-    $\ntrpn$           & $-$                             & $2.0$         & $2.0$ \\
-    $\kxb$             & $\SI{}{\per\milli\second}$            & $0.0172$      & $0.0172$ \\
-    $\nxb$             & $-$                             & $5.0$         & $5.0$ \\
-    $\trpnf$           & $-$                             & $0.35$        & $0.35$ \\
-    $\tref$            & $\SI{}{\kilo\pascal}$                 & $156.067$     & $156.067$ \\
-    $p$                & $\SI{}{\kilo\pascal}$                 & $0.3122$      & $0.4481$ \\
-    $\pao$             & $\SI{}{\kilo\pascal}$                 & $7.1136$      & $10.3887$ \\
-    $Z$                & $\SI{}{\mmHg\second\per\milli\liter}$ & $5.6234$      & $7.4031$ \\
-    $C_1$              & $\SI{}{\kilo\pascal}$                          & $0.9141$      & $1.0670$ \\
+    \tableheadline{Parameter} & \tableheadline{Units} & \multicolumn{2}{c}{\spacedlowsmallcaps{Value}} \\
+    \midrule
+    & & \tableheadline{SHAM} & \tableheadline{AB} \\
+    \midrule
+    $\Caif$ & $\SI{}{\micro\Molar\tothe{1/2}}$      & $2.1723$  & $0.7087$ \\
+    $\koff$ & $\SI{}{\per\milli\second}$            & $0.0515$  & $0.0686$ \\
+    $\kxb$  & $\SI{}{\per\milli\second}$            & $0.0172$  & $0.0090$ \\
+    $\tref$ & $\SI{}{\kilo\pascal}$                 & $156.067$ & $112.582$ \\
+    $\p$    & $\SI{}{\kilo\pascal}$                 & $0.3122$  & $0.3914$ \\
+    $\pao$  & $\SI{}{\kilo\pascal}$                 & $7.1136$  & $7.0047$ \\
+    $\Z$    & $\SI{}{\mmHg\second\per\milli\liter}$ & $5.6234$  & $9.9301$ \\
+    $\Cone$ & $\SI{}{\kilo\pascal}$                 & $0.9141$  & $1.6725$ \\
     \bottomrule
-    \end{tabular}
-    \caption{Representative SHAM rat and ZSF1 rat models input parameters' values.}
-    \label{tab:shamabbestfitparameters}
+    \end{tabularx}
+    \caption{Representative SHAM and AB rat models' input parameters' values.}
+    \label{tab:shamabbestfitparamvalues}
 \end{table}
 
 \begin{table}[!ht]
     \myfloatalign
-    \begin{tabular}{@{}llll}
+    \begin{tabularx}{\textwidth}{XXXl}
     \toprule
-    \tableheadline{LV feature}             & \tableheadline{Units}                         & \multicolumn{2}{c}{\spacedlowsmallcaps{Value}} \\ \midrule
-                                    &                                        & \tableheadline{SHAM} & \tableheadline{ZSF1} \\ \midrule
-    $\textrm{EDV}$                  & $\SI{}{\micro\liter}$                  & $516.23$      & $444.02$ \\
-    $\textrm{ESV}$                  & $\SI{}{\micro\liter}$                  & $173.82$      & $172.83$ \\
-    $\textrm{EF}$                   & $\SI{}{\percent}$                      & $66.33$       & $61.08$ \\
-    $\textrm{IVCT}$                 & $\SI{}{\milli\second}$                 & $19.3$        & $19.7$ \\
-    $\textrm{ET}$                   & $\SI{}{\milli\second}$                 & $52.9$        & $54.6$ \\
-    $\textrm{IVRT}$                 & $\SI{}{\milli\second}$                 & $23.8$        & $33.0$ \\
-    $\textrm{Tdiast}$               & $\SI{}{\milli\second}$                 & $93.5$        & $91.4$ \\
-    $\textrm{PeakP}$                & $\SI{}{\kilo\pascal}$                  & $16.15$       & $19.15$ \\
-    $\textrm{Tpeak}$                & $\SI{}{\milli\second}$                 & $46.6$        & $45.9$ \\
-    $\textrm{ESP}$                  & $\SI{}{\kilo\pascal}$                  & $10.04$       & $12.55$ \\
-    $\textrm{maxdP}$ & $\SI{}{\kilo\pascal\per\milli\second}$ & $0.9973$      & $1.1700$ \\
-    $\textrm{mindP}$ & $\SI{}{\kilo\pascal\per\milli\second}$ & $-0.5712$     & $-0.5276$ \\
+    \tableheadline{LV feature}      & \tableheadline{Units}                  & \multicolumn{2}{c}{\spacedlowsmallcaps{Value}} \\
+    \midrule
+                                    &                                        & \tableheadline{SHAM} & \tableheadline{AB} \\
+    \midrule
+    $\textrm{EDV}$                  & $\SI{}{\micro\liter}$                  & $516.23$             & $467.88$ \\
+    $\textrm{ESV}$                  & $\SI{}{\micro\liter}$                  & $173.82$             & $137.88$ \\
+    $\textrm{EF}$                   & $\SI{}{\percent}$                      & $66.33$              & $70.53$ \\
+    $\textrm{IVCT}$                 & $\SI{}{\milli\second}$                 & $19.3$               & $13.2$ \\
+    $\textrm{ET}$                   & $\SI{}{\milli\second}$                 & $52.9$               & $57.7$ \\
+    $\textrm{IVRT}$                 & $\SI{}{\milli\second}$                 & $23.8$               & $40.0$ \\
+    $\textrm{Tdiast}$               & $\SI{}{\milli\second}$                 & $93.5$               & $94.8$ \\
+    $\textrm{PeakP}$                & $\SI{}{\kilo\pascal}$                  & $16.15$              & $20.94$ \\
+    $\textrm{Tpeak}$                & $\SI{}{\milli\second}$                 & $46.6$               & $38.3$ \\
+    $\textrm{ESP}$                  & $\SI{}{\kilo\pascal}$                  & $10.04$              & $9.79$ \\
+    $\textrm{maxdP}$ & $\SI{}{\kilo\pascal\per\milli\second}$                & $0.9973$             & $1.4462$ \\
+    $\textrm{mindP}$ & $\SI{}{\kilo\pascal\per\milli\second}$                & $-0.5712$            & $-0.3306$ \\
     \bottomrule
-    \end{tabular}
-    \caption{Representative SHAM rat and ZSF1 rat models output LV features' values.}
-    \label{tab:shamabbestfitfeatures}
+    \end{tabularx}
+    \caption{Representative SHAM and AB rat models' output LV features' values.}
+    \label{tab:shamabbestfitfeatvalues}
 \end{table}
 
 

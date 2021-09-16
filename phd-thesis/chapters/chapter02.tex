@@ -27,9 +27,9 @@ Rule-based fibers~\cite{Bayer:2012} complemented the anatomical description of t
 %
 %
 \section{Ionic model}\label{sec:ionicmodel}
-We employed the Gattoni et al.~\cite{Gattoni:2016} model to simulate rat left ventricular myocytes electrophysiology and calcium dynamics at physiological pacing rate ($\SI{6}{\hertz}$) and temperature ($\SI{37}{\celsius}$). All the currents included in this framework are summarised in Table~\ref{tab:gattonicurrentstab}, while the main ion channels, transporters and pumps are depicted in Figure~\ref{fig:gattonicurrentsfig}.
+We employed the Gattoni et al.~\cite{Gattoni:2016} model to simulate rat left ventricular myocytes electrophysiology and calcium dynamics at physiological pacing rate ($\SI{6}{\hertz}$) and temperature ($\SI{37}{\celsius}$). All the currents present in this model are summarised in Table~\ref{tab:gattonicurrentstab}, while the main ion channels, transporters and pumps are depicted in Figure~\ref{fig:gattonicurrentsfig}.
 
-\begin{table}
+\begin{table}[!ht]
     \myfloatalign
     \begin{tabularx}{\textwidth}{lX}
     \toprule
@@ -72,7 +72,7 @@ We employed the Gattoni et al.~\cite{Gattoni:2016} model to simulate rat left ve
 %
 %
 \section{Contraction model}\label{sec:ch2contractionmodel}
-We employed the Land et al.~\cite{Land:2012} myocyte contraction model to simulate active tension generation at sarcomere level and isometric steady-state force-calcium relationship in the rat heart. This model describes the cooperative binding of calcium to troponin C, which in turn causes unblocking of the actin sites for myosin cross-bridge cycling.
+We employed the Land et al.~\cite{Land:2012} myocyte contraction model to simulate active tension generation at sarcomere level and isometric steady-state force-calcium relationship in the rat heart. This model describes the cooperative binding of calcium to TnC, which in turn causes unblocking of the actin sites for myosin cross-bridge cycling.
 
 \vspace{0.2cm}
 The process of $\Ca$ to TnC binding is described via the following equation:
@@ -244,7 +244,7 @@ Land et al.~\cite{Land:2012} cell contraction model's main mechanisms are summar
 %
 %
 \subsection{Uncoupling binding and unbinding rates}\label{sec:ch2uncouplingbindingandunbindingrates}
-We modified equation~\eqref{eq:landodesys1} in order to uncouple the unbinding rate from the binding rate of the $\Ca$-TnC relationship. This was achieved by fixing the binding rate to a predefined value which was shown to characterise the intact rat muscle in literature experiments~\cite{Niederer:2006}, namely $\overline{\kon}=\SI{0.1}{\micro\Molar\per\milli\second}$, while at the same time re-scaling the calcium sensitivity parameter $\Caift$. By recalling equation~\eqref{eq:landodesys1}, we have that:
+We modified equation~\eqref{eq:landodesys1} in order to uncouple the unbinding rate from the binding rate of the $\Ca$-TnC relationship. This was achieved by fixing the binding rate to a predefined value which was shown to characterise the intact rat muscle in literature experiments~\cite{Niederer:2006}, namely $\overline{\kon}=\SI{0.1}{\per\micro\Molar\per\milli\second}$, while at the same time re-scaling the calcium sensitivity parameter $\Caift$. By recalling equation~\eqref{eq:landodesys1}, we have that:
 
 \begin{align}
     \frac{d\text{TRPN}}{dt} &=\ktrpn\left[\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\trpn\right] \\
@@ -405,4 +405,4 @@ We also set hemodynamic boundary conditions to control blood flow and pressures 
 %
 \section{Electrical activation}\label{sec:electricalactivation}
 The calcium transient was assumed not to vary spatially and it homogeneously activated contraction throughout the ventricular walls. Previous heart models
-have shown that heterogeneous activation patterns have negligible impact in the small rat heart [REF], and investigating those was out of the scope of this project.
+have shown that heterogeneous activation patterns have negligible impact in the small rat heart \todo{REF}, and investigating those was out of the scope of this project.

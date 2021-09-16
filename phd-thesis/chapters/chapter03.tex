@@ -307,7 +307,7 @@ we obtain:
 \end{equation}
 
 \noindent
-We can notice that the convolution of two Gaussian distributions is still Gaussian. We are normally interested in taking the logarithm of the obtained distribution: this is the \textit{log marginal likelihood}
+We can notice that the convolution of two Gaussian distributions is still Gaussian. It is common to take the logarithm of the obtained distribution: this is the \textit{log marginal likelihood}
 \begin{equation}\label{eq:logmarginallikelihood}
 \begin{split}
     \log{p(\mathbf{y}\;\vert\; X,\,\boldsymbol{\theta}}) = -\frac{1}{2}(\mathbf{y}-H_X\boldsymbol{\beta})^\mathsf{T}(\Sigma_{XX}+\sigma_n^2I)^{-1}(\mathbf{y}-H_X\boldsymbol{\beta}) + \\ -\frac{1}{2}\log{\;\vert\; \Sigma_{XX}+\sigma_n^2I\;\vert\; } - \frac{N}{2}\log{2\pi}

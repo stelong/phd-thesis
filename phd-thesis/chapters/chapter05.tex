@@ -5,7 +5,7 @@
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we use the personalised SHAM rat model as a reference model of healthy rat heart contraction to show that it is possible to map pharmacological interventions at the sarcomere level through to whole-organ function. For this purpose, we consider omecamtiv mecarbil drug, which action is well characterised at the cellular level. We finally show that it is possible to go backwards. 
+    In this chapter, we use the personalised SHAM rat heart contraction model as a reference model of a healthy rat to show that it is possible to quantitatively map pharmacological interventions at the sarcomere level through to whole-organ function. Moreover, we show that we can infer cell-level compound effects from whole-organ observations, making the inverse mapping possible. We apply this framework to an example drug, namely to omecamtiv mecarbil, which has been proposed as a possible treatment of heart failure with reduced ejection fraction.
 \end{remark}
 
 
@@ -13,6 +13,7 @@
 %
 %
 \section{Motivation}\label{sec:ch5motivation}
+\todo{this is Introduction copy-pasted from the paper: adapt it to thesis}
 Omecamtiv mecarbil (OM) is a cardiac myosin activator developed as a treatment of heart failure. OM acts on cross-bridge formation without disrupting intracellular calcium homeostasis. OM effects are extensively characterised both \textit{in vitro} and \textit{in vivo} yet how these mechanistically translate from the sarcomere to whole-heart function is not fully understood. We employed a $3$D biventricular contraction model of a healthy rat heart that was fitted to anatomic, structural, and hemodynamic and volumetric functional data. The model incorporates pre-load, after-load, fibre orientation, passive material properties, anatomy, calcium transients, and thin and thick filament dynamics. We identified $4$ sarcomere model parameters that reflect cross-bridge behavior. Gaussian process emulators (GPEs) were trained to map these parameters to pressure- and volume-based indexes of left ventricular (LV) function. We constrained the $4$-parameter space using preclinical OM data, either ($1$) \textit{in vivo} whole-heart hemodynamics data (using the Bayesian history matching technique), or ($2$) \textit{in vitro} force-pCa measurements. The OM-compatible sarcomere parameter space from case ($1$) was used to directly calculate force-pCa curves, while the one resulting from case ($2$) was mapped to the LV indexes using the trained GPEs. We found that our mapping from LV features to force-pCa and vice versa was in agreement with experimental data. In addition, our simulations supported the latest evidence that OM indirectly alters thin filament calcium sensitivity. Our work demonstrates how quantitative mapping from cellular to whole-organ level can be used to improve our understanding of drug action mechanisms.
 
 \vspace{0.2cm}
@@ -37,23 +38,46 @@ This paper outlines our methodology of incorporating OM into our model, that con
 %
 %
 %
-\subsection{Sarcomere parameter space}\label{sec:ch5sarcomereparameterspace}
-We modelled the OM effect at the sarcomere level by altering parameters that are specifically responsible for cross-bridge dynamics, namely $\kxb$, $\nxb$, $\trpnf$ and  $\tref$, introduced in Section~\ref{sec:ch2contractionmodel}. All the other parameters, including the ones regulating $\Ca$ binding to TnC ($\Caif$, $\beta_1$, $\ntrpn$, $\kon$, $\koff$) were kept fixed to either the Land et al.~\cite{Land:2012} model baseline values or to the fitted values from the SHAM rat model (Table \todo{talk about best l2 sham fit parameter and link it here}) when these were available.
+\subsection{Rat model}\label{sec:ch5ratmodel}
+To quantitatively link sarcomere properties to whole-organ function, we used the personalised SHAM rat heart contraction model derived in Section~\ref{sec:ch4fittedmodels}. Again, this model (or simulator) can be seen as a multi-scale map from input parameters to output features.
+
+\vspace{0.2cm}
+With the simulator input, we aimed at modelling the OM effect at the sarcomere level.
+As OM increases the rate of cross-bridge formation~\cite{Malik:2011}, we considered parameters that are specifically responsible for cross-bridge dynamics in the Land et al.~\cite{Land:2012} cell contraction sub-model, namely $\kxb$, $\nxb$, $\trpnf$ and $\tref$. These parameters were introduced in Section~\ref{sec:ch2contractionmodel}, and constituted the simulator $4$-dimensional input.
+
+\vspace{0.2cm}
+The simulator output aimed at describing the LV function using a set of scalar features. These were the same $12$ features used in the previous analysis (Table~\ref{tab:lvfeatures}) with the addition of other $2$ features (Table~\ref{tab:lvfeaturesom}), for a total of $14$ features.
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{llX}
+    \toprule
+    \tableheadline{LV feature}                  & \tableheadline{Units}                         & \tableheadline{Definition} \\ \midrule
+    $\textrm{SV}$                  & $\SI{}{\micro\liter}$                  & stroke volume \\
+    $\textrm{ET/Tdiast}$                  & $-$                  & systolic ejection time over diastiolic filling time \\
+    \bottomrule
+    \end{tabularx}
+    \caption{Additional LV features of interest.}
+    \label{tab:lvfeaturesom}
+\end{table}
+
+\noindent
+The obtained simulator map had thus the following form:
+%
+\begin{align}\label{eq:fsimulom}
+    f_{simul}\colon\mathbb{R}^{4} &\to\underbrace{\mathbb{R}\times\cdots\times\mathbb{R}}_{14\,\text{times}} \\
+    \mathbf{x} &\mapsto (y_1,\,\dots,\,y_{14}) \nonumber
+\end{align}
+
+\noindent
+When running the simulator at a new parameter point, as we were using the personalised SHAM rat model, all the other parameters were kept fixed to its reference parameter values (Table~\ref{tab:shamabbestfitparamvalues}) when applicable, or to the Land et al.~\cite{Land:2012} model baseline values when otherwise.
 
 
 %
 %
 %
-\subsection{Mapping sarcomere parameter space to LV function}\label{sec:ch5mappingsarcomereparameterspacetolvfunction}
-To quantitatively link sarcomere properties to whole-organ function, we used a previously fitted $3$D biventricular contraction model of a healthy rat heart~\cite{Longobardi:2020}. The model simulation outputs of the LV contractile function can be described using $14$ features (Table~\ref{tab:lvfeatures}). We can thus treat the full model as a multi-scale map from sarcomere input parameters to LV output features.
-
-
-%
-%
-%
-\subsection{Surrogate mapping}\label{sec:ch5surrogatemapping}
-We sampled $4096$ points from a LHD in the $4$-dimensional sarcomere parameter space with initial ranges given as the union of a $\pm\SI{50}{\percent}$ perturbation around reference parameter values and the range of parameter values inferred from \textit{in vitro} force-pCa data of skinned rat myocyte preparations~\cite{Nagy:2015, Kampourakis:2018, Kieu:2019} (see Section~\ref{sec:ch5case2} for details). The full model was run at these points and the successfully completed simulations formed the training dataset ($1189$ points). Univariate GPEs were then trained with a $5$-fold cross-validation to predict each of the $14$ LV output features. The accuracy of each of the resulting $14$ trained GPEs was evaluated using the $R^2$-score regression metric. The resulting mean cross-validation $R^2$ test score was $>0.98$ for all the GPEs.
-
+\subsection{Input parameter space}\label{sec:ch5inputparameterspace}
+The input parameter space $X\subset\mathbb{R}^{4}$ of the simulator map $f_{simul}$ introduced in equation~\eqref{eq:fsimulom} was defined as the Cartesian product of $4$ one-dimensional parameter ranges. Each of these ranges was given as the union of a $\pm\SI{50}{\percent}$ perturbation around the related parameter reference value and the range for the same parameter that was inferred from \textit{in vitro} F-pCa data in skinned rat myocyte preparations~\cite{Nagy:2015, Kampourakis:2018, Kieu:2019} \todo{how to explain this carefully here?}. Adopted ranges are reported in Table~\ref{tab:omparamranges}.
 
 \begin{table}[!ht]
     \myfloatalign
@@ -67,9 +91,20 @@ We sampled $4096$ points from a LHD in the $4$-dimensional sarcomere parameter s
         $\tref$  & $\SI{}{\kilo\pascal}$ & $[109.25,\,202.89]$ \\
         \bottomrule
     \end{tabularx}
-    \caption{Input parameter ranges used for describing OM sarcomere space.}
+    \caption{Input parameter ranges used for describing the OM-compatible sarcomere space in healthy rat hearts.}
     \label{tab:omparamranges}
 \end{table}
+
+
+
+%
+%
+%
+\subsection{Training dataset and emulators}\label{sec:ch5trainingdatasetandemulators}
+We sampled $4096$ points from a LHD in the input parameter space $X$ derived in Section~\ref{sec:ch5inputparameterspace}. The simulator was run at these points and the successfully completed simulations formed the training dataset ($1189$ points). Univariate GPEs were then trained with a $5$-fold cross-validation to predict each of the $14$ LV output features. The accuracy of each of the resulting $14$ trained GPEs was evaluated using the $R^2$-score regression metric. The resulting mean cross-validation $R^2$ test score was $>0.98$ for all the GPEs.
+
+
+
 
 \begin{table}[!ht]
     \myfloatalign
