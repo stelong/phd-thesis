@@ -28,6 +28,54 @@ This paper outlines our methodology of incorporating OM into our model, that con
 %
 \section{Preclinical data}\label{sec:ch5preclinicaldata}
 
+%
+%
+%
+\subsection{Cell-level measurements}\label{sec:ch5celllevelmeasurements}
+\textit{In vitro} measurements of the OM effects on the sarcomere in healthy rats were taken from literature experimental studies performed on skinned myocytes' preparations. OM effects were given in terms of alterations of the $\pCaf$ and $h$ features of the F-pCa curve (introduced in Section~\ref{sec:ch2theforcecalciumrelationship}, equation~\eqref{eq:FpCa}). To map these effects from skinned to intact/\textit{in vivo} results we used percentages of F-pCa featueres' change from the control muscle to the OM-containing solution-exposed muscle. These values are summarised in Table~\ref{tab:pshiftpslope}.
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{lXX}
+    \toprule
+    \tableheadline{Fraction of change} & \tableheadline{Exp. variability} & \tableheadline{Reference}  \\
+    \midrule
+    $P_{\textrm{shift}}$ (for $\pCaf$) & $[0.0085,\,0.0833]$ & \cite{Nagy:2015, Kampourakis:2018, Kieu:2019} \\
+    $P_{\textrm{slope}}$ (for $h$) & $[-0.7282,\,-0.2470]$ & \cite{Nagy:2015, Kampourakis:2018, Kieu:2019} \\
+    \bottomrule
+    \end{tabularx}
+    \caption{F-pCa fractions of change experimental variability in OM-containing solution-exposed healthy rat skinned muscles. Values are given as ranges of minimum and maximum fractions of change from control experimental mean values.}
+    \label{tab:pshiftpslope}
+\end{table}
+
+
+
+%
+%
+%
+\subsection{Whole-organ measurements}\label{sec:ch5wholeorganlevelmeasurements}
+We did not have \textit{in vivo} measurements of the OM effects on the whole-organ function in healthy rats, so qualitative observations from a healthy pig study were used~\cite{Bakkehaug:2015}. Again, we used percentage changes in LV features from baseline values after OM administration. In particular, we focused on the features whose change from control was reported to be statistically significant. These values are summarised in Table~\ref{tab:pigdata}.
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{lXX}
+        \toprule
+        \tableheadline{LV feature} & \tableheadline{Exp. variability ($\SI{}{\percent}$)} & \tableheadline{Reference} \\
+        \midrule
+        $\textrm{EDV}^*$ & $87.14 \pm 17.14$ & \cite{Bakkehaug:2015} \\
+        $\textrm{ESV}^*$ & $76.92 \pm 20.51$ & \cite{Bakkehaug:2015} \\
+        $\textrm{SV}$ & $100.00 \pm 25.81$ & \cite{Bakkehaug:2015} \\
+        $\textrm{EF}$ & $115.91 \pm 18.18$ & \cite{Bakkehaug:2015} \\
+        $\textrm{ET}^*$ & $116.16 \pm 9.61$ & \cite{Bakkehaug:2015} \\
+        $\textrm{Tdiast}^*$ & $88.24 \pm 16.97$ & \cite{Bakkehaug:2015} \\
+        $\textrm{maxdP}^*$ & $121.66 \pm 35.53$ & \cite{Bakkehaug:2015} \\
+        $\textrm{mindP}$ & $108.96 \pm 31.01$ & \cite{Bakkehaug:2015} \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Left ventricular features' experimental variability in healthy pigs after OM administration. Values are given as mean$\pm$std percentage change from control experimental mean values. Asterisked $(\cdot)^*$ features' changes were reported to be statistically significant.}
+    \label{tab:pigdata}
+\end{table}
+
 
 %
 %
@@ -101,7 +149,7 @@ The input parameter space $X\subset\mathbb{R}^{4}$ of the simulator map $f_{simu
 %
 %
 \subsection{Training dataset and emulators}\label{sec:ch5trainingdatasetandemulators}
-We sampled $4096$ points from a LHD in the input parameter space $X$ derived in Section~\ref{sec:ch5inputparameterspace}. The simulator was run at these points and the successfully completed simulations formed the training dataset ($1189$ points). Univariate GPEs were then trained with a $5$-fold cross-validation to predict each of the $14$ LV output features. The accuracy of each of the resulting $14$ trained GPEs was evaluated using the $R^2$-score regression metric. The resulting mean cross-validation $R^2$ test score was $>0.98$ for all the GPEs.
+We sampled $4096$ points from a LHD in the input parameter space $X$ derived in Section~\ref{sec:ch5inputparameterspace}. The simulator was run at these points and the successfully completed simulations formed the training dataset ($1189$ points). Univariate GPEs were then trained with a $5$-fold cross-validation to predict each of the $14$ LV output features. The accuracy of each of the resulting $14$ trained GPEs was evaluated using the $R^2$-score regression metric. The resulting mean cross-validation $R^2$ test score was $>0.99$ for all the GPEs.
 
 
 
@@ -160,25 +208,7 @@ We sampled $4096$ points from a LHD in the input parameter space $X$ derived in 
 \subsection{Inferring OM effects on the sarcomere from in vivo whole-organ hemodynamics data}\label{ch5caseone}
 We did not have \textit{in vivo} measurements of OM effects on rat cardiac hemodynamics, so qualitative observations (Table~\ref{tab:pigdata}) from a healthy pig study were used~\cite{Bakkehaug:2015}. We aimed to match significant changes in hemodynamics from baseline after OM administration and keep all other features constant. Changes in parameters that could recover the desired hemodynamic changes were determined by using the available GPEs to predict LV features' values at $400,000$ input parameter points sampled using a Latin hypercube design over the training dataset's ranges. A single iteration of Bayesian history matching (HM) was then performed with an implausibility threshold set to $1.5$ (see~\cite{Longobardi:2020} for more details), that identified $3,469$ points (corresponding to $\SI{0.8672}{\percent}$ of the initial space) as non-implausible for replicating the organ-scale effects of OM administration (Fig.~\ref{fig:wave0}). We predicted the intact steady-state force-pCa curves for each of these parameter sets by running the cellular contraction model and derived the $\pCaf$ and $h$ values from the curves. The median predicted changes in the intact force-pCa curves following OM administration were then compared with measured \cite{Nagy:2015, Kampourakis:2018, Kieu:2019} changes in force-pCa curves from skinned rat preparations in OM-containing solutions (Fig.~\ref{fig:wave0mappingtofpCa}) and found to be in qualitative agreement. 
 
-\begin{table}[!ht]
-    \myfloatalign
-    \begin{tabularx}{\textwidth}{XX}
-        \toprule
-        \tableheadline{LV feature} & \tableheadline{Exp. variability ($\SI{}{\percent}$)} \\
-        \midrule
-        $\textrm{EDV}^*$ & $87.14 \pm 17.14$ \\
-        $\textrm{ESV}^*$ & $76.92 \pm 20.51$ \\
-        $\textrm{SV}$ & $100.00 \pm 25.81$ \\
-        $\textrm{EF}$ & $115.91 \pm 18.18$ \\
-        $\textrm{ET}^*$ & $116.16 \pm 9.61$ \\
-        $\textrm{Tdiast}^*$ & $88.24 \pm 16.97$ \\
-        $\textrm{maxdP}^*$ & $121.66 \pm 35.53$ \\
-        $\textrm{mindP}$ & $108.96 \pm 31.01$ \\
-        \bottomrule
-    \end{tabularx}
-    \caption{Left ventricular features' target mean and standard deviation values. Values are given as percentage change from healthy, reference experimental mean values. Values taken from~\cite{Bakkehaug:2015}.}
-    \label{tab:pigdata}
-\end{table}
+
 
 \begin{figure}[!ht]
     \myfloatalign
