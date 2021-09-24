@@ -125,7 +125,7 @@ When running the simulator at a new parameter point, as we were using the person
 %
 %
 \subsection{Input parameter space}\label{sec:ch5inputparameterspace}
-The input parameter space $X\subset\mathbb{R}^{4}$ of the simulator map $f_{simul}$ introduced in equation~\eqref{eq:fsimulom} was defined as the Cartesian product of $4$ one-dimensional parameter ranges. Each of these ranges was given as the union of a $\pm\SI{50}{\percent}$ perturbation around the related parameter reference value and the range for the same parameter that was inferred from \textit{in vitro} F-pCa data in skinned rat myocytes' preparations, presented in Section~\ref{sec:ch5celllevelmeasurements} (further details are provided in Section~\ref{sec:ch5casetwo}). Adopted ranges are reported in Table~\ref{tab:omparamranges}.
+The input parameter space $X\subset\mathbb{R}^{4}$ of the simulator map $f_{simul}$ introduced in equation~\eqref{eq:fsimulom} was defined as the Cartesian product of $4$ one-dimensional parameter ranges. Each of these ranges was given as the combination of bounds inferred from the \textit{in vitro} F-pCa data presented in Section~\ref{sec:ch5celllevelmeasurements} (further details are provided in Section~\ref{sec:ch5inferringomeffectswholeorganfpca}) and a $\pm\SI{50}{\percent}$ ($\pm\SI{30}{\percent}$ for $\tref$) perturbation around the related parameter reference value. Adopted ranges are reported in Table~\ref{tab:omparamranges}.
 
 \begin{table}[!ht]
     \myfloatalign
@@ -148,14 +148,24 @@ The input parameter space $X\subset\mathbb{R}^{4}$ of the simulator map $f_{simu
 %
 %
 %
-\subsection{Training dataset and emulators}\label{sec:ch5trainingdatasetandemulators}
-We sampled $4096$ points from a LHD in the input parameter space $X$ derived in Section~\ref{sec:ch5inputparameterspace}. The simulator was run at these points and the successfully completed simulations formed the training dataset ($1189$ points). Univariate GPEs were then trained with a $5$-fold cross-validation to predict each of the $14$ LV output features. The accuracy of each of the resulting $14$ trained GPEs was evaluated using the $R^2$-score regression metric. The resulting mean cross-validation $R^2$ test score was $>0.99$ for all the GPEs.
+\subsection{Training dataset, emulators and global sensitivity analysis}\label{sec:ch5trainingdatasetandemulators}
+We sampled $4096$ points from a LHD in the input parameter space $X$ described in Section~\ref{sec:ch5inputparameterspace}. The simulator was run at these points and the successfully completed simulations formed the training dataset ($1189$ points).
+
+\vspace{0.2cm}
+Univariate GPEs, defined as in Section~\ref{sec:ch3gaussianprocessemulation}, were used to predict each of the $14$ LV output features, and all the hyperparameters (both from the mean function and from the zero-mean GP) were jointly optimised during training by maximisation of the model log-marginal likelihood. The accuracy and adequacy of being used as a surrogate model for each of the resulting $14$ trained GPEs was again evaluated using the $R^2$-score regression metric and the $ISE_2$, as described in Section~\ref{sec:ch3regressionaccuracy}. GPEs' implementation and training was performed using GPErks emulation tool~\cite{GPErks:2021} based on GPyTorch Python library~\cite{Gardner:2019}.
+
+\vspace{0.2cm}
+The trained GPEs were employed to perform a GSA. Sobol' sensitivity indices were estimated using the \texttt{SALib} Python library~\cite{Herman:2017}, and GPErks tool was used to incorporate GPEs' full posterior distribution samples into the indices' estimates, according to the second emulation-based approach of equations~\eqref{eq:emulpostsamplesgsa1}--\eqref{eq:emulpostsamplesgsa2}, presented in Section~\ref{sec:ch3emulatorbasedestimates}. Parameters whose Sobol' indices' distributions' expectation was below the threshold $0.01$ were determined to have negligible effects.
 
 
+
 %
 %
 %
-\section{Decidi dopo}
+\subsection{Inferring OM effects on whole-organ function from in vitro F-pCa\\measurements}\label{sec:ch5inferringomeffectswholeorganfpca}
+We want to investigate whether it is possible to validate OM mechanisms of action by using the built quantitative link between sarcomere properties and whole-organ function.
+
+\vspace{0.2cm}
 By recalling equations~\eqref{eq:ec50}--\eqref{eq:h}:
 %
 \begin{align}
@@ -164,17 +174,27 @@ By recalling equations~\eqref{eq:ec50}--\eqref{eq:h}:
 \end{align}
 
 \noindent
-we can notice that among the $4$ chosen input parameters there are $2$ parameters, namely $\trpnf$ and $\nxb$, that can be used to tune both the $\pCaf$ and $h$ at the same time. Given a set of changes $(\Delta\pCaf,\,\Delta h)$ in these two features of the F-pCa curve, it is possible to scale the $2$ parameters' reference values such that the F-pCa curve undergoes a perturbation of exactely $(\Delta\pCaf,\,\Delta h)$. This can be accomplished by solving for the set of scaling coefficients $(\alpha,\,\beta)\in\mathbb{R}\times\mathbb{R}$ the following equations:
+we can notice that among the $4$ chosen input parameters (Section~\ref{sec:ch5ratmodel}) there are $2$ parameters, namely $\trpnf$ and $\nxb$, that can be used to tune both the $\pCaf$ and $h$ at the same time. Given a set of changes $(\Delta\pCaf,\,\Delta h)$ in these two features of the F-pCa curve, it is possible to scale the $2$ parameters' reference values such that the F-pCa curve undergoes a perturbation of exactely $(\Delta\pCaf,\,\Delta h)$. This can be accomplished by solving for the set of scaling coefficients $(\alpha,\,\beta)\in\mathbb{R}\times\mathbb{R}$ the following equations:
 %
-\begin{equation}
-    \begin{cases}
-        \pCaf(\mathbf{p}_{\textrm{new}}) - \pCaf(\mathbf{p}) = \Delta\pCaf \\
-        h(\mathbf{p}_{\textrm{new}}) - h(\mathbf{p}) = \Delta h
-    \end{cases}
-\end{equation}
+\begin{align}
+    & \pCaf(\mathbf{p}_{\textrm{new}}) - \pCaf(\mathbf{p}) = \Delta\pCaf \label{eq:pcafeqalpha} \\
+    & h(\mathbf{p}_{\textrm{new}}) - h(\mathbf{p}) = \Delta h \label{eq:heqbeta}
+\end{align}
 
-\noindent
+\vspace{0.2cm}\noindent
 where $\pCaf(\cdot)$ and $h(\cdot)$ are now seen as functions of the reference $\mathbf{p}=(\trpnf,\,\nxb)$ and the new $\mathbf{p}_{\textrm{new}}=(\alpha\cdot\trpnf,\,\beta\cdot\nxb)$ parameter vectors.
+
+\vspace{0.2cm}
+The resulting $2$-dimensional space given by all the possible $\mathbf{p}_{\textrm{new}}$ vectors obtained by solving equations~\ref{eq:pcafeqalpha}--\ref{eq:heqbeta} for all the viable $(\Delta\pCaf,\,\Delta h)$ according to the experimentally observed variability for the F-pCa curve (Table~\ref{tab:pshiftpslope}) will constitute an OM-compatible sarcomere space encoded by the $\trpnf$ and $\nxb$ parameters. We obtained this space by first generating a LHD of $100,000$ points in the fractions of change $2$D experimental space (Table~\ref{tab:pshiftpslope}), and projecting this into the corresponding $2$D sarcomere parameter space as just described.
+
+\vspace{0.2cm}
+We finally mapped this space, while keeping $\kxb$ and $\tref$ parameters for which we had no data fixed to their reference values, to EDV, ESV, ET/Tdiast and maxdP features, which were shown to significantly vary with OM administration in the \textit{in vivo} pig study~\cite{Bakkehaug:2015}.
+
+
+%
+%
+%
+\subsection{Inferring OM effects on the sarcomere from in vivo whole-organ measurements}\label{sec:ch5inferringomeffectsfpcawholeorgan}
 
 
 
@@ -185,7 +205,7 @@ where $\pCaf(\cdot)$ and $h(\cdot)$ are now seen as functions of the reference $
 \section{Results}\label{sec:ch5results}
 
 \subsection{GPE and GSA}
-
+The resulting mean cross-validation $R^2$ and $ISE_2$ test scores were $>0.99$ and $>0.97$ respectively for all the GPEs.
 
 \begin{table}[!ht]
     \myfloatalign
@@ -233,7 +253,7 @@ where $\pCaf(\cdot)$ and $h(\cdot)$ are now seen as functions of the reference $
 %
 %
 %
-\subsection{Inferring OM effects on the sarcomere from in vivo whole-organ hemodynamics data}\label{ch5caseone}
+\subsection{Bella1}\label{ch5caseone}
 We did not have \textit{in vivo} measurements of OM effects on rat cardiac hemodynamics, so qualitative observations (Table~\ref{tab:pigdata}) from a healthy pig study were used~\cite{Bakkehaug:2015}. We aimed to match significant changes in hemodynamics from baseline after OM administration and keep all other features constant. Changes in parameters that could recover the desired hemodynamic changes were determined by using the available GPEs to predict LV features' values at $400,000$ input parameter points sampled using a Latin hypercube design over the training dataset's ranges. A single iteration of Bayesian history matching (HM) was then performed with an implausibility threshold set to $1.5$ (see~\cite{Longobardi:2020} for more details), that identified $3,469$ points (corresponding to $\SI{0.8672}{\percent}$ of the initial space) as non-implausible for replicating the organ-scale effects of OM administration (Fig.~\ref{fig:wave0}). We predicted the intact steady-state force-pCa curves for each of these parameter sets by running the cellular contraction model and derived the $\pCaf$ and $h$ values from the curves. The median predicted changes in the intact force-pCa curves following OM administration were then compared with measured \cite{Nagy:2015, Kampourakis:2018, Kieu:2019} changes in force-pCa curves from skinned rat preparations in OM-containing solutions (Fig.~\ref{fig:wave0mappingtofpCa}) and found to be in qualitative agreement. 
 
 
@@ -256,15 +276,15 @@ We did not have \textit{in vivo} measurements of OM effects on rat cardiac hemod
 %
 %
 %
-\subsection{Inferring OM effects on whole-organ function from in vitro force-pCa measurements}\label{ch5casetwo}
-The effect of OM on force-pCa measurements in healthy rats' skinned myocytes preparations were taken from the literature ~\cite{Nagy:2015, Kampourakis:2018, Kieu:2019}. To map skinned experimental observations to intact/\textit{in vivo} results we scaled our reference $\pCaf$ and $h$ values by the experimentally observed percentage changes $P_{\textrm{shift}}$ and $P_{\textrm{slope}}$, respectively, to estimate the \textit{in vivo} change ($\Delta$) of $\pCaf$ and $h$ values due to OM. We indicate \textit{in vivo} model parameters in the presece of OM with a superscript OM. We define and calculate values for $\alpha,\,\beta\in\mathbb{R}$ such that  the parameters $\trpnf^{\textrm{OM}} := \alpha\cdot \trpnf$ and $\nxb^{\textrm{OM}} := \beta\cdot \nxb$ achieved the desired change in the force-pCa curve encoded by a given combination of $\Delta\pCa$ and $\Delta h$. To determine the plausible values of $\trpnf^{\textrm{OM}}$ and $\nxb^{\textrm{OM}}$, we sampled $100,000$ points from a $2$D Latin hypercube design using the experimentally observed ranges for $P_{\textrm{shift}}\in [0.0085,\,0.0833]$ and $P_{\textrm{slope}}\in [-0.7282,\,-0.2470]$ and determined the corresponding pair of scaling coefficients $(\alpha,\,\beta)$ for each point to define a set of $100,000$ plausible values of $(\nxb^{\textrm{OM}},\, \trpnf^{\textrm{OM}})$. Finally, we used the previously trained GPEs to predict $\textrm{EDV}$, $\textrm{ESV}$, $\textrm{ET/Tdiast}$ and $\textrm{dP/dt}_\textrm{max}$ for the plausible values of $(\nxb^{\textrm{OM}},\, \trpnf^{\textrm{OM}})$, while keeping the values of $\kxb$ of $\tref$, where we did not have data, fixed to control values. Fig.~\ref{fig:lvfeatsdistr} shows that the inferred median effects of these changes to $\pCaf$ and $h$ due to OM on whole-organ function show a qualitative agreement in the direction of change for all the $4$ LV features reported to be significantly altered by OM in the pig study~\cite{Bakkehaug:2015}.
-
+\subsection{Bella results}\label{ch5casetwo}
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter05/Deltas_and_params_with_OM_blue.png}
     \caption{Predicted \textit{in silico} OM effects on whole-heart function as percentage changes of LV features' values from control values. Experimental uncertainty ranges are displayed as shaded regions using percentage-from-control mean $\pm$ standard deviation values for both the healthy (gray) and $+$OM (orange) cases.}
     \label{fig:deltas}
 \end{figure}
+
+Fig.~\ref{fig:lvfeatsdistr} shows that the inferred median effects of these changes to $\pCaf$ and $h$ due to OM on whole-organ function show a qualitative agreement in the direction of change for all the $4$ LV features reported to be significantly altered by OM in the pig study~\cite{Bakkehaug:2015}.
 
 \begin{figure}[!ht]
     \myfloatalign
