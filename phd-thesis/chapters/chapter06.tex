@@ -79,7 +79,7 @@ The existing coupling between $\tp$ and $\rtf$ $\Ca$ features manifests as regio
 %
 %
 %
-\section{Model validation}\label{sec:ch6modelvalidation}
+\section{Validating the personalised healthy rat heart contraction model}\label{sec:ch6validatingthepersonalisedhealthyratheartcontractionmodel}
 To test if the rat heart contraction model can predict how changes in calcium transients impact the whole heart function, we validated the computational framework by comparing qualitative measurements and predictions of changes in cardiac mechanics in the presence of compounds that manipulate the calcium transient. This provides a multi-scale test on the ability of the model to map from changes in ion channels conductances to changes in calcium transient and the resulting changes in whole heart function.
 
 \vspace{0.2cm}
@@ -216,4 +216,4 @@ The presented validation workflow is summarised in Figure~\ref{fig:validationsch
 %
 %
 \section{Discussion}\label{sec:ch6discussion}
-The used approach simulates the compound induced changes in the $\Ca$ transient, thereby overcoming the issue when no directly recorded $\Ca$ transients are available. In so doing, we created a fully simulated map from compound properties to whole organ function.
+The used approach simulates the compound induced changes in the $\Ca$ transient, thereby overcoming the issue when no directly recorded $\Ca$ transients are available. In so doing, we created a fully simulated map from compound properties to whole organ function. \todo{start of limitations:} Most of the compounds we tested were calcium channel blockers, which are known to induce negative chronotropic effects. This means that they reduce the heart rate. Although this can be neutralised by secondary effects such as a reflex increase in beta adrenergic tone in response to systemic vascular dilation, so that because of the level of reflex beta adrenergic discharge the net effect on heart rate could be balanced out~\cite{Low:1982}, our model doesn't account for heart rate variations, so the validation was performed by evaluating the effects of compounds at a fixed, physiological rate. \todo{start of conclusion:} Having a validated, personalised model of rat heart contraction is powerful as it can be trusted when this is used to predict compounds' mechanisms of action or for identifying in silico pharmacological cellular targets, as we shall see in the next Chapter.

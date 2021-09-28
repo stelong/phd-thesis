@@ -48,10 +48,18 @@ We used healthy control and diseased rat data from experimental studies conducte
 %
 \section{Methods}\label{sec:ch4methods}
 
+
 %
 %
 %
-\subsection{Mesh generation}\label{sec:ch4meshgeneration}
+\subsection{Rat heart contraction model}\label{sec:ch4ratheartcontractionmodel}
+We modelled both the healthy and the diseased rats' heart contraction mechanics using the multi-scale mathematical model presented in Chapter~\ref{cha:chapter02}. Rat phenotype-specific anatomy and calcium dynamics descriptions were used, as described in the next two paragraphs.
+
+
+%
+%
+%
+\subsubsection{Mesh generation}\label{sec:ch4meshgeneration}
 One representative cine MRI scan was obtained for both the SHAM and the AB rat cohorts. Each image set consisted of $47$ equally, $\SI{2.779}{\milli\second}$-spaced time frames. Example apicobasal slices are shown in Figure~\ref{fig:ratrepimag}, while MRI characteristics are reported in Table~\ref{tab:mrichar}.
 
 \begin{figure}[hbt!]
@@ -140,7 +148,7 @@ Rat meshes with fibres were generated from the representative MRI scans segmenta
 %
 %
 %
-\subsection{Ionic model}\label{sec:ch4ionicmodel}
+\subsubsection{Ionic model}\label{sec:ch4ionicmodel}
 We employed two variants~\cite{Gattoni:2017} of the original ionic model~\cite{Gattoni:2016} the same authors developed in order to describe the control SHAM and the diseased AB rats specific calcium dynamics. The experimental data the authors used to re-fit the original model comes from exactly the same experimental study (\cite{Roe:2017}) which we obtained the MRI scans from. For this reason, we were able have both sham-operated and aortic-banded rat cohorts-specific anatomy and electrophysiology mathematical descriptions at the same time. Simulated action potentials and calcium transients from the two different models are shown in Figure~\ref{fig:shamvsabcaap}.
 
 \begin{figure}[!ht]

@@ -88,7 +88,7 @@ We did not have \textit{in vivo} measurements of the OM effects on the whole-org
 %
 %
 %
-\subsection{Rat model}\label{sec:ch5ratmodel}
+\subsection{Rat heart contraction model}\label{sec:ch5ratheartcontractionmodel}
 To quantitatively link sarcomere properties to whole-organ function, we used the personalised SHAM rat heart contraction model derived in Section~\ref{sec:ch4fittedmodels}. Again, this model (or simulator) can be seen as a multi-scale map from input parameters to output features.
 
 \vspace{0.2cm}
@@ -136,14 +136,14 @@ The obtained simulator map had thus the following form:
 \end{align}
 
 \noindent
-When running the simulator at a new parameter point, as we were using the personalised SHAM rat model, all the other parameters were kept fixed to its reference parameter values (Table~\ref{tab:shamabbestfitparamvalues}) when applicable, or to the Land et al.~\cite{Land:2012} model baseline values when otherwise.
+When running the simulator at a new parameter point, since we were using the personalised SHAM rat model, all the other parameters were kept fixed to its reference parameter values (Table~\ref{tab:shamabbestfitparamvalues}) when applicable, or to the Land et al.~\cite{Land:2012} model baseline values when otherwise.
 
 
 %
 %
 %
 \subsection{Input parameter space}\label{sec:ch5inputparameterspace}
-The input parameter space $X\subset\mathbb{R}^{4}$ of the simulator map $f_{simul}$ introduced in equation~\eqref{eq:fsimulom} was defined as the Cartesian product of $4$ one-dimensional parameter ranges. Each of these ranges was given as the combination of bounds inferred from the \textit{in vitro} F-pCa data presented in Section~\ref{sec:ch5celllevelmeasurements} (further details are provided in Section~\ref{sec:ch5inferringomeffectswholeorganfpca}) and a $\pm\SI{50}{\percent}$ ($\pm\SI{30}{\percent}$ for $\tref$) perturbation around the related parameter reference value. Adopted ranges are reported in Table~\ref{tab:omparamranges}.
+The input parameter space $X\subset\mathbb{R}^{4}$ of the simulator map $f_{simul}$ introduced in equation~\eqref{eq:fsimulom} was defined as the hypercube obtained by the Cartesian product of $4$ one-dimensional parameter ranges. Each of these ranges was given as the combination of bounds inferred from the \textit{in vitro} F-pCa data presented in Section~\ref{sec:ch5celllevelmeasurements} (further details are provided in Section~\ref{sec:ch5inferringomeffectswholeorganfpca}) and a $\pm\SI{50}{\percent}$ ($\pm\SI{30}{\percent}$ for $\tref$) perturbation around the related parameter reference value. Adopted ranges are reported in Table~\ref{tab:omparamranges}.
 
 \begin{table}[!ht]
     \myfloatalign
@@ -192,7 +192,7 @@ By recalling equations~\eqref{eq:ec50}--\eqref{eq:h}:
 \end{align}
 
 \noindent
-we can notice that among the $4$ chosen input parameters (Section~\ref{sec:ch5ratmodel}) there are $2$ parameters, namely $\trpnf$ and $\nxb$, that can be used to tune both the $\pCaf$ and $h$ at the same time. Given a set of changes $(\Delta\pCaf,\,\Delta h)$ in these two features of the F-pCa curve, it is possible to scale the $2$ parameters' reference values such that the F-pCa curve undergoes a perturbation of exactely $(\Delta\pCaf,\,\Delta h)$. This can be accomplished by solving for the set of scaling coefficients $(\alpha,\,\beta)\in\mathbb{R}\times\mathbb{R}$ the following equations:
+we can notice that among the $4$ chosen input parameters (Section~\ref{sec:ch5ratheartcontractionmodel}) there are $2$ parameters, namely $\trpnf$ and $\nxb$, that can be used to tune both the $\pCaf$ and $h$ at the same time. Given a set of changes $(\Delta\pCaf,\,\Delta h)$ in these two features of the F-pCa curve, it is possible to scale the $2$ parameters' reference values such that the F-pCa curve undergoes a perturbation of exactely $(\Delta\pCaf,\,\Delta h)$. This can be accomplished by solving for the set of scaling coefficients $(\alpha,\,\beta)\in\mathbb{R}\times\mathbb{R}$ the following equations:
 %
 \begin{align}
     & \pCaf(\mathbf{p}_{\textrm{new}}) - \pCaf(\mathbf{p}) = \Delta\pCaf \label{eq:pcafeqalpha} \\
