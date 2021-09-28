@@ -240,42 +240,58 @@ Land et al.~\cite{Land:2012} cell contraction model's main mechanisms are summar
 \end{figure}
 
 
-%
-%
-%
-\subsection{Uncoupling binding and unbinding rates}\label{sec:ch2uncouplingbindingandunbindingrates}
-We modified equation~\eqref{eq:landodesys1} in order to uncouple the unbinding rate from the binding rate of the $\Ca$-TnC relationship. This was achieved by fixing the binding rate to a predefined value which was shown to characterise the intact rat muscle in literature experiments~\cite{Niederer:2006}, namely $\overline{\kon}=\SI{0.1}{\per\micro\Molar\per\milli\second}$, while at the same time re-scaling the calcium sensitivity parameter $\Caift$. By recalling equation~\eqref{eq:landodesys1}, we have that:
+% %
+% %
+% %
+% \subsection{Uncoupling binding and unbinding rates}\label{sec:ch2uncouplingbindingandunbindingrates}
+% We modified equation~\eqref{eq:landodesys1} in order to uncouple the unbinding rate from the binding rate of the $\Ca$-TnC relationship. This was achieved by fixing the binding rate to a predefined value which was shown to characterise the intact rat muscle in literature experiments~\cite{Niederer:2006}, namely $\overline{\kon}=\SI{0.1}{\per\micro\Molar\per\milli\second}$, while at the same time re-scaling the calcium sensitivity parameter $\Caift$. By recalling equation~\eqref{eq:landodesys1}, we have that:
 
+% \begin{align}
+%     \frac{d\text{TRPN}}{dt} &=\ktrpn\left[\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\trpn\right] \\
+%     &= \ktrpn\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\ktrpn\trpn \\
+%     &= \underbrace{\frac{\ktrpn}{\Caift^{\ntrpn}}}_{\kon}\Cai^{\ntrpn}(1-\trpn)-\underbrace{\ktrpn}_{\koff}\trpn \\
+%     &= \kon\Cai^{\ntrpn}(1-\trpn)-\koff\trpn
+% \end{align}
+
+% \noindent
+% $\kon$ is therefore a function of $\koff$, $\Caift$ and $\ntrpn$. However, for every set of these three parameters $(\koff,\,\Caift,\,\ntrpn)\in\mathbb{R}^{3}$, there exists a unique value $\widehat{\Caift}\in\mathbb{R}$ such that:
+
+% \begin{equation}
+%     \widehat{\Caift}^{\ntrpn}\times\kon = \widehat{\Caift}^{\ntrpn}\times\frac{\koff}{\Caift^{\ntrpn}} = \overline{\kon} = \text{constant}
+% \end{equation}
+
+% \noindent
+% The newly introduced parameter
+% %
+% \begin{equation}
+%     \widehat{\Caift} := \Caift\left(\frac{\overline{\kon}}{\koff}\right)^{1/\ntrpn}
+% \end{equation}
+
+% \noindent
+% allows to uncouple the unbinding rate from the binding rate in equation~\eqref{eq:landodesys1}, which can be now re-written as:
+
+% \begin{equation}\label{eq:landodesys1mod}
+%     \der{\trpn}{t} = \overline{\kon}\left(\frac{\Cai}{\widehat{\Caift}}\right)^{\ntrpn}(1-\trpn)-\koff\trpn 
+% \end{equation}
+
+% \noindent
+% To simplify notation, we will keep using $\kon$ for $\overline{\kon}$ and $\Caift$ for $\widehat{\Caift}$, although it is worth noting that $\Caift$ is now given in $\SI{}{\micro\Molar}^{1-1/\ntrpn}$ units.
+
+
+%
+%
+%
+\subsection{Uncoupling binding and unbinding}
+We wanted to uncouple the unbinding rate from the binding rate in the $\Ca$-TnC relationship. This was achieved by assigning a different function to parameter $\ktrpn$ according to whether this was multiplying the first term or the second term in equation~\eqref{eq:landodesys1}:
+%
 \begin{align}
     \frac{d\text{TRPN}}{dt} &=\ktrpn\left[\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\trpn\right] \\
-    &= \ktrpn\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\ktrpn\trpn \\
-    &= \underbrace{\frac{\ktrpn}{\Caift^{\ntrpn}}}_{\kon}\Cai^{\ntrpn}(1-\trpn)-\underbrace{\ktrpn}_{\koff}\trpn \\
-    &= \kon\Cai^{\ntrpn}(1-\trpn)-\koff\trpn
+    &= \underbrace{\ktrpn}_{\kon}\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\underbrace{\ktrpn}_{\koff}\trpn \\
+    &= \kon\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\koff\trpn \label{eq:landodesys1mod}
 \end{align}
 
-\noindent
-$\kon$ is therefore a function of $\koff$, $\Caift$ and $\ntrpn$. However, for every set of these three parameters $(\koff,\,\Caift,\,\ntrpn)\in\mathbb{R}^{3}$, there exists a unique value $\widehat{\Caift}\in\mathbb{R}$ such that:
-
-\begin{equation}
-    \widehat{\Caift}^{\ntrpn}\times\kon = \widehat{\Caift}^{\ntrpn}\times\frac{\koff}{\Caift^{\ntrpn}} = \overline{\kon} = \text{constant}
-\end{equation}
-
-\noindent
-The newly introduced parameter
-%
-\begin{equation}
-    \widehat{\Caift} := \Caift\left(\frac{\overline{\kon}}{\koff}\right)^{1/\ntrpn}
-\end{equation}
-
-\noindent
-allows to uncouple the unbinding rate from the binding rate in equation~\eqref{eq:landodesys1}, which can be now re-written as:
-
-\begin{equation}\label{eq:landodesys1mod}
-    \der{\trpn}{t} = \overline{\kon}\left(\frac{\Cai}{\widehat{\Caift}}\right)^{\ntrpn}(1-\trpn)-\koff\trpn 
-\end{equation}
-
-\noindent
-To simplify notation, we will keep using $\kon$ for $\overline{\kon}$ and $\Caift$ for $\widehat{\Caift}$, although it is worth noting that $\Caift$ is now given in $\SI{}{\micro\Molar}^{1-1/\ntrpn}$ units.
+\vspace{0.2cm}\noindent
+Both the binding ($\kon$) and unbinding ($\koff$) rates were set to the same model baseline $\ktrpn$ value, although now it is possible to treat them as two different parameters. This will serve the purpose of understanding the individual contribution of one of them (e.g. $\koff$) in the active tension generation, while fixing the other ($\kon$).
 
 
 %

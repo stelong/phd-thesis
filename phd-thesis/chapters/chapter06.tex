@@ -21,7 +21,7 @@ $\Ca$ dynamics plays a key role in the heart contraction. If mapping myofilament
 %
 %
 \section{Encoding calcium transient variations}\label{sec:ch6encodingcalciumtransientvariations}
-We used a $4$-feature parametric representation of the $\Ca$ transient that maps to common experimentally measured features. The $\Ca$ transient was characterised using diastolic concentration (\acs{DCA}), amplitude (\acs{AMPL}), time to peak concentration (\acs{TP}) and time to half-relaxation from peak concentration (\acs{RT$_{50}$}) features. We wish to sample random sets of these features such that the final samples will uniformly cover the feature space, in order to possibly cover both healthy and pathological $\Ca$ transient phenotypes. For this purpose, we used linear weighs to scale each of the four features from a representative $\Ca$ transient. This parametric encoding of $\Ca$ transient variation ensured that all transients maintained a characteristic $\Ca$ transient morphology.
+We used a $4$-feature parametric representation of the $\Ca$ transient that maps to common experimentally measured features. The $\Ca$ transient was characterised using diastolic concentration (\acs{DCA}), amplitude (\acs{AMPL}), time to peak concentration (\acs{TP}) and time to half-relaxation from peak concentration (\acs{RT$_{50}$}) features. We wish to sample random sets of these features such that the final samples will uniformly cover the feature space, in order to possibly cover both healthy and pathological $\Ca$ transient phenotypes. For this purpose, we used linear weighs to scale each of the four features from a representative $\Ca$ transient. This parametric encoding of $\Ca$ transient variation ensured that all transients maintained a characteristic $\Ca$ transient morphology. \todo{table of 4 Ca features with units and definitions}
 
 \vspace{0.2cm}
 The specific implementation of this scaling strategy is presented in Alg.~\ref{alg:cascaling}. Note that \texttt{features} function returns the set of four features given an input $\Ca$ transient; \texttt{concatenate} function returns a $1$D array obtained as the horizontal stack of the given input row $1$D arrays; \texttt{linear\_interpolator} function returns a function whose call method uses $1$D linear interpolation to find the value of new points.
@@ -144,12 +144,12 @@ For each given compound, we calculated $B$ for each channel when $C$ was set to 
 \end{figure}
 
 \vspace{0.2cm}
-As the $\Ca$ transients obtained in the presence of the compound at different concentrations can be encoded by $\dca$, $\ampl$, $\tp$ and $\rtf$ features (Section~\ref{sec:ch6encodingcalciumtransientvariations}), we can visualise how these are varying in a dose-dependent manner. These dose-response curves are shown in Figure~\ref{fig:cafeatsverapamilrespcurve} for verapamil as an example compound.
+As the $\Ca$ transients obtained in the presence of the compound at different concentrations can be encoded by $\dca$, $\ampl$, $\tp$ and $\rtf$ features (Section~\ref{sec:ch6encodingcalciumtransientvariations}), we can visualise how these are varying in a dose-dependent manner. The $\Ca$ transient features' dose-response curves are shown in Figure~\ref{fig:cafeatsverapamilrespcurve} for the verapamil example compound.
 
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter06/verapamil_dose_calcium_response_curve_drug.pdf}
-    \caption{Calcium transient features dose-response curves. Calcium transient features are extracted from perturbed calcium transients and plotted against the respectively simulated compound concentrations.}
+    \caption{Calcium transient features' dose-response curves. Calcium transient features are extracted from perturbed calcium transients and plotted against the respectively simulated compound concentrations.}
     \label{fig:cafeatsverapamilrespcurve}
 \end{figure}
 

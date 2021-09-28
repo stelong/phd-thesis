@@ -13,9 +13,12 @@
 %
 %
 \section{Motivation}
-% Heart contraction is the result of integrated cellular, tissue and organ function. Biophysical \textit{in silico} cardiac models offer a systematic approach for studying these multi-scale interactions. The computational cost of such models is high, due to their multi-parametric and non-linear nature. This has so far made it difficult to perform model fitting and prevented global sensitivity analysis studies. We propose a machine learning approach based on Gaussian process emulation of model simulations using probabilistic surrogate models, which enables model parameter inference via a Bayesian history matching technique and global sensitivity analysis on whole-organ mechanics. This framework is applied to model healthy and aortic-banded hypertensive rats, a commonly used animal model of heart failure disease. The obtained probabilistic surrogate models accurately predicted the left ventricular pump function ($R^2=0.92$ for ejection fraction). The history matching technique allowed us to fit both the control and diseased virtual bi-ventricular rat heart models to MRI and literature data, with model outputs from the constrained parameter space falling within $2$ STD of the respective experimental values. The global sensitivity analysis identified Troponin C and cross-bridge kinetics as key parameters in determining both systolic and diastolic ventricular function.
+\todo{this is Abstract copy-pasted from the paper: adapt it to thesis}
 
+\noindent
+Heart contraction is the result of integrated cellular, tissue and organ function. Biophysical \textit{in silico} cardiac models offer a systematic approach for studying these multi-scale interactions. The computational cost of such models is high, due to their multi-parametric and non-linear nature. This has so far made it difficult to perform model fitting and prevented global sensitivity analysis studies. We propose a machine learning approach based on Gaussian process emulation of model simulations using probabilistic surrogate models, which enables model parameter inference via a Bayesian history matching technique and global sensitivity analysis on whole-organ mechanics. This framework is applied to model healthy and aortic-banded hypertensive rats, a commonly used animal model of heart failure disease. The obtained probabilistic surrogate models accurately predicted the left ventricular pump function ($R^2=0.92$ for ejection fraction). The history matching technique allowed us to fit both the control and diseased virtual bi-ventricular rat heart models to MRI and literature data, with model outputs from the constrained parameter space falling within $2$ STD of the respective experimental values. The global sensitivity analysis identified Troponin C and cross-bridge kinetics as key parameters in determining both systolic and diastolic ventricular function.
 
+\vspace{0.2cm}\noindent
 \todo{this is Introduction copy-pasted from the paper: adapt it to thesis}
 
 \noindent
@@ -209,7 +212,7 @@ The input parameter space $X\subset\mathbb{R}^{8}$ of the simulator map $f_{simu
         \toprule
         \tableheadline{Parameter} & \tableheadline{Units} & \tableheadline{Range} \\
         \midrule
-        $\Caif$ & $\SI{}{\micro\Molar\tothe{1/2}}$      & $[0.25,\,3.25]$ \\
+        $\Caif$ & $\SI{}{\micro\Molar}$      & $[0.25,\,3.25]$ \\
         $\koff$ & $\SI{}{\per\milli\second}$            & $[0.05,\,0.2]$ \\
         $\kxb$  & $\SI{}{\per\milli\second}$            & $[0.008,\,0.2]$ \\
         $\tref$ & $\SI{}{\kilo\pascal}$                 & $[80,\,160]$ \\
@@ -477,7 +480,7 @@ Unlike classical optimisation algorithms that converge to a single set of parame
     \midrule
     & & \tableheadline{SHAM} & \tableheadline{AB} \\
     \midrule
-    $\Caif$ & $\SI{}{\micro\Molar\tothe{1/2}}$      & $2.1723$  & $0.7087$ \\
+    $\Caif$ & $\SI{}{\micro\Molar}$      & $2.1723$  & $0.7087$ \\
     $\koff$ & $\SI{}{\per\milli\second}$            & $0.0515$  & $0.0686$ \\
     $\kxb$  & $\SI{}{\per\milli\second}$            & $0.0172$  & $0.0090$ \\
     $\tref$ & $\SI{}{\kilo\pascal}$                 & $156.067$ & $112.582$ \\

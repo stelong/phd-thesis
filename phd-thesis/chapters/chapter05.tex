@@ -93,7 +93,23 @@ To quantitatively link sarcomere properties to whole-organ function, we used the
 
 \vspace{0.2cm}
 With the simulator input, we aimed at modelling the OM effect at the sarcomere level.
-As OM increases the rate of cross-bridge formation~\cite{Malik:2011}, we considered parameters that are specifically responsible for cross-bridge dynamics in the Land et al.~\cite{Land:2012} cell contraction sub-model, namely $\kxb$, $\nxb$, $\trpnf$ and $\tref$. These parameters were introduced in Section~\ref{sec:ch2contractionmodel}, and constituted the simulator $4$-dimensional input.
+As OM increases the rate of cross-bridge formation~\cite{Malik:2011}, we considered parameters that are specifically responsible for cross-bridge dynamics in the Land et al.~\cite{Land:2012} cell contraction sub-model, namely $\kxb$, $\nxb$, $\trpnf$ and $\tref$. These parameters, introduced in Section~\ref{sec:ch2contractionmodel} and again reported in Table~\ref{tab:paramswithdefom}, constituted the simulator $4$-dimensional input.
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{llX}
+    \toprule
+    \tableheadline{Parameter} & \tableheadline{Units}                   & \tableheadline{Definition} \\
+    \midrule
+    $\kxb$                    & $\SI{}{\per\milli\second}$              & cross-bridges cycling rate \\
+    $\nxb$                    & $-$                                     & cross-bridge formation degree of cooperativity \\
+    $\trpnf$                  & $-$                                     & fraction of $\Ca$-TnC bounds for half-maximal cross-bridges activation \\
+    $\tref$                   & $\SI{}{\kilo\pascal}$                   & maximal reference tension \\
+    \bottomrule
+    \end{tabularx}
+    \caption{Model parameters and their definitions.}
+    \label{tab:paramswithdefom}
+\end{table}
 
 \vspace{0.2cm}
 The simulator output aimed at describing the LV function using a set of scalar features. These were the same $12$ features used in the previous analysis (Table~\ref{tab:lvfeatures}) with the addition of other $2$ features (Table~\ref{tab:lvfeaturesom}), for a total of $14$ features.
