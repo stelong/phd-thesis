@@ -136,7 +136,7 @@ The obtained simulator map had thus the following form:
 \end{align}
 
 \noindent
-When running the simulator at a new parameter point, since we were using the personalised SHAM rat model, all the other parameters were kept fixed to its reference parameter values (Table~\ref{tab:shamabbestfitparamvalues}) when applicable, or to the Land et al.~\cite{Land:2012} model baseline values when otherwise.
+When running the simulator at a new parameter point, we fixed all the parameters not included in the set of simulator inputs to the personalised SHAM rat model baseline parameter values (Table~\ref{tab:shamabbestfitparamvalues}) when applicable, or to the Land et al.~\cite{Land:2012} model baseline values when otherwise.
 
 
 %
@@ -157,7 +157,7 @@ The input parameter space $X\subset\mathbb{R}^{4}$ of the simulator map $f_{simu
         $\tref$  & $\SI{}{\kilo\pascal}$ & $[109.25,\,202.89]$ \\
         \bottomrule
     \end{tabularx}
-    \caption{Input parameter ranges used for describing the OM-compatible sarcomere space in healthy rat hearts.}
+    \caption{Parameters' ranges used for describing the healthy rat model $4$D input parameter space.}
     \label{tab:omparamranges}
 \end{table}
 
@@ -167,13 +167,14 @@ The input parameter space $X\subset\mathbb{R}^{4}$ of the simulator map $f_{simu
 %
 %
 \subsection{Training dataset, emulators and global sensitivity analysis}\label{sec:ch5trainingdatasetandemulators}
-We sampled $4096$ points from a LHD in the input parameter space $X$ described in Section~\ref{sec:ch5inputparameterspace}. The simulator was run at these points and the successfully completed simulations formed the training dataset ($1189$ points).
+We sampled $4096$ points from a LHD over the input parameter space $X$ defined in Section~\ref{sec:ch5inputparameterspace}. The simulator was run at these points, and the successfully completed simulations were collected to form the training dataset ($1189$ points).
 
 \vspace{0.2cm}
-Univariate GPEs, defined as in Section~\ref{sec:ch3gaussianprocessemulation}, were used to predict each of the $14$ LV output features, and all the hyperparameters (both from the mean function and from the zero-mean GP) were jointly optimised during training by maximisation of the model log-marginal likelihood. The accuracy and adequacy of being used as a surrogate model for each of the resulting $14$ trained GPEs was again evaluated using the $R^2$-score regression metric and the $ISE_2$, as described in Section~\ref{sec:ch3regressionaccuracy}. GPEs' implementation and training was performed using GPErks emulation tool~\cite{GPErks:2021} based on GPyTorch Python library~\cite{Gardner:2019}.
+Univariate GPEs, defined as in Section~\ref{sec:ch3gaussianprocessemulation}, were used to predict each of the $14$ LV output features, and all the GPE model hyperparameters (both from the mean function and from the zero-mean GP) were jointly optimised during training by maximisation of the model log marginal likelihood (equation~\eqref{eq:logmarginallikelihood}). The accuracy and adequacy of being used as a surrogate model for each of the resulting $14$ trained GPEs were evaluated using the $R^2$-score regression metric and the $ISE_2$, as described in Section~\ref{sec:ch3regressionaccuracy}. GPEs' implementation and training were performed using GPErks emulation tool~\cite{GPErks:2021} based on GPyTorch Python library~\cite{Gardner:2019}.
 
 \vspace{0.2cm}
-The trained GPEs were employed to perform a GSA. Sobol' sensitivity indices were estimated using the \texttt{SALib} Python library~\cite{Herman:2017}, and GPErks tool was used to incorporate GPEs' full posterior distribution samples into the indices' estimates, according to the second emulation-based approach of equations~\eqref{eq:emulpostsamplesgsa1}--\eqref{eq:emulpostsamplesgsa2}, presented in Section~\ref{sec:ch3emulatorbasedestimates}. Parameters whose Sobol' indices' distributions' expectation was below the threshold $0.01$ were determined to have negligible effects.
+To study the input parameters' impact on the output LV features' total variance we performed a GSA using the trained GPEs. Model outputs' sensitivity to model inputs was characterised by Sobol' first-order and total effects. These were estimated using \texttt{SALib} Python library~\cite{Herman:2017}. GPErks tool~\cite{GPErks:2021} was used to incorporate GPEs' full posterior distribution samples to account for emulators' uncertainty in Sobol' indices estimates, by following the second emulation-based approach of equations~\eqref{eq:emulpostsamplesgsa1}--\eqref{eq:emulpostsamplesgsa2}, presented in Section~\ref{sec:ch3emulatorbasedestimates}. Parameters whose Sobol' indices' distributions' expectation was below the threshold $0.01$ were determined to have negligible effects.
+
 
 
 
