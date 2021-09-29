@@ -38,6 +38,30 @@ In this study we aim to predict changes in myocyte function that recovers whole 
 %
 %
 %
+\section{Rat data}\label{sec:ch7raddata}
+In order to create a mathematical model of the ZSF1 rat, we first needed to characterise its LV systolic and diastolic functions. For this purpose, we performed a literature search on PubMed (date 09/03/2021) with query: ``(rat) AND (ZSF1) AND (hemodynamic)". The search gave $32$ results and we analysed them all. Of these, $19$ contained information about LV hemodynamic measurements. All the $19$ studies~\cite{Abdellatif:2016, Bowen:2017, Bowen:2018, Brandt:2019, Cuijpers:2020, Davila:2019, Hamdani:2013, Hohendanner:2018, Lai:2016, Leite:2015, Leite:2015*a, Leite:2019, Nguyen:2020, Park:2020, Salah:2018, Schmederer:2018, Stolina:2020, Van-Dijk:2016, Wang:2020} had been conducted on male rats at the age of $20$ weeks, and diastolic dysfunction was confirmed by echocardiographic measurements (decreased E/A, increased E/E', increased LA area). We identified common phenotypes in these obese ZSF1 rats' hemodynamics compared to their respective control (lean ZSF1 rat) as described by $4$ LV features, namely $\textrm{EF}$ (no change), $\textrm{PeakP}$ (increased), $\textrm{maxdP}$ (increased), $\textrm{Tau}$ (increased). To regularise observed changes in ZSF1 rats from multiple labs, we applied the observed average, percentage changes between ZSF1 rats and local control animals to our SHAM control rat model. The applied experimental variability is summarised in Table~\ref{tab:obesezsf1data}.
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{lXX}
+    \toprule
+    \tableheadline{LV feature}                  & \tableheadline{Exp. variability ($\SI{}{\percent}$)} & \tableheadline{Reference} \\
+    \midrule
+    $\textrm{EF}$    & $103.95\pm 7.62$  & \cite{Bowen:2017, Cuijpers:2020, Hamdani:2013, Leite:2015, Leite:2019, Salah:2018, Stolina:2020, Leite:2015*a, Schmederer:2018} \\
+    $\textrm{PeakP}^{*}$ & $119.26\pm 6.07$  & \cite{Leite:2015, Leite:2019} \\
+    $\textrm{maxdP}^{*}$ & $125.46\pm 5.26$  & \cite{Bowen:2017, Hamdani:2013, Leite:2015, Leite:2015*a, Schmederer:2018} \\
+    $\textrm{Tau}^{*}$ & $141.97\pm 13.67$ & \cite{Bowen:2017, Cuijpers:2020, Hamdani:2013, Leite:2015, Leite:2019, Salah:2018, Stolina:2020} \\
+    \bottomrule
+    \end{tabularx}
+    \caption{Experimental ZSF1 obese rat hemodynamic data. For each LV feature of interest, mean and standard deviation values are given as percentages of the related control mean values. Asterisked $(\cdot)^*$ features' changes were reported to be statistically significant.}
+    \label{tab:obesezsf1data}
+\end{table}
+
+
+
+%
+%
+%
 \section{Methods}\label{sec:ch7methods}
 
 
@@ -154,7 +178,7 @@ The input parameter space $X\subset\mathbb{R}^{16}$ of the simulator map $f_{sim
 %
 %
 %
-\subsection{Training dataset, emulators, global sensitivity analysis and history matching}
+\subsection{Training dataset, emulators, global sensitivity analysis}
 We sampled $14,848$ points from a LHD over the input parameter space $X$ defined in Section~\ref{sec:ch7inputparameterspace}. The simulator was run at these points, and the successfully completed simulations were collected to form the training dataset ($1,299$ points).
 
 \vspace{0.2cm}
@@ -163,17 +187,90 @@ Univariate GPEs, defined as in Section~\ref{sec:ch3gaussianprocessemulation}, we
 \vspace{0.2cm}
 To study the input parameters' impact on the output LV features' total variance we performed a GSA using the trained GPEs. Model outputs' sensitivity to model inputs was characterised by Sobol' first-order and total effects. These were estimated using \texttt{SALib}~\cite{Herman:2017}. GPErks~\cite{GPErks:2021} was used to incorporate GPEs' full posterior distribution samples to account for emulators' uncertainty in Sobol' indices estimates, by following the second emulation-based approach of equations~\eqref{eq:emulpostsamplesgsa1}--\eqref{eq:emulpostsamplesgsa2}, presented in Section~\ref{sec:ch3emulatorbasedestimates}. Parameters whose Sobol' indices' distributions' expectation was below the threshold $0.01$ were determined to have negligible effects.
 
+
+\subsection{Building ZSF1}
+To create a model of the ZSF1 rat, we re-fitted model parameters using the history matching (HM) technique (Section~$2.3$ of the main manuscript), trying to match the experimental variability shown for the above mentioned LV features. As $\textrm{EF}$ did not change significantly in any experiment, we matched the $\textrm{EF}$ feature value directly with no variability.
+
+\vspace{0.2cm}
+We considered the evidence for changing each of the $16$ model parameters (Table~$1$ of the main manuscript). In ZSF1 rats, the intracellular calcium transient was shown to have increased diastolic concentrations and decreased/unaltered amplitudes at multiple frequencies ($1$-$\SI{4}{\Hz}$-paced cells)~\cite{Miranda-Silva:2020, Abdellatif:2021}, so we fitted $\dca$ and $\ampl$ parameters. As the observed changes in time to peak calcium and time to calcium half-relaxation could not be extrapolated at physiological pacing rates, $\tp$ and $\rtf$ parameters were kept fixed. Also, end-diastolic pressure~\cite{Abdellatif:2016, Bowen:2017, Hamdani:2013, Hohendanner:2018, Lai:2016, Leite:2015, Leite:2015*a, Leite:2019, Salah:2018, Schmederer:2018} and cardiac tissue stiffness~\cite{Hamdani:2013, Abdellatif:2016, Van-Dijk:2016, Salah:2018, Schmederer:2018, Leite:2019, Davila:2019, Nguyen:2020} were consistently shown to be increased w.r.t control, so we fitted $p$ and $C_1$ parameters. Furthermore, there was evidence for an increase in arterial systolic pressure~\cite{Cuijpers:2020} and aortic characteristic impedance~\cite{Leite:2019}, therefore parameters $\pao$, $Z$ were selected for optimisation as well. As there were no statistically significant changes in the reported values of myocardial active contraction in ZSF1 rats~\cite{Deel:2017, McCain:2014, Hersch:2013}, we assumed that sarcomere properties remained unchanged (i.e. $\Caif$, $\beta_1$, $\koff$, $\ntrpn$, $\kxb$, $\nxb$, $\trpnf$, $\tref$ parameters were not fitted). Although the ZSF1 rats all developed LV hypertrophy as shown by increased cardiac fibrosis, collagen type III fibers and cardiomyocyte size (increased LV mass and indexes of LV mass such as LV $+$ IVS weights / tibial length), this was not always (e.g.~\cite{Van-Dijk:2016, Schmederer:2018}) accompanied by an increase in LV wall thickness in male ZSF1 rats. Moreover, half of the ZSF1 rat studies~\cite{Hamdani:2013, Leite:2015, Leite:2015*a, Leite:2019, Abdellatif:2016, Lai:2016, Van-Dijk:2016, Nguyen:2020} showed no LV dilation as appraised by indexed end-diastolic volumes (preserved EDVi), measured by no change in the bi-ventricle size/shape. To summarise, $6$ out of $16$ SHAM rat model parameters were re-fitted to build the ZSF1 rat model while keeping the other parameters fixed to reference values.
+
 \vspace{0.2cm}
 Bayesian history matching (HM) technique was used to re-fit model parameters as done previously~\cite{Longobardi:2020}, to create a mathematical model of the obese ZSF1 rat (Section~\ref{sec:buildingzsf1model}) and to virtually recover it towards an healthy condition (Section~\ref{sec:recovery}).
 
 
+%
+%
+%
+\subsection{Recoverying ZSF1}
+In order to recover the LV function in the created ZSF1 rat HFpEF animal model, we re-parametrised the calcium dynamics or the thin filament kinetics or the thick filament kinetics or all the three components combined such that the obtained model matched the variability observed for the LV function in the healthy, control SHAM rat model.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \caption{{\bf ZSF1 and SHAM reference rat models.} ZSF1 rat (red) and SHAM rat (blue) models' pressure (P) and volume (V) transients and PV-loops are plotted with dashed lines. SHAM model \textit{in silico} variability is also represented by a cloud of thin blue full lines.}
+    \label{fig:zsf1andshamrefwithvar}
+    \includegraphics[width=0.85\textwidth]{figures/chapter07/zsf1_vs_sham_last_wave_plus_ref.pdf}
+\end{figure}
+
+\vspace{0.2cm}
+We aim to identify cellular properties that can be manipulated to recover the ZSF1 rat towards the SHAM rat within a purely virtual experiment. By ``recover" we mean to bring the altered LV features' values we observed for the ZSF1 rat model back to the values of the SHAM rat model. We will do so by specifically targeting different subsets of model parameters to represent \textit{in silico} different possible pharmacological mechanisms of action.
+
+\vspace{0.2cm}
+To recover the ZSF1 rat we re-fitted different subsets of model parameters in the ZSF1 model to recover the SHAM model output features, within the certainty that these features are predicted by the model (\nameref{S6_Text}). The LV features we aimed to recover were $\textrm{EDV}$, $\textrm{ESV}$, $\textrm{PeakP}$, $\textrm{maxdP}$, $\textrm{Tau}$. The groups of parameters selected for optimisation were: calcium transient (Ca), thin filament (TNF), thick filament (TKF) (Table~\ref{tab:paramsranking}), and the three groups combined (CaMYO). For each group of $D$ parameters $\mathbf{p}=(p_1,\,\dots,\,p_D)$ we first trained one univariate GPE for each of the target LV features to substitute the following deterministic map
+%
+\begin{align}
+    f\colon\mathbb{R}^D &\to \mathbb{R} \\
+    \mathbf{p} &\mapsto f_{simul}(\mathbf{p},\,(p_{D+1}^{\textrm{ZSF1}},\dots,\,p_{16}^{\textrm{ZSF1}}))=y
+\end{align}
+
+\vspace{0.2cm}\noindent
+with a probabilistic surrogate to predict the LV feature value $y\in\mathbb{R}$ for a given parameter set $\mathbf{p}\in\mathbb{R}^D$. This was done by sampling points ($512$ for Ca, TNF, TKF groups and $2048$ for CaMYO group) from a Latin hypercube design over the restricted, $D$-dimensional parameter space and by running the full simulator $f_{simul}$ at these points to build new training datasets while keeping all the remaining parameters $(p_{D+1}^{\textrm{ZSF1}},\dots,\,p_{16}^{\textrm{ZSF1}})$ fixed to the ZSF1 reference values. 
 
 
 %
 %
 %
-\section{Results}\label{sec:results}
+\section{Results}\label{sec:ch7results}
 We can summarise the results as follows. In Section~\ref{sec:sobolgsa}, we use the trained framework for evaluating the whole multi-scale model output global sensitivities to model parameters. The full model and the surrogate model are validated in Section~\ref{sec:modelvalidation} against known pharmacological effects on whole-organ function from literature experimental studies. In Section~\ref{sec:buildingzsf1model}, we create a virtual representation of the ZSF1 rat. In Section~\ref{sec:recovery}, we employ the validated framework to inform the selection of cellular calcium and sarcomere targets for \textit{in silico} recovery of the diseased HFpEF rat back to the healthy state.
+
+
+%
+%
+%
+\subsection{Gaussian process emulators}\label{sec:ch7gaussianprocessemulators}
+We employed Gaussian process emulators (GPEs) as probabilistic surrogates of the full multi-scale biventricular rat heart contraction model outputs. $5$-fold cross-validation was used to quantify GPEs' accuracy, by calculating the coefficient of determination ($R^{2}$) and the independent standard error ($\textrm{ISE}_2$) as described in Section~$2.2$ of the main manuscript.
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XXX}
+    \toprule
+    \tableheadline{LV feature} & \tableheadline{$R^2$} & \tableheadline{$ISE_2 (\SI{}{\percent})$} \\
+    \midrule
+    $\textrm{EDV}$             & $0.9437\pm 0.0089$    & $98.38\pm 0.61$ \\
+    $\textrm{ESV}$             & $0.8344\pm 0.0227$    & $98.92\pm 0.75$ \\
+    $\textrm{SV}$              & $0.7937\pm 0.0228$    & $98.92\pm 0.66$ \\
+    $\textrm{EF}$              & $0.7627\pm 0.0051$    & $98.77\pm 0.45$ \\
+    $\textrm{IVCT}$            & $0.5190\pm 0.0579$    & $93.46\pm 1.19$ \\
+    $\textrm{ET}$              & $0.7900\pm 0.0248$    & $97.15\pm 1.49$ \\
+    $\textrm{IVRT}$            & $0.7467\pm 0.0480$    & $97.54\pm 1.02$ \\
+    $\textrm{Tdiast}$          & $0.5047\pm 0.0226$    & $94.53\pm 1.07$ \\
+    $\textrm{PeakP}$           & $0.8942\pm 0.0114$    & $98.61\pm 0.79$ \\
+    $\textrm{Tpeak}$           & $0.4921\pm 0.0362$    & $94.30\pm 1.15$ \\
+    $\textrm{ESP}$             & $0.9556\pm 0.0074$    & $98.07\pm 0.69$ \\
+    $\textrm{maxdP}$           & $0.9448\pm 0.0087$    & $98.46\pm 0.81$ \\
+    $\textrm{mindP}$           & $0.9008\pm 0.0121$    & $97.84\pm 1.10$ \\
+    $\textrm{Tau}$             & $0.8213\pm 0.0168$    & $96.69\pm 0.72$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{GPEs' accuracy. The GPEs' accuracy was evaluated using the average $R^{2}$ score and $ISE_2$ obtained with a $5$-fold cross-validation. Values are reported as mean$\pm$std.}
+    \label{tab:gpescoresfinal}
+\end{table}
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter07/bgpes_vs_bsplit_16p.pdf}
+    \caption{For each LV feature, the GPE with the highest $R^2$ split test score is used to make predictions at the respective left-out subset of test points. Predictions are sorted in ascending order for the sake of a better visualisation and joined with a thick blue line, and the respective observations (empty dots) are sorted accordingly. $2$ STD confidence intervals (shaded regions) are also plotted around predicted mean lines.}
+    \label{fig:bgpevsbsplitfinal}
+\end{figure}
 
 
 %
@@ -187,6 +284,13 @@ In Figure~\ref{fig:s1stheat}, the calculated Sobol' first-order and total effect
     \includegraphics[width=\textwidth]{figures/chapter07/gsa_16p_heatmap_S1_ST.pdf}
     \caption{Sobol' first-order (S1) and total effects (ST). The contribution of each parameter (Table~\ref{tab:paramswithdeffinal}) by itself (S1) or jointly with the other parameters (ST) into explaining the total variance of each LV feature (Tables~\ref{tab:lvfeatures}--\ref{tab:lvfeaturesfinal}) is expressed as Sobol' indices ranging from $0$ (no effect) to $1$ (maximal effect).}
     \label{fig:s1stheat}
+\end{figure}
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter07/gsa_16p_donut_S1.pdf}
+    \caption{gsa in donut}
+    \label{fig:s1stdonutfinal}
 \end{figure}
 
 \vspace{0.2cm}
@@ -230,6 +334,87 @@ Compounds may target calcium dynamics, thin filament kinetics, thick filament ki
 \subsection{Building a model of the obese ZSF1 rat}\label{sec:buildingzsf1model}
 In order to create a mathematical model of the obese ZSF1 rat, we performed a literature search to characterise the experimentally observed variability on LV systolic and diastolic function this rat shows with respect to its control animal. We than applied this variability to our SHAM control rat model, and we re-fitted model parameters using the HM technique (Section~\ref{sec:history}), trying to match the calculated shift in the LV function in the ZSF1 rats. The obtained representative ZSF1 rat model calcium transient and PV loop are depicted in Figure~\ref{fig:shamandzsf1ratmodels}, and are compared with the reference SHAM rat model. Details of each step in the ZSF1 rat model creation process, including the complete sets of re-fitted and fixed model parameters and corresponding LV features are reported in~\nameref{S5_Text}.
 
+
+\vspace{0.2cm}
+The first wave of the HM procedure is displayed in Figure~\ref{fig:w1zsf1rat}. We sampled $400,000$ input parameter points from a Latin hypercube design over the parameter space \emph{a priori} constrained by literature evidences (as explained above). These points were tested against an implausibility criterion with threshold set to $3.0$ and $47,097$ points (corresponding to $\SI{11.77}{\percent}$ of the full test set) were deemed non-implausible. The forward model was then run at a subset of $1024$ non-implausible input parameter points to see if the respective simulation output was correctly matching the experimentally observed value for each LV feature under study. This is illustrated in Figure~\ref{fig:w1bestzsf1model}. Since all the simulated features' values already fell between $3$ standard deviations from the respective experimental mean values, we concluded the HM.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter07/wave_1.png}
+    \caption{First wave of history matching. The space represented by the parameters selected for optimisation is constrained according to an implausibility criterion which evaluates how plausible is a point to yield model predictions that are matching experimental observations.}  
+    \label{fig:w1zsf1rat}
+\end{figure}
+
+\vspace{0.2cm}
+In order to have a representative ZSF1 rat model to be used in next investigations, we selected one candidate represented by the best-fit according to a weighted $L_1$ norm where the last three LV features (PeakP, maxdP and Tau) which were shown to significantly change in the ZSF1 rat had double the weight of the first feature (EF) which showed no significant change, and with all the weights summing up to $1$. The best-fit ZSF1 rat model input calcium transient and PV loop are depicted in Figure of the main manuscript, and are compared with the reference SHAM rat model. The complete sets of re-fitted and fixed model parameters and corresponding LV features for both the reference, control SHAM rat model and the newly obtained, representative ZSF1 rat model are reported in Table~\ref{tab:bestfitparametersvalues} and Table~\ref{tab:bestfitfeaturesvalues}, respectively.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=0.8\textwidth]{figures/chapter07/w1_features_match.pdf}
+    \caption{Matching experimental LV features' values. Simulator runs at input parameter points from the HM first (and also last) wave's non-implausible space. Obtained LV features’ (empty, blue dots) distributions around experimental mean values (filled, black dots) are all within 3 STD confidence intervals (vertical straight lines centred in their respective mean value). The best fit in weighted $L_1$ norm is also displayed (black cross). All the values including confidence intervals have been normalised by the respective experimental mean values.}
+    \label{fig:w1bestzsf1model}
+\end{figure}
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{lXXX}
+    \toprule
+    \tableheadline{Parameter} & \tableheadline{Units} & \multicolumn{2}{c}{\spacedlowsmallcaps{Value}} \\
+    \midrule
+                              &                       & \tableheadline{SHAM} & \tableheadline{ZSF1} \\
+    \midrule
+    $\dca$                    & $\SI{}{\micro\Molar}$                 & $0.4632$      & $0.5870$ \\
+    $\ampl$                   & $\SI{}{\micro\Molar}$                 & $1.0341$      & $1.0317$ \\
+    $\tp$                     & $\SI{}{\milli\second}$                & $25.9474$     & $25.9474$ \\
+    $\rtf$                    & $\SI{}{\milli\second}$                & $40.0807$     & $40.0807$ \\
+    $\Caif$                   & $\SI{}{\micro\Molar}$                 & $2.1723$      & $2.1723$ \\
+    $\beta_1$                 & $-$                                   & $-1.5$        & $-1.5$ \\
+    $\koff$                   & $\SI{}{\per\milli\second}$            & $0.0515$      & $0.0515$ \\
+    $\ntrpn$                  & $-$                                   & $2.0$         & $2.0$ \\
+    $\kxb$                    & $\SI{}{\per\milli\second}$            & $0.0172$      & $0.0172$ \\
+    $\nxb$                    & $-$                                   & $5.0$         & $5.0$ \\
+    $\trpnf$                  & $-$                                   & $0.35$        & $0.35$ \\
+    $\tref$                   & $\SI{}{\kilo\pascal}$                 & $156.067$     & $156.067$ \\
+    $p$                       & $\SI{}{\kilo\pascal}$                 & $0.3122$      & $0.4481$ \\
+    $\pao$                    & $\SI{}{\kilo\pascal}$                 & $7.1136$      & $10.3887$ \\
+    $Z$                       & $\SI{}{\mmHg\second\per\milli\liter}$ & $5.6234$      & $7.4031$ \\
+    $C_1$                     & $\SI{}{\kilo\pascal}$                 & $0.9141$      & $1.0670$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{Representative SHAM and ZSF1 rat models' input parameters' values.}
+    \label{tab:bestfitparametersvalues}
+\end{table}
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{lXXX}
+    \toprule
+    \tableheadline{LV feature} & \tableheadline{Units} & \multicolumn{2}{c}{\spacedlowsmallcaps{Value}} \\
+    \midrule
+                               &                       & \tableheadline{SHAM} & \tableheadline{ZSF1} \\
+    \midrule
+    $\textrm{EDV}$             & $\SI{}{\micro\liter}$                  & $516.23$      & $444.02$ \\
+    $\textrm{ESV}$             & $\SI{}{\micro\liter}$                  & $173.82$      & $172.83$ \\
+    $\textrm{SV}$              & $\SI{}{\micro\liter}$                  & $342.42$      & $271.19$ \\
+    $\textrm{EF}$              & $\SI{}{\percent}$                      & $66.33$       & $61.08$ \\
+    $\textrm{IVCT}$            & $\SI{}{\milli\second}$                 & $19.3$        & $19.7$ \\
+    $\textrm{ET}$              & $\SI{}{\milli\second}$                 & $52.9$        & $54.6$ \\
+    $\textrm{IVRT}$            & $\SI{}{\milli\second}$                 & $23.8$        & $33.0$ \\
+    $\textrm{Tdiast}$          & $\SI{}{\milli\second}$                 & $93.5$        & $91.4$ \\
+    $\textrm{PeakP}$           & $\SI{}{\kilo\pascal}$                  & $16.15$       & $19.15$ \\
+    $\textrm{Tpeak}$           & $\SI{}{\milli\second}$                 & $46.6$        & $45.9$ \\
+    $\textrm{ESP}$             & $\SI{}{\kilo\pascal}$                  & $10.04$       & $12.55$ \\
+    $\textrm{maxdP}$ & $\SI{}{\kilo\pascal\per\milli\second}$           & $0.9973$      & $1.1700$ \\
+    $\textrm{mindP}$ & $\SI{}{\kilo\pascal\per\milli\second}$           & $-0.5712$     & $-0.5276$ \\
+    $\textrm{Tau}$                  & $\SI{}{\milli\second}$            & $6.1212$      & $8.6916$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{Representative SHAM and ZSF1 rat models' output LV features' values.}
+    \label{tab:bestfitfeaturesvalues}
+\end{table}
+
+
+
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter07/w1_resulting_bestfit_ca_and_pvloop.pdf}
@@ -242,18 +427,163 @@ In order to create a mathematical model of the obese ZSF1 rat, we performed a li
 %
 %
 \subsection{In silico recovering HFpEF condition towards healthy condition}\label{sec:recovery}
-We aim to identify cellular properties that can be manipulated to recover the ZSF1 rat towards the SHAM rat within a purely virtual experiment. By ``recover" we mean to bring the altered LV features' values we observed for the ZSF1 rat model back to the values of the SHAM rat model. We will do so by specifically targeting different subsets of model parameters to represent \textit{in silico} different possible pharmacological mechanisms of action.
 
-\vspace{0.2cm}
-To recover the ZSF1 rat we re-fitted different subsets of model parameters in the ZSF1 model to recover the SHAM model output features, within the certainty that these features are predicted by the model (\nameref{S6_Text}). The LV features we aimed to recover were $\textrm{EDV}$, $\textrm{ESV}$, $\textrm{PeakP}$, $\textrm{maxdP}$, $\textrm{Tau}$. The groups of parameters selected for optimisation were: calcium transient (Ca), thin filament (TNF), thick filament (TKF) (Table~\ref{tab:paramsranking}), and the three groups combined (CaMYO). For each group of $D$ parameters $\mathbf{p}=(p_1,\,\dots,\,p_D)$ we first trained one univariate GPE for each of the target LV features to substitute the following deterministic map
-%
-\begin{align}
-    f\colon\mathbb{R}^D &\to \mathbb{R} \\
-    \mathbf{p} &\mapsto f_{simul}(\mathbf{p},\,(p_{D+1}^{\textrm{ZSF1}},\dots,\,p_{16}^{\textrm{ZSF1}}))=y
-\end{align}
 
-\noindent
-with a probabilistic surrogate to predict the LV feature value $y\in\mathbb{R}$ for a given parameter set $\mathbf{p}\in\mathbb{R}^D$. This was done by sampling points ($512$ for Ca, TNF, TKF groups and $2048$ for CaMYO group) from a Latin hypercube design over the restricted, $D$-dimensional parameter space and by running the full simulator $f_{simul}$ at these points to build new training datasets while keeping all the remaining parameters $(p_{D+1}^{\textrm{ZSF1}},\dots,\,p_{16}^{\textrm{ZSF1}})$ fixed to the ZSF1 reference values. The new training datasets had dimensions of $104$, $129$, $114$ and $326$ points for the Ca, TNF, TKF and CaMYO groups, respectively. The GPEs' accuracy are reported in~\nameref{S6_Text} for each group.
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XX}
+    \toprule
+    \tableheadline{LV feature} & \tableheadline{Synthetic variability} \\
+    \midrule
+    $\textrm{EDV}$             & $498.22\pm 13.21$ \\
+    $\textrm{ESV}$             & $185.12\pm 4.08$ \\
+    $\textrm{PeakP}$           & $16.14\pm 0.49$ \\
+    $\textrm{maxdP}$           & $0.95\pm 0.04$ \\
+    $\textrm{Tau}$             & $6.52\pm 0.40$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{SHAM rat model \textit{in silico} variability on target LV features for ZSF1 recovery. Target mean and standard deviation LV features values to be matched for recovering the ZSF1 rat.}
+    \label{tab:targetfeatsforrecovery}
+\end{table}
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XXX}
+    \toprule
+    \tableheadline{LV feature} & \tableheadline{$R^2$} & \tableheadline{$ISE_2 (\SI{}{\percent})$} \\
+    \midrule
+    $\textrm{EDV}$   & $\SI{0.9984}{}\pm\SI{0.0009}{}$ & $\SI{90.42}{}\pm\SI{6.70}{}$ \\
+    $\textrm{ESV}$   & $\SI{0.9868}{}\pm\SI{0.0105}{}$ & $\SI{98.09}{}\pm\SI{3.80}{}$ \\
+    $\textrm{PeakP}$ & $\SI{0.9940}{}\pm\SI{0.0045}{}$ & $\SI{93.33}{}\pm\SI{5.71}{}$ \\
+    $\textrm{maxdP}$ & $\SI{0.9965}{}\pm\SI{0.0008}{}$ & $\SI{95.23}{}\pm\SI{4.25}{}$ \\
+    $\textrm{Tau}$   & $\SI{0.9419}{}\pm\SI{0.0367}{}$ & $\SI{90.42}{}\pm\SI{6.70}{}$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{GPEs' accuracy for the Ca parameter group.}
+    \label{tab:gpescores1}
+\end{table}
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XXX}
+    \toprule
+    \tableheadline{LV feature} & \tableheadline{$R^2$} & \tableheadline{$ISE_2 (\SI{}{\percent})$} \\
+    \midrule
+    $\textrm{EDV}$   & $\SI{0.9725}{}\pm\SI{0.0182}{}$ & $\SI{92.24}{}\pm\SI{4.86}{}$ \\
+    $\textrm{ESV}$   & $\SI{0.9810}{}\pm\SI{0.0083}{}$ & $\SI{93.07}{}\pm\SI{5.65}{}$ \\
+    $\textrm{PeakP}$ & $\SI{0.9557}{}\pm\SI{0.0235}{}$ & $\SI{89.93}{}\pm\SI{4.58}{}$ \\
+    $\textrm{maxdP}$ & $\SI{0.9766}{}\pm\SI{0.0203}{}$ & $\SI{96.89}{}\pm\SI{2.88}{}$ \\
+    $\textrm{Tau}$   & $\SI{0.9378}{}\pm\SI{0.0225}{}$ & $\SI{86.73}{}\pm\SI{11.97}{}$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{GPEs' accuracy for the TNF parameter group.}
+    \label{tab:gpescores2}
+\end{table}
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XXX}
+    \toprule
+    \tableheadline{LV feature} & \tableheadline{$R^2$} & \tableheadline{$ISE_2 (\SI{}{\percent})$} \\
+    \midrule
+    $\textrm{EDV}$   & $\SI{0.9802}{}\pm\SI{0.0159}{}$ & $\SI{92.13}{}\pm\SI{6.36}{}$ \\
+    $\textrm{ESV}$   & $\SI{0.9952}{}\pm\SI{0.0024}{}$ & $\SI{92.09}{}\pm\SI{7.49}{}$ \\
+    $\textrm{PeakP}$ & $\SI{0.9937}{}\pm\SI{0.0020}{}$ & $\SI{92.13}{}\pm\SI{4.22}{}$ \\
+    $\textrm{maxdP}$ & $\SI{0.9588}{}\pm\SI{0.0296}{}$ & $\SI{97.39}{}\pm\SI{3.47}{}$ \\
+    $\textrm{Tau}$   & $\SI{0.8079}{}\pm\SI{0.1413}{}$ & $\SI{90.31}{}\pm\SI{7.53}{}$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{GPEs' accuracy for the TKF parameter group.}
+    \label{tab:gpescores3}
+\end{table}
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XXX}
+    \toprule
+    \tableheadline{LV feature} & \tableheadline{$R^2$} & \tableheadline{$ISE_2 (\SI{}{\percent})$} \\
+    \midrule
+    $\textrm{EDV}$   & $\SI{0.9040}{}\pm\SI{0.0074}{}$ & $\SI{91.40}{}\pm\SI{4.42}{}$ \\
+    $\textrm{ESV}$   & $\SI{0.6910}{}\pm\SI{0.0214}{}$ & $\SI{94.79}{}\pm\SI{1.81}{}$ \\
+    $\textrm{PeakP}$ & $\SI{0.6986}{}\pm\SI{0.0639}{}$ & $\SI{94.47}{}\pm\SI{1.85}{}$ \\
+    $\textrm{maxdP}$ & $\SI{0.9009}{}\pm\SI{0.0232}{}$ & $\SI{92.64}{}\pm\SI{3.54}{}$ \\
+    $\textrm{Tau}$   & $\SI{0.7994}{}\pm\SI{0.0515}{}$ & $\SI{89.54}{}\pm\SI{4.72}{}$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{GPEs' accuracy for the CaMYO parameter group.}
+    \label{tab:gpescores4}
+\end{table}
+
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{lXXXXXXXX}
+    \toprule
+    \tableheadline{Wave} & \multicolumn{8}{c}{\spacedlowsmallcaps{Parameter group}} \\
+    \midrule
+    & \multicolumn{2}{c}{\spacedlowsmallcaps{Ca}} & \multicolumn{2}{c}{\spacedlowsmallcaps{TNF}} & \multicolumn{2}{c}{\spacedlowsmallcaps{TKF}} & \multicolumn{2}{c}{\spacedlowsmallcaps{CaMYO}} \\
+    \midrule
+    & cutoff & NIMP ($\SI{}{\percent}$) & cutoff & NIMP ($\SI{}{\percent}$) & cutoff & NIMP ($\SI{}{\percent}$) & cutoff & NIMP ($\SI{}{\percent}$) \\ 
+    \midrule
+    $1$ & $4.5$ & $0.08$ & $4.0$ & $0.01$ & $4.0$ & $0.07$ & $4.0$ & $13.75$ \\
+    $2$ & $4.5$ & $0.18$ & $4.0$ & $0.33$ & $4.0$ & $0.14$ & $4.0$ & $73.78$ \\
+    $3$ & $4.2$ & $6.53$ & $4.0$ & $0.80$ & $-$ & $-$  & $3.5$ & $55.03$ \\
+    $4$ & $4.2$ & $92.79$  & $-$ & $-$  & $-$ & $-$  & $3.5$ & $84.39$ \\
+    $5$ & $-$ & $-$  & $-$ & $-$  & $-$ & $-$  & $3.0$ & $55.98$ \\
+    $6$ & $-$ & $-$  & $-$ & $-$  & $-$ & $-$  & $3.0$ & $84.43$ \\
+    $7$ & $-$ & $-$  & $-$ & $-$  & $-$ & $-$  & $2.5$ & $47.94$ \\
+    $8$ & $-$ & $-$  & $-$ & $-$  & $-$ & $-$  & $2.5$ & $83.97$ \\
+    $9$ & $-$ & $-$  & $-$ & $-$  & $-$ & $-$  & $2.0$ & $34.12$ \\
+    $10$ & $-$ & $-$  & $-$ & $-$  & $-$ & $-$  & $2.0$ & $75.03$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{Details of history matching progression. History matching is run for each parameter group in order to re-fit the specific parameters within the group. Parameter points ($400,000$ at Wave $1$ and $100,000$ at the next Waves) are tested against an implausibility criterion using the reported cutoff values, and only a percentage of these points resulted to be non-implausible (NIMP).}
+    \label{tab:wavesprogress}
+\end{table}
+
+
+\begin{table}[!ht]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{lXXXX}
+    \toprule
+    % \tableheadline{Group} & \tableheadline{Parameter} & \parbox[t]{2cm}{\spacedlowsmallcaps{ZSF1}\\\spacedlowsmallcaps{(reference)}} & \parbox[t]{2cm}{\spacedlowsmallcaps{RECOV}\\\spacedlowsmallcaps{(median)}} & \parbox[t]{2cm}{\spacedlowsmallcaps{Percentage}\\\spacedlowsmallcaps{of change}} & \parbox[t]{2cm}{\spacedlowsmallcaps{Direction}\\\spacedlowsmallcaps{of change}} \\
+    \tableheadline{Group} & \tableheadline{Parameter} & \tableheadline{ZSF1} & \tableheadline{RECOV} & \tableheadline{Change ($\SI{}{\percent}$)} \\
+    \midrule
+    \multirow{4}{*}{Ca} & $\dca$ & $1.2674$ & $1.3440$ & $6.05$ \\
+    & $\ampl$ & $0.9977$ & $0.8399$ & $-15.82$ \\
+    & $\tp$ & $1.0000$ & $1.6379$ & $63.79$ \\
+    & $\rtf$ & $1.0000$ & $0.6906$ & $-30.95$ \\
+    \midrule
+    \multirow{4}{*}{TNF} & $\Caif$ & $2.1723$ & $2.4699$ & $13.70$ \\
+    & $\betaone$ & $-1.50$ & $-2.91$ & $-93.91$ \\
+    & $\koff$ & $0.0515$ & $0.0394$ & $-23.47$ \\
+    & $\ntrpn$ & $2.00$ & $2.05$ & $2.28$ \\
+    \midrule
+    \multirow{4}{*}{TKF} & $\kxb$ & $0.0172$ & $0.0147$ & $-14.18$ \\
+    & $\nxb$ & $5.00$ & $4.55$ & $-9.07$ \\
+    & $\trpnf$ & $0.35$ & $0.42$ & $20.24$ \\
+    & $\tref$ & $156.067$ & $222.420$ & $42.52$ \\
+    \midrule
+    \multirow{12}{*}{CaMYO} & $\dca$ & $1.2674$ & $1.4200$ & $12.04$ \\
+    & $\ampl$ & $0.9977$ & $1.5486$ & $55.22$ \\
+    & $\tp$ & $1.0000$ & $1.4828$ & $48.28$ \\
+    & $\rtf$ & $1.0000$ & $0.5247$ & $-47.53$ \\
+    & $\Caif$ & $2.1723$ & $2.1268$ & $-2.10$ \\
+    & $\betaone$ & $-1.50$ & $-1.57$ & $-4.86$ \\
+    & $\koff$ & $0.0515$ & $0.0492$ & $-4.44$ \\
+    & $\ntrpn$ & $2.00$ & $1.79$ & $-10.69$ \\
+    & $\kxb$ & $0.0172$ & $0.0130$ & $-24.44$ \\
+    & $\nxb$ & $5.00$ & $6.28$ & $25.61$ \\
+    & $\trpnf$ & $0.35$ & $0.48$ & $37.12$ \\
+    & $\tref$ & $156.067$ & $147.785$ & $-5.31$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{Percentage perturbations of cardiac cellular properties resulting from the last waves' parameter spaces. For each parameter last wave distribution, its median value is given as a $\pm$ percentage perturbation from the corresponding ZSF1 reference value.}
+    \label{tab:virtualdrugeffects}
+\end{table}
+
+
+The new training datasets had dimensions of $104$, $129$, $114$ and $326$ points for the Ca, TNF, TKF and CaMYO groups, respectively. The GPEs' accuracy are reported in~\nameref{S6_Text} for each group.
 
 \vspace{0.2cm}
 For each parameter subgroup the adjustable parameters were re-fit using HM. Additional information about performed waves, used cutoff values and percentages of space reduction are reported in~\nameref{S6_Text}. In Figure~\ref{fig:lvfeatsmatch} the history matching waves progression is shown. For each LV feature we aimed to match, its values obtained when simulating parameter points from a specific wave's non-implausible region are plotted as a distribution, possibly overlapping to the experimental variability (red band) observed for the same feature. This is done at every wave run, so that the HM is represented as a sequence of LV features values' distributions over consecutive waves.
@@ -296,7 +626,7 @@ A value of $R_{\textrm{perc}}=1$ indicates that the feature has been recovered f
     $\textrm{PeakP}$    & $0.33$ & $0.36$ & $0.35$ & $0.20$ \\
     $\textrm{maxdP}$    & $1.00$ & $0.85$ & $0.82$ & $0.73$ \\
     $\textrm{Tau}$      & $0.34$ & $0.17$ & $0.00$ & $0.61$ \\ \midrule
-    \tableheadline{Mean recovery} & $0.34$ & $0.28$ & $0.24$ & $0.39$ \\
+    \textbf{Mean recovery} & $0.34$ & $0.28$ & $0.24$ & $0.39$ \\
     \bottomrule
     \end{tabularx}
     \caption{LV features' percentages of recovery. For each LV feature we aimed to recover, the distance between its median recovered value and the respective healthy value is divided by the distance between the initial, diseased value and the healthy value. This ratio describes the percentage of recovery for the examined feature.}
