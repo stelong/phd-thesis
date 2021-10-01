@@ -692,3 +692,8 @@ So far we have considered Sobol' indices estimates without taking into account t
 
 \vspace{0.2cm}\noindent
 If in the case of~\eqref{eq:modelevalsgsa} and \eqref{eq:emulmeangsa} the bootstrapping approach can be directly applied, the situation changes in the case where we make use of emulator samples to estimate the Sobol' indices as in~\eqref{eq:emulpostsamplesgsa1}. In fact, quantifying how the uncertainty of the emulator predictions propagates into the uncertainty of the integral estimates is a non-trivial task and also an actively researched topic of probabilistic numerics \todo{REFS}. As further analysis on this topic are out of the scope for this project, we neglected the uncertainty arising from the integral estimates and only considered the uncertainty arising from the fact that we are using an emultor to replace the true forward model. This choice is consistent with the assumption that as the number of MC samples $N$ grows, the numerical error of the quadrature formulas will converge to $0$, and what is left will be only the uncertainty of the emulator which does not change with $N$ for a fixed learning sample (training dataset).
+
+
+% FIGURE 3.3 USE IT AT the beginnin of Chapt 3 as introduction then explain everything
+
+% concluding remarks for chapter 3 to reconnect to introduction
