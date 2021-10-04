@@ -6,8 +6,17 @@ quantification}\label{cha:chapter3}
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we present the principal tools we employed for model emulation, fitting and uncertainty quantification. First, the full multi-scale $3$D biventricular rat heart contraction model is represented as a non-linear mapping between selected input parameters and scalar output features of interest. Second, the non-linear mapping is emulated using probabilistic surrogates based on Gaussian process emulation. Finally, two applications of emulators are presented: Bayesian history matching technique for model fitting and emulator-based Sobol' global sensitivity analysis for model uncertainty quantification. 
+    In this chapter, we present the principal tools we employed for model emulation, fitting and uncertainty quantification. First, the full multi-scale $3$D biventricular rat heart contraction model is represented as a non-linear mapping between selected input parameters and scalar output features of interest (Section~\ref{sec:ch3multiscalemap}). Second, the non-linear mapping is emulated using probabilistic surrogates based on Gaussian process emulation (Section~\ref{sec:ch3gaussianprocessemulation}). Finally, two applications of emulators are presented: Bayesian history matching technique for model fitting (Section~\ref{sec:ch3historymatching}) and emulator-based Sobol' global sensitivity analysis for model uncertainty quantification (Section~\ref{sec:ch3globalsensitivityanalysis}).
 \end{remark}
+
+We want to create a quantitative link of cell, tissue and hemodynamic properties to whole heart function. To do this, we first need to define quantities of interest that will vary to reflect model properties and quantities of interest that will consequently vary to reflect model behaviour. The quantitative mapping that will result from this work is summarised in Figure~\ref{fig:simulatorframework}, and it is progressively constructed in Sections~\ref{sec:ch3modelinputparameters}--\ref{sec:ch3modeloutputfeatures}--\ref{sec:ch3multiscalemap}.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter03/simulator_framework.pdf}
+    \caption{Multi-scale $3$D biventricular rat heart contraction model. Given a fixed calcium transient (a) and mesh with fibres (b), parameters representing cell, tissue and hemodynamics properties (left grey column, described in Table~\ref{tab:paramswithdef}) constitutes the input for the model. LV volume and pressure transients and PV loop are obtained after a four-beats model run. The LV features (right grey column, described in Table~\ref{tab:lvfeatures}), extracted from the fourth-beat curves (c1-c2), constitutes the output for the model. \todo{renew figure}}
+    \label{fig:simulatorframework}
+\end{figure}
 
 
 %
@@ -123,14 +132,7 @@ For a given fixed $\Ca$ transient, heart cubic-Hermite finite element mesh and f
 \end{align}
 
 \noindent
-Equation~\eqref{eq:fsimul} effectively constitutes a quantitative link between cellular, tissue and hemodynamic properties to whole-organ function. The multi-scale mapping $f_{simul}$ takes the name of \textit{simulator}. A schematic of the simulator input-to-output map is provided in Figure~\ref{fig:simulatorframework}.
-
-\begin{figure}[!ht]
-    \myfloatalign
-    \includegraphics[width=\textwidth]{figures/chapter03/simulator_framework.pdf}
-    \caption{Multi-scale $3$D biventricular rat heart contraction model. Given a fixed calcium transient (a) and mesh with fibres (b), parameters representing cell, tissue and haemodynamics properties (left grey column, described in Table~\ref{tab:paramswithdef}) constitutes the input for the model. LV volume and pressure transients and PV loop are obtained after a four-beats model run. The LV features (right grey column, described in Table~\ref{tab:lvfeatures}), extracted from the fourth-beat curves (c1-c2), constitutes the output for the model. \todo{renew figure}}
-    \label{fig:simulatorframework}
-\end{figure}
+Equation~\eqref{eq:fsimul} effectively constitutes a quantitative link between cellular, tissue and hemodynamic properties to whole-organ function. The multi-scale mapping $f_{simul}$ takes the name of \textit{simulator}.
 
 \vspace{0.2cm}
 One simulator evaluation at a new input parameter set requires the full forward model of rat heart contraction mechanics to be run. However, this is computationally expensive ($\sim 4$-$10$ CPU hours per evaluation). We overcome the computational burden of running such a complex model by replacing it with a probabilistic surrogate based on \textit{Gaussian process emulation}, as we shall see in the next section.
@@ -694,6 +696,8 @@ So far we have considered Sobol' indices estimates without taking into account t
 If in the case of~\eqref{eq:modelevalsgsa} and \eqref{eq:emulmeangsa} the bootstrapping approach can be directly applied, the situation changes in the case where we make use of emulator samples to estimate the Sobol' indices as in~\eqref{eq:emulpostsamplesgsa1}. In fact, quantifying how the uncertainty of the emulator predictions propagates into the uncertainty of the integral estimates is a non-trivial task and also an actively researched topic of probabilistic numerics \todo{REFS}. As further analysis on this topic are out of the scope for this project, we neglected the uncertainty arising from the integral estimates and only considered the uncertainty arising from the fact that we are using an emultor to replace the true forward model. This choice is consistent with the assumption that as the number of MC samples $N$ grows, the numerical error of the quadrature formulas will converge to $0$, and what is left will be only the uncertainty of the emulator which does not change with $N$ for a fixed learning sample (training dataset).
 
 
-% FIGURE 3.3 USE IT AT the beginnin of Chapt 3 as introduction then explain everything
-
-% concluding remarks for chapter 3 to reconnect to introduction
+%
+%
+%
+\section{Concluding remarks}\label{sec:ch3concludingremarks}
+Concluding remarks
