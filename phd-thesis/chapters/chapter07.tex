@@ -39,7 +39,7 @@ In this study we aim to predict changes in myocyte function that recovers whole 
 %
 %
 \section{Rat data}\label{sec:ch7raddata}
-In order to create a mathematical model of the ZSF1 rat, we first needed to characterise its LV systolic and diastolic functions. For this purpose, we performed a literature search on PubMed (date 09/03/2021) with query: ``(rat) AND (ZSF1) AND (hemodynamic)". The search gave $32$ results and we analysed them all. Of these, $19$ contained information about LV hemodynamic measurements. All the $19$ studies~\cite{Abdellatif:2016, Bowen:2017, Bowen:2018, Brandt:2019, Cuijpers:2020, Davila:2019, Hamdani:2013, Hohendanner:2018, Lai:2016, Leite:2015, Leite:2015*a, Leite:2019, Nguyen:2020, Park:2020, Salah:2018, Schmederer:2018, Stolina:2020, Van-Dijk:2016, Wang:2020} had been conducted on male rats at the age of $20$ weeks, and diastolic dysfunction was confirmed by echocardiographic measurements (decreased E/A, increased E/E', increased LA area). We identified common phenotypes in these obese ZSF1 rats' hemodynamics compared to their respective control (lean ZSF1 rat) as described by $4$ LV features, namely $\textrm{EF}$ (no change), $\textrm{PeakP}$ (increased), $\textrm{maxdP}$ (increased), $\textrm{Tau}$ (increased). To regularise observed changes in ZSF1 rats from multiple labs, we applied the observed average, percentage changes between ZSF1 rats and local control animals to our SHAM control rat model. The applied experimental variability is summarised in Table~\ref{tab:obesezsf1data}.
+In order to create a mathematical model of the ZSF1 rat, we first needed to characterise its LV systolic and diastolic functions. For this purpose, we performed a literature search on PubMed (date 09/03/2021) with query: ``(rat) AND (ZSF1) AND (hemodynamic)". The search gave $32$ results and we analysed them all. Of these, $19$ contained information about LV hemodynamic measurements. All the $19$ studies~\cite{Abdellatif:2016, Bowen:2017, Bowen:2018, Brandt:2019, Cuijpers:2020, Davila:2019, Hamdani:2013, Hohendanner:2018, Lai:2016, Leite:2015, Leite:2015*a, Leite:2019, Nguyen:2020, Park:2020, Salah:2018, Schmederer:2018, Stolina:2020, Van-Dijk:2016, Wang:2020} had been conducted on male rats at the age of $20$ weeks, and diastolic dysfunction was confirmed by echocardiographic measurements (decreased E/A, increased E/E', increased LA area). We identified common phenotypes in these obese ZSF1 rats' hemodynamics compared to their respective control (lean ZSF1 rat) as described by $4$ LV features, namely $\textrm{EF}$ (no change), $\textrm{PeakP}$ (increased), $\textrm{maxdP}$ (increased), $\textrm{Tau}$ (increased). To regularise observed changes in ZSF1 rats from multiple labs, we considered the average percentage changes between ZSF1 rats and local control animals. These are summarised in Table~\ref{tab:obesezsf1data}.
 
 \begin{table}[!ht]
     \myfloatalign
@@ -188,34 +188,35 @@ Univariate GPEs, defined as in Section~\ref{sec:ch3gaussianprocessemulation}, we
 To study the input parameters' impact on the output LV features' total variance we performed a GSA using the trained GPEs. Model outputs' sensitivity to model inputs was characterised by Sobol' first-order and total effects. These were estimated using \texttt{SALib}~\cite{Herman:2017}. GPErks~\cite{GPErks:2021} was used to incorporate GPEs' full posterior distribution samples to account for emulators' uncertainty in Sobol' indices estimates, by following the second emulation-based approach of equations~\eqref{eq:emulpostsamplesgsa1}--\eqref{eq:emulpostsamplesgsa2}, presented in Section~\ref{sec:ch3emulatorbasedestimates}. Parameters whose Sobol' indices' distributions' expectation was below the threshold $0.01$ were determined to have negligible effects.
 
 
-\subsection{Building ZSF1}
-To create a model of the ZSF1 rat, we re-fitted model parameters using the history matching (HM) technique (Section~$2.3$ of the main manuscript), trying to match the experimental variability shown for the above mentioned LV features. As $\textrm{EF}$ did not change significantly in any experiment, we matched the $\textrm{EF}$ feature value directly with no variability.
+\subsection{Building a model of the $20$-week old obese ZSF1 rat}
+To create a model of the ZSF1 rat, we re-fitted SHAM model parameters using HM technique (Section~\ref{sec:ch3historymatching}), using the maximum implausibility measure (equation~\eqref{eq:maximplmeasure}) across multiple target features, with the model discrepancy term (and its corresponding variance) set to zero in equation~\eqref{eq:implmeasure}. We first applied the experimental percentage variability observed in the ZSF1 rat studies when going from control to diseased rats (Table~\ref{tab:obesezsf1data}) to the SHAM rat model corresponding features' baseline values (Table~\ref{tab:shamabbestfitfeatvalues}). We then tryed to match the resulting experimental variability during HM. As $\textrm{EF}$ did not change significantly in any experiment, we matched for this feature an experimental variability of $\SI{100}{\percent}\pm\SI{0}{\percent}$ (i.e. no change).
 
 \vspace{0.2cm}
-We considered the evidence for changing each of the $16$ model parameters (Table~$1$ of the main manuscript). In ZSF1 rats, the intracellular calcium transient was shown to have increased diastolic concentrations and decreased/unaltered amplitudes at multiple frequencies ($1$-$\SI{4}{\Hz}$-paced cells)~\cite{Miranda-Silva:2020, Abdellatif:2021}, so we fitted $\dca$ and $\ampl$ parameters. As the observed changes in time to peak calcium and time to calcium half-relaxation could not be extrapolated at physiological pacing rates, $\tp$ and $\rtf$ parameters were kept fixed. Also, end-diastolic pressure~\cite{Abdellatif:2016, Bowen:2017, Hamdani:2013, Hohendanner:2018, Lai:2016, Leite:2015, Leite:2015*a, Leite:2019, Salah:2018, Schmederer:2018} and cardiac tissue stiffness~\cite{Hamdani:2013, Abdellatif:2016, Van-Dijk:2016, Salah:2018, Schmederer:2018, Leite:2019, Davila:2019, Nguyen:2020} were consistently shown to be increased w.r.t control, so we fitted $p$ and $C_1$ parameters. Furthermore, there was evidence for an increase in arterial systolic pressure~\cite{Cuijpers:2020} and aortic characteristic impedance~\cite{Leite:2019}, therefore parameters $\pao$, $Z$ were selected for optimisation as well. As there were no statistically significant changes in the reported values of myocardial active contraction in ZSF1 rats~\cite{Deel:2017, McCain:2014, Hersch:2013}, we assumed that sarcomere properties remained unchanged (i.e. $\Caif$, $\beta_1$, $\koff$, $\ntrpn$, $\kxb$, $\nxb$, $\trpnf$, $\tref$ parameters were not fitted). Although the ZSF1 rats all developed LV hypertrophy as shown by increased cardiac fibrosis, collagen type III fibers and cardiomyocyte size (increased LV mass and indexes of LV mass such as LV $+$ IVS weights / tibial length), this was not always (e.g.~\cite{Van-Dijk:2016, Schmederer:2018}) accompanied by an increase in LV wall thickness in male ZSF1 rats. Moreover, half of the ZSF1 rat studies~\cite{Hamdani:2013, Leite:2015, Leite:2015*a, Leite:2019, Abdellatif:2016, Lai:2016, Van-Dijk:2016, Nguyen:2020} showed no LV dilation as appraised by indexed end-diastolic volumes (preserved EDVi), measured by no change in the bi-ventricle size/shape. To summarise, $6$ out of $16$ SHAM rat model parameters were re-fitted to build the ZSF1 rat model while keeping the other parameters fixed to reference values.
+To understand which of the $16$ model parameters (Table~\ref{tab:paramswithdeffinal}) could undergo re-fitting, we collected evidence for changing each of them from literature studies. In ZSF1 rats, the intracellular $\Ca$ transient was shown to have increased diastolic concentrations and decreased/unaltered amplitudes at multiple frequencies ($1$-$\SI{4}{\Hz}$-paced cells)~\cite{Miranda-Silva:2020, Abdellatif:2021}, so we fitted $\dca$ and $\ampl$ parameters. As the observed changes in time to peak calcium and time to calcium half-relaxation could not be extrapolated at physiological pacing rates, $\tp$ and $\rtf$ parameters were kept fixed. Also, end-diastolic pressure~\cite{Abdellatif:2016, Bowen:2017, Hamdani:2013, Hohendanner:2018, Lai:2016, Leite:2015, Leite:2015*a, Leite:2019, Salah:2018, Schmederer:2018} and cardiac tissue stiffness~\cite{Hamdani:2013, Abdellatif:2016, Van-Dijk:2016, Salah:2018, Schmederer:2018, Leite:2019, Davila:2019, Nguyen:2020} were consistently shown to be increased w.r.t control, so we fitted $p$ and $C_1$ parameters. Furthermore, there was evidence for an increase in arterial systolic pressure~\cite{Cuijpers:2020} and aortic characteristic impedance~\cite{Leite:2019}, therefore parameters $\pao$, $Z$ were selected for optimisation as well. As there were no statistically significant changes in the reported values of myocardial active contraction in ZSF1 rats~\cite{Deel:2017, McCain:2014, Hersch:2013}, we assumed that sarcomere properties remained unchanged (i.e. $\Caif$, $\beta_1$, $\koff$, $\ntrpn$, $\kxb$, $\nxb$, $\trpnf$, $\tref$ parameters were not fitted). Although the ZSF1 rats all developed LV hypertrophy as shown by increased cardiac fibrosis, collagen type III fibers and cardiomyocyte size (increased LV mass and indexes of LV mass such as LV $+$ IVS weights / tibial length), this was not always (e.g.~\cite{Van-Dijk:2016, Schmederer:2018}) accompanied by an increase in LV wall thickness in male ZSF1 rats. Moreover, half of the ZSF1 rat studies~\cite{Hamdani:2013, Leite:2015, Leite:2015*a, Leite:2019, Abdellatif:2016, Lai:2016, Van-Dijk:2016, Nguyen:2020} showed no LV dilation as appraised by indexed end-diastolic volumes (preserved EDVi), which we translated into a no change in the biventricle size/shape. To summarise, $6$ out of $16$ SHAM rat model parameters were re-fitted to build the ZSF1 rat model while keeping the other parameters fixed to reference values.
+
+
+%
+%
+%
+\subsection{In silico recoverying the ZSF1 rat towards healthy conditions}
+The ZSF1 rat model we are building will constitute a virtual platform to better understand pathophysiological mechanisms of a diseased, HFpEF animal model. We aim at using this platform to identify cellular properties that can be manipulated to recover the ZSF1 rat towards an healthy condition. By ``recover" we mean to bring the altered LV features' values of the ZSF1 rat model back to the values of the SHAM rat model. We will do so by specifically targeting different subsets of model parameters to \textit{in silico} represent different possible pharmacological compounds' mechanisms of action.
 
 \vspace{0.2cm}
-Bayesian history matching (HM) technique was used to re-fit model parameters as done previously~\cite{Longobardi:2020}, to create a mathematical model of the obese ZSF1 rat (Section~\ref{sec:buildingzsf1model}) and to virtually recover it towards an healthy condition (Section~\ref{sec:recovery}).
-
-
-%
-%
-%
-\subsection{Recoverying ZSF1}
-In order to recover the LV function in the created ZSF1 rat HFpEF animal model, we re-parametrised the calcium dynamics or the thin filament kinetics or the thick filament kinetics or all the three components combined such that the obtained model matched the variability observed for the LV function in the healthy, control SHAM rat model.
+For this purpose, starting from the built ZSF1 rat model, we re-fitted model parameters to go back to the initial, healthy state of the SHAM rat model, matching the \textit{in silico} variability observed for the LV function in the SHAM rat model (Section~\ref{sec:ch4modelfitting}, Figure~\ref{fig:simulatormatchtoexpvar}). This process is illustrated in Figure~\ref{fig:zsf1andshamrefwithvar}.
 
 \begin{figure}[!ht]
     \myfloatalign
-    \caption{ZSF1 and SHAM reference rat models. ZSF1 rat (red) and SHAM rat (blue) models' pressure (P) and volume (V) transients and PV-loops are plotted with dashed lines. SHAM model \textit{in silico} variability is also represented by a cloud of thin blue full lines.}
-    \label{fig:zsf1andshamrefwithvar}
     \includegraphics[width=0.85\textwidth]{figures/chapter07/zsf1_vs_sham_last_wave_plus_ref.pdf}
+    \caption{ZSF1 and SHAM reference rat models. ZSF1 rat (red) and SHAM rat (blue) models' pressure (P) and volume (V) transients and PV-loops are plotted with dashed lines. SHAM model \textit{in silico} variability is also represented by a cloud of thin blue full lines. \todo{Black arrow represent the direction of recovery}}
+    \label{fig:zsf1andshamrefwithvar}
 \end{figure}
 
-\vspace{0.2cm}
-We aim to identify cellular properties that can be manipulated to recover the ZSF1 rat towards the SHAM rat within a purely virtual experiment. By ``recover" we mean to bring the altered LV features' values we observed for the ZSF1 rat model back to the values of the SHAM rat model. We will do so by specifically targeting different subsets of model parameters to represent \textit{in silico} different possible pharmacological mechanisms of action.
 
 \vspace{0.2cm}
-To recover the ZSF1 rat we re-fitted different subsets of model parameters in the ZSF1 model to recover the SHAM model output features, within the certainty that these features are predicted by the model (\nameref{S6_Text}). The LV features we aimed to recover were $\textrm{EDV}$, $\textrm{ESV}$, $\textrm{PeakP}$, $\textrm{maxdP}$, $\textrm{Tau}$. The groups of parameters selected for optimisation were: calcium transient (Ca), thin filament (TNF), thick filament (TKF) (Table~\ref{tab:paramsranking}), and the three groups combined (CaMYO). For each group of $D$ parameters $\mathbf{p}=(p_1,\,\dots,\,p_D)$ we first trained one univariate GPE for each of the target LV features to substitute the following deterministic map
+The LV features we aimed to recover were $\textrm{EDV}$, $\textrm{ESV}$, $\textrm{PeakP}$, $\textrm{maxdP}$, $\textrm{Tau}$. The groups of parameters selected for optimisation were: calcium transient ($\dca$, $\ampl$, $\tp$, $\rtf$), thin filament ($\Caif$, $\betaone$, $\koff$, $\ntrpn$), thick filament ($\kxb$, $\nxb$, $\trpnf$, $\tref$) and the three groups combined, labelled respectively as Ca, TNF, TKF and CaMYO. We performed a separate HM for each group. This required to build a specific set of emulators to be used each time.
+
+\vspace{0.2cm}
+For each group of $D$ parameters $\mathbf{p}=(p_1,\,\dots,\,p_D)$, we trained one univariate GPE for each of the target LV features to replace the deterministic map
 %
 \begin{align}
     f\colon\mathbb{R}^D &\to \mathbb{R} \\
@@ -223,7 +224,7 @@ To recover the ZSF1 rat we re-fitted different subsets of model parameters in th
 \end{align}
 
 \vspace{0.2cm}\noindent
-with a probabilistic surrogate to predict the LV feature value $y\in\mathbb{R}$ for a given parameter set $\mathbf{p}\in\mathbb{R}^D$. This was done by sampling points ($512$ for Ca, TNF, TKF groups and $2048$ for CaMYO group) from a Latin hypercube design over the restricted, $D$-dimensional parameter space and by running the full simulator $f_{simul}$ at these points to build new training datasets while keeping all the remaining parameters $(p_{D+1}^{\textrm{ZSF1}},\dots,\,p_{16}^{\textrm{ZSF1}})$ fixed to the ZSF1 reference values. 
+with a probabilistic surrogate to predict the LV feature value $y\in\mathbb{R}$ for a given parameter set $\mathbf{p}\in\mathbb{R}^D$. The training datasets were built by sampling points ($512$ for Ca, TNF, TKF groups and $2048$ for CaMYO group) from a LHD over the restricted, $D$-dimensional parameter space and by running the full simulator $f_{simul}$ (equation~\eqref{eq:fsimulfinal}) at these points while keeping all the remaining parameters $(p_{D+1}^{\textrm{ZSF1}},\dots,\,p_{16}^{\textrm{ZSF1}})$ fixed to the ZSF1 reference values. 
 
 
 %
@@ -289,7 +290,7 @@ In Figure~\ref{fig:s1stheat}, the calculated Sobol' first-order and total effect
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter07/gsa_16p_donut_S1.pdf}
-    \caption{gsa in donut}
+    \caption{\todo{Donut GSA to be consistent with previous chapters' plots?}}
     \label{fig:s1stdonutfinal}
 \end{figure}
 
@@ -331,7 +332,7 @@ Compounds may target calcium dynamics, thin filament kinetics, thick filament ki
 %
 %
 %
-\subsection{Building a model of the obese ZSF1 rat}\label{sec:buildingzsf1model}
+\subsection{The ZSF1 rat model}\label{sec:buildingzsf1model}
 In order to create a mathematical model of the obese ZSF1 rat, we performed a literature search to characterise the experimentally observed variability on LV systolic and diastolic function this rat shows with respect to its control animal. We than applied this variability to our SHAM control rat model, and we re-fitted model parameters using the HM technique (Section~\ref{sec:history}), trying to match the calculated shift in the LV function in the ZSF1 rats. The obtained representative ZSF1 rat model calcium transient and PV loop are depicted in Figure~\ref{fig:shamandzsf1ratmodels}, and are compared with the reference SHAM rat model. Details of each step in the ZSF1 rat model creation process, including the complete sets of re-fitted and fixed model parameters and corresponding LV features are reported in~\nameref{S5_Text}.
 
 
