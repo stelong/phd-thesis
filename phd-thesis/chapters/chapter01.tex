@@ -460,7 +460,7 @@ so that the final set of equations describing the bidomain model takes the follo
 \end{align}
 
 \noindent
-The system is solved using the finite element method with no-flux conditions at the computational domain boundaries. $\mathbf{G}_i$ and $\mathbf{G}_e$ conductivity tensors element are taken to reflect the anisotropy of the cardiac tissue.
+The system is solved using the finite element method with no-flux conditions at the computational domain boundaries (\textit{Neumann boundary conditions}). $\mathbf{G}_i$ and $\mathbf{G}_e$ conductivity tensors' components are taken to reflect the anisotropy of the cardiac tissue.
 
 
 %
@@ -477,17 +477,17 @@ Like electrical properties, tissue mechanical properties depend on the orientati
 \end{equation}
 
 \noindent
-Large deformation mechanics equations enforce the stress equilibrium:
+The determinant of the deformation gradient $J:=\text{det}(\mathbf{F})$ measures the volume variation as the material undergoes deformation. Large deformation mechanics equations for an incompressible solid enforce the stress equilibrium with an incompressibility constraint:
 %
 \begin{equation}
-    -\nabla\cdot(\mathbf{F}\mathbf{T}) = 0
+    -\nabla\cdot(\mathbf{F}\mathbf{T}) = 0\,,\quad\text{with constraint}\quad J = 1
 \end{equation}
 
 \noindent
-where $\mathbf{T}$ is the second Piola-Kirchhoff stress tensor. The solution to the mechanics problem requires a description of the material behaviour known as the \textit{constitutive law}~\cite{BonetWood:2008}, which gives the stress tensor $\mathbf{T}$ as a function of the Green strain tensor $\mathbf{E}$ and the Cauchy strain tensor $\mathbf{C}$ for the material. The strain tensor is given as a function of the deformation gradient tensor:
+where $\mathbf{T}$ is the second Piola-Kirchhoff stress tensor. The solution to the mechanics problem requires a description of the material behaviour known as the \textit{constitutive law}~\cite{BonetWood:2008}, which gives the stress tensor $\mathbf{T}$ as a function of the Green strain tensor $\mathbf{E}$ and the Cauchy strain tensor $\mathbf{C}$ for the material. The Green strain tensor is given as a function of the deformation gradient tensor:
 %
 \begin{equation}
-    \mathbf{E} = \frac{1}{2}\,(\mathbf{C}-\mathbf{I}),\quad \mathbf{C}=\mathbf{F}^T\mathbf{F}
+    \mathbf{E} = \frac{1}{2}\,(\mathbf{C}-\mathbf{I})\,,\quad\text{with}\quad \mathbf{C}=\mathbf{F}^T\mathbf{F}
 \end{equation}
 
 \noindent
@@ -497,22 +497,6 @@ and is transformed to a fibre-aligned coordinate system using $\mathbf{E^{fsn}}=
     \mathbf{T^{fsn}} = \derp{W}{\mathbf{E^{fsn}}}
 \end{equation}
 
-% Most constitutive laws go back to Fung~\cite{Fung:1993}, who observed an exponential relation between strain and stress in cardiac tissue.
-% In this work, we used the transversely isotropic cardiac strain energy function proposed by Guccione et al.~\cite{guccione}, combined with a Lagrange multiplier scheme with a compressibility penalty term \cite{Land:2012, Land:2015*a}:
-
-% \begin{equation}
-%     W = W_g -p(J - 1) + \frac{\kappa}{2}(J - 1)^2
-% \end{equation}
-
-% where
-
-% \begin{align}
-%     &W_g = \frac{1}{2}\,c_1\,(e^{Q(\mathbf{E})}-1) \\
-%     &Q(\mathbf{E}) = c_2\,E_{\text{ff}}^2+c_3\,(E_{\text{ss}}^2+E_{\text{nn}}^2+2\,E_{\text{sn}}^2)+2\,c_4\,(E_{\text{fs}}^2+E_{\text{fn}}^2) 
-% \end{align}
-
-% and where $\kappa,\,c_1,\,c_2,\,c_3,\,c_4\in\mathbb{R}^{+}$, $p$ is the hydrostatic term and $J=\text{det}(\mathbf{F})$. 
-
 \noindent
 The stress tensor $\mathbf{T^{fsn}}$ is then transformed back using $\mathbf{L}\,\mathbf{T^{fsn}}\,\mathbf{L}^T$. The final second Piola-Kirchhoff stress tensor is obtained from the strain energy function by adding an active tension component $T_a$ (Section~\ref{sec:cell_contr_modelling}) along the fibres direction $\mathbf{f}$:
 %
@@ -521,7 +505,7 @@ The stress tensor $\mathbf{T^{fsn}}$ is then transformed back using $\mathbf{L}\
 \end{equation}
 
 \noindent
-$\mathbf{T}$ expresses the stresses in actively contracting incompressible cardiac tissue in terms of its strain and completes the set of equations required to model actively contracting cardiac tissue. The resulting system of equations is solved using the finite element method.
+$\mathbf{T}$ expresses the stresses in actively contracting incompressible cardiac tissue in terms of its strain and completes the set of equations required to model actively contracting cardiac tissue. The resulting system of equations is solved using the finite element method. A given displacement can be used to prescribe the position of the nodes at the computational domain boundaries (\textit{Dirichlet boundary conditions}).
 
 
 %
