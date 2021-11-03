@@ -13,20 +13,20 @@
 %
 %
 \section{Physiology of the heart}
-During each heartbeat, the chambers of the heart are activated by an electrical impulse that propagates across the entire tissue. The activation wave is initiated by a group of pacemaking cells, making up the \textit{sinoatrial node} and located in the right atria, and spreads throughout the ventricles via a specialised conduction system called the \textit{His-Purkinje system}. The arrival of the activation wave at each cardiac cardiac cell or \textit{myocyte} causes a depolarisation of the cell membrane that initiates an \textit{action potential} (\acs{AP}). This cellular electrical signal gives rise to a \textit{calcium transient} that activates the tension generating proteins inside the cell through a process called \textit{excitation-contraction} (\acs{EC}) coupling, causing concerted myocardial contraction and relaxation. This causes the heart walls to contract, pumping blood in and out of the heart and around the body or to the lungs. \todo{missing picture of a full heart}
+During each heartbeat, the chambers of the heart are activated by an electrical impulse that propagates across the entire tissue. The activation wave is initiated by a group of pacemaking cells, making up the \textit{sinoatrial node} and located in the right atria, and spreads throughout the ventricles via a specialised conduction system called the \textit{His-Purkinje system}. The arrival of the activation wave at each cardiac cardiac cell or \textit{myocyte} causes a depolarisation of the cell membrane that initiates an \textit{action potential} (\acs{AP}). This cellular electrical signal gives rise to a \textit{calcium transient} that activates the tension generating proteins inside the cell through a process called \textit{excitation-contraction} (\acs{EC}) coupling, causing concerted myocardial contraction and relaxation. This causes the heart walls to contract, pumping blood in and out of the heart and around the body or to the lungs.
 
-% \begin{figure}
-%     \centering
-%     \includegraphics{heart}
-%     \caption{A picture of the heart and its conduction system}
-%     \label{fig:my_label}
-% \end{figure}
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=0.66\textwidth]{figures/chapter01/fig_elsv_8.png}
+    \caption{The heart and its conduction system. Adapted from~\cite{Guyton:2021}. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
+    \label{fig:my_label0}
+\end{figure}
 
 
 %
 %
 %
-\subsection{Cardiac electrophysiology}\label{sec:cardiacelecphys}
+\subsection{Cardiac electrophysiology}\label{sec:ch1cardiac_electrophysiology}
 The surface membrane of a cardiac cell is called the \textit{sarcolemma}. On either side of the sarcolemma, the intracellular and the extracellular environments consist of ionic solutions. For cardiac electrophysiology the major ion species are sodium (\acs{Na}), potassium (\acs{K}), chloride (\acs{Cl}) and calcium (\acs{Ca}). An important property of the sarcolemma is its ability to maintain concentration gradients, such that each ion species is unevenly distributed between the intracellular and extracellular space, resulting in concentration gradients across the membrane. As ions are charged particles, their uneven distribution across the sarcolemma also creates an electrical gradient. The resulting electrochemical gradient provides a driving force to move ions across the cell membrane.
 
 % (The diffusion gradient is also important so the voltage is not the sole force moving ions)
@@ -50,7 +50,10 @@ Another crucial property of the sarcolemma is its capacity to respond to electri
 \end{figure}
 
 \vspace{0.2cm}
-Every ventricular myocyte is in general not excitable (\textit{refractory}) between Phase $0$ through to half way through Phase $3$, meaning that the cell cannot produce another AP. This is due to all the $\Na$ channels moving to the \textit{inactivated} state after the initial Phase $0$ depolarisation. The period of time since the cell was last activated and it is unable to initiate another activation is called \textit{absolute refractory period}. However, cell \textit{hyperpolarisation} due to $\K$ ions leak which makes the membrane potential being more negative than the resting configuration makes the $\Na$ channels reset to the still closed but not inactivated state. In this moment (\textit{relative refractory period}), the cell can potentially evoke a new AP, although needing a larger-than-normal excitatory stimulus. Myocytes' non-excitability has two major implications. The first one concerns the spread of excitation through the heart which is brought about by local electrical currents that act ahead of the action potential. In the depolarised, active region the membrane interior is positively charged, while the resting region ahead is negatively charged. The two internal active and resting regions are connected through a conductive pathway called \textit{gap junction}, and positive charge can therefore flow to the resting membrane region, depolarising it. Conversely, in the extracellular space positive charge flows from the resting membrane region to the active region. When in the resting region the membrane potential reaches the threshold for voltage-gated $\Na$ channels opening (Phase $0$), the active region is still in its refractory period, therefore the excitation can only proceed unidirectionally. The second major implication concerns myocyte contraction. As we shall see in Section~\ref{sec:cardiaccellcontr}, cell contraction takes place in response to an increase in intracellular $\Ca$ concentration (\acs{Cai}). The peak mechanical event (maximal contraction) is achieved after the peak chemical event (maximal $\Cai$) which is achieved after the peak electrical event (maximal membrane potential). More specifically, peak tension is reached during the AP absolute refractory period while the myocyte relaxes during the AP relative refractory period, so that tension development is completed before the myocyte becomes excitable again. The contractile behaviour of the heart is thus restricted to repeated single \textit{twitches}, preventing life threatening sustained myocardial contractions.
+Every ventricular myocyte is in general not excitable (\textit{refractory}) between Phase $0$ through to half way through Phase $3$, meaning that the cell cannot produce another AP. This is due to all the $\Na$ channels moving to the \textit{inactivated} state after the initial Phase $0$ depolarisation. The period of time since the cell was last activated and it is unable to initiate another activation is called \textit{absolute refractory period}. However, cell \textit{hyperpolarisation} due to $\K$ ions leak which makes the membrane potential being more negative than the resting configuration makes the $\Na$ channels reset to the still closed but not inactivated state. In this moment (\textit{relative refractory period}), the cell can potentially evoke a new AP, although needing a larger-than-normal excitatory stimulus.
+
+\vspace{0.2cm}\noindent
+Myocytes' non-excitability has two major implications. The first one concerns the spread of excitation through the heart which is brought about by local electrical currents that act ahead of the action potential. In the depolarised, active region the membrane interior is positively charged, while the resting region ahead is negatively charged. The two internal active and resting regions are connected through a conductive pathway called \textit{gap junction}, and positive charge can therefore flow to the resting membrane region, depolarising it. Conversely, in the extracellular space positive charge flows from the resting membrane region to the active region. When in the resting region the membrane potential reaches the threshold for voltage-gated $\Na$ channels opening (Phase $0$), the active region is still in its refractory period, therefore the excitation can only proceed unidirectionally. The second major implication concerns myocyte contraction. As we shall see in Section~\ref{sec:ch1cardiac_cellular_contraction}, cell contraction takes place in response to an increase in intracellular $\Ca$ concentration (\acs{Cai}). The peak mechanical event (maximal contraction) is achieved after the peak chemical event (maximal $\Cai$) which is achieved after the peak electrical event (maximal membrane potential). More specifically, peak tension is reached during the AP absolute refractory period while the myocyte relaxes during the AP relative refractory period, so that tension development is completed before the myocyte becomes excitable again. The contractile behaviour of the heart is thus restricted to repeated single \textit{twitches}, preventing life threatening sustained myocardial contractions.
 
 \begin{figure}[!ht]
     \myfloatalign
@@ -79,7 +82,7 @@ Every ventricular myocyte is in general not excitable (\textit{refractory}) betw
 %
 %
 %
-\subsubsection{The role of calcium in sarcomere contraction}
+\subsubsection{The role of calcium in sarcomere contraction}\label{ch1:the_role_of_calcium_in_sarcomere_contraction}
 Calcium plays a key role in signalling the cardiac cell to contract. The variation of $\Ca$ levels observed inside the cell during each heart beat is referred to as \textit{calcium transient} or \textit{calcium signal}. To understand the $\Ca$ dynamics that makes the common $\Cai$ transient shape, we need to introduce other important both structural and functional myocyte components.
 
 \vspace{0.2cm}
@@ -96,11 +99,18 @@ As $\Ca$ is removed from the cytosol, $\Cai$ decreases so that $\Ca$ dissociates
 %
 %
 %
-\subsection{Cardiac cellular contraction}\label{sec:cardiaccellcontr}
-The basic contractile unit of each myocyte is called \textit{sarcomere} and is mainly composed of filamentous proteins (\textit{myofilaments}) between thin partitions called \textit{Z lines}. The two principal interdigitating myofilaments are composed respectively of \textit{myosin} protein (\textit{thick filament}) and of \textit{actin} protein (\textit{thin filament}). The thin filament consists of two actin strings arranged as a two-stranded helix. The groove between the actin strands contains two regulatory proteins: \textit{tropomyosin} (\acs{Tn}) and \textit{troponin} (\acs{Tm}). The sarcomere also contains spring-like filaments of \textit{titin}, connecting Z lines. They ensure that myosin filaments stay aligned and they confer elasticity to the heart wall along with the extracellular \textit{collagen}. \todo{missing picture of the thin and thick filaments}
+\subsection{Cardiac cellular contraction}\label{sec:ch1cardiac_cellular_contraction}
+The basic contractile unit of each myocyte is called \textit{sarcomere} and is mainly composed of filamentous proteins (\textit{myofilaments}) between thin partitions called \textit{Z disks}. The two principal interdigitating myofilaments are composed respectively of \textit{myosin} protein (\textit{thick filament}) and of \textit{actin} protein (\textit{thin filament}). The thin filament consists of two actin strings arranged as a two-stranded helix. The groove between the actin strands contains two regulatory proteins: \textit{tropomyosin} (\acs{Tn}) and \textit{troponin} (\acs{Tm}). The sarcomere also contains spring-like filaments of \textit{titin}, connecting Z disks. They ensure that myosin filaments stay aligned and they confer elasticity to the heart wall along with the extracellular \textit{collagen}.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=0.66\textwidth]{figures/chapter01/fig_elsv_5.png}
+    \caption{Proteins organisation within the sarcomere. Adapted from~\cite{Guyton:2021}. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
+    \label{fig:my_label3}
+\end{figure}
 
 \vspace{0.2cm}
-In the heart, contraction is initiated by a rise $\Cai$. $\Ca$ binds to the calcium-binding subunit of Tn, namely \textit{troponin C} (\acs{TnC}) on the thin filament, which causes Tm to move out of the actin groove exposing actin binding sites. The myosin heads in the thick filament can then bind to actin. The mysoin heads then rotate in the power stoke, pulling the thick filaments past the thin filaments, causing the sarcomere to contract. The mysoin heads then unbind and can reattach to actin to further contract the sarcomere. Each biochemical bond which is formed through acto-myosin interaction is called \textit{cross-bridge}, and constitutes an independent generator of force: the force generated within the entire sarcomere is therefore the cumulative contribution of many formed cross-bridges. 
+In the heart, contraction is initiated by a rise in $\Cai$. $\Ca$ binds to the calcium-binding subunit of Tn, namely \textit{troponin C} (\acs{TnC}), on the thin filament, which causes Tm to move out of the actin groove exposing actin binding sites. The myosin heads in the thick filament can then bind to actin. The mysoin heads then rotate in the power stoke, pulling the thick filaments past the thin filaments, causing the sarcomere to contract. The mysoin heads then unbind and can reattach to actin to further contract the sarcomere. Each biochemical bond which is formed through acto-myosin interaction is called \textit{cross-bridge}, and constitutes an independent generator of force: the force generated within the entire sarcomere is therefore the cumulative contribution of many formed cross-bridges. 
 
 % cross-bridge theory states that actin and myosin form a protein complex (classically called actomyosin) by attachment of myosin head on the actin filament, thereby forming a sort of cross-bridge between the two filaments. The sliding filament theory is a widely accepted explanation of the mechanism that underlies muscle contraction.[6]
 
@@ -144,11 +154,47 @@ Biophysically detailed mathematical models have been developed to better underst
 %
 %
 \subsection{Cell electrophysiology}\label{sec:cell_ep_modelling}
-% Cardiac electrophysiology has been measured in the clinic for more than ten decades. These measurements have proved to be essential for patient diagnoses and monitoring. Computational models of cardiac electrophysiology have more recently been employed to interpret clinical data.
-% \vspace{0.2cm}
-In Section~\ref{sec:cardiacelecphys}, we have seen how ions uneven distribution across the interior and the exterior of the sarcolemma is essential for a correct AP generation. The equilibrium potential for a particular ion at which its electrochemical gradient is balanced can be expressed through the \textit{Nernst equation}:
+Models of cardiac cells electrophysiology began with the work of Noble in 1962~\cite{Noble:1962}, who for the first time \textit{in silico} reproduced the long-lasting action and pace-maker potentials of Purkinje fibres of the heart. He continued on the pioneering work of Hodgkin and Huxley~\cite{Hodgkin:1952}, who in 1952 modelled $\Na$, $\K$ and leakage currents across the surface membrane of a squid giant nerve fibre, that give rise to dynamic changes in membrane potential and hence the AP.
+
+\vspace{0.2cm}
+The sarcolemma was modelled as an electrical circuit (\textit{equivalent circuit model}), comprised of a capacitor in parallel with resistors that represent ionic currents. The total membrane current was given as the sum of the capacitive current and the ionic current:
 %
-\begin{equation}\label{eq:nernsteq}
+\begin{equation}\label{eq:membranecurrent}
+I_m = C_m\,\der{V_m}{t} + \sum_{\textrm{ion}}I_\textrm{ion}
+\end{equation}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $I_m$            & total membrane current \\
+    $I_\textrm{ion}$ & individual transmembrane ionic current with sign \\ & (negative, positive for inward, outward currents respectively) \\ 
+    $C_m$            & capacitance of the cell membrane per unit area \\
+    $V_m$            & transmembrane voltage
+\end{tabular}
+
+\vspace{0.2cm}\noindent
+and for each ion species the generic transmembrane current $I_{\textrm{ion}}$ was described as:
+%
+\begin{equation}
+    I_{\textrm{ion}} = g_{\textrm{ion}}\,(V_m-E_{\textrm{ion}})
+\end{equation}
+
+\noindent
+where
+
+\vspace{0.2cm}
+\begin{tabular}{ll}
+    $g_{\textrm{ion}}$ & average channel conductance \\
+    $V_m$ & transmembrane voltage \\
+    $E_\textrm{ion}$ & equilibrium potential of the considered ion species
+\end{tabular}
+
+\vspace{0.2cm}\noindent
+The equilibrium potential for a particular ion at which its electrochemical gradient is balanced can be expressed through the \textit{Nernst equation}:
+%
+\begin{equation}
     E_{\textrm{ion}}=\frac{\textrm{R}\textrm{T}}{\textrm{F}z}\,\ln{\frac{[\textrm{ion}]_{\textrm{ex}}}{[\textrm{ion}]_{\textrm{in}}}}
 \end{equation}
 
@@ -166,43 +212,7 @@ where
 \end{tabular}
 
 \vspace{0.5cm}
-Ionic cell models have been developed to represent the baseline physiology of both atrial, ventricular, and sinoatrial node myocytes [REFS]. Also, a variety of many other models have been built~\cite{Corrado:2020} by adapting these first, general one to specifically interpret clinical data from pathological phenotypes (e.g. gene mutation causing a specific ion channel malfunction). These many currently available models all share some traits and mostly differ in single ion channels kinetics representations.
-
-\vspace{0.2cm}
-The sarcolemma is commonly viewed as an electrical circuit (\textit{equivalent circuit model}), comprised of a capacitor in parallel with resistors that represent ionic currents. The total membrane current is given as the sum of the capacitive current and the ionic current:
-%
-\begin{equation}\label{eq:membranecurrent}
-I_m = C_m\,\der{V_m}{t} + \sum_{\textrm{ion}}I_\textrm{ion}
-\end{equation}
-
-\noindent
-where
-
-\vspace{0.2cm}
-\begin{tabular}{ll}
-    $I_m$            & total membrane current \\
-    $I_\textrm{ion}$ & individual transmembrane ionic current with sign \\ & (negative, positive for inward, outward currents respectively) \\ 
-    $C_m$            & capacitance of the cell membrane per unit area \\
-    $V_m$            & transmembrane voltage
-\end{tabular}
-
-\vspace{0.5cm}
-\noindent
-and the generic transmembrane current $I_{\textrm{ion}}$ is described as:
-%
-\begin{equation}
-    I_{\textrm{ion}} = g_{\textrm{ion}}\,(V_m-E_{\textrm{ion}})
-\end{equation}
-
-\noindent
-where
-
-\vspace{0.2cm}
-\begin{tabular}{ll}
-    $g_{\textrm{ion}}$ & average channel conductance \\
-    $V_m$ & transmembrane voltage \\
-    $E_\textrm{ion}$ & Nernst potential (equation~\eqref{eq:nernsteq}) of the considered ion species
-\end{tabular}
+Since Noble's work, many ionic cell models have been developed to represent the baseline physiology of both atrial, ventricular, and sinoatrial node myocytes~\cite{Corrado:2020}. These many currently available models all share the electric circuit way of modelling the cell membrane~\eqref{eq:membranecurrent}, and mostly differ in single ion channels kinetics representations. \todo{CONTINUE}
 
 \vspace{0.5cm}
 Now, the current $I_{\textrm{ion}}$ is produced by the movement of ions across the membrane through an ion channel, which is made of pore-forming proteins that span the membrane lipid bi-layer. Ion channels are regulated by one or more \textit{gates}, which allows ions to pass according to whether they are in an open or closed state. Changes in an ion channel conformation takes place in response to chemical or electrical signals, temperature, or mechanical force. Cardiac cells ion channels are mostly \textit{voltage-gated}, meaning that they change conformation with varying transmembrane voltage. Two approaches have been used to represent ionic channels kinetics: the first uses the Hodgkin-Huxley (\acs{HH}) formulation~\cite{Hodgkin:1952} while the second (a generalisation of the first) uses continuous-time Markov chain models (\acs{MM})~\cite{Fink:2009}.
@@ -359,28 +369,32 @@ Cardiac contraction models are used to simulate active tension generation at the
 %
 %
 \subsection{Electromechanical coupling}\label{sec:mathelecmechcoupl}
-In biophysically detailed models, the active tension along the cardiac muscle fibres direction is calculated using sarcomere contraction models, introduced in Section~\ref{sec:cell_contr_modelling}. Most models of coupled electromechanics are defined by a system of ODEs that can be described using two generic functions $h$ and $f$ as follows:
+In biophysically detailed models of cardiac electromechanics, the active tension along the muscle fibres direction is calculated using sarcomere contraction models, introduced in Section~\ref{sec:cell_contr_modelling}. This calculation is normally performed in two steps. The first step consists in solving a system of ODEs of the form:
 %
-\begin{align}
-    T_a &= h(\lambda,\,\dot{\lambda},\,\mathbf{y},\,t) \label{eq:eq5} \\
-    \der{\mathbf{y}}{t} &= f(T_a,\,\lambda,\,\dot{\lambda},\,\mathbf{y},\,t) \label{eq:eq6}
-\end{align}
+\begin{equation}\label{eq:epmechcoupling}
+    \der{\mathbf{y}}{t} = f(t,\,\lambda,\,\dot{\lambda},\,\mathbf{y}) 
+\end{equation}
 
 \noindent
-where
+where $f$ is a generic non-linear function and
 
 \vspace{0.2cm}
 \begin{tabular}{ll}
-    $T_a$           & active tension \\
+    $t$             & time \\
     $\lambda$       & fibre strain \\
     $\dot{\lambda}$ & fibre strain rate ($=\mathrm{d}\lambda / \mathrm{d}t$) \\
-    $\mathbf{y}$    & vector of state variables \\
-    $t$             & time
+    $\mathbf{y}$    & vector of state variables
 \end{tabular}
 
-\vspace{0.5cm}\noindent
-The vector $\mathbf{y}$ is a combination of both electrophysiology and myofilaments state variables. $h$ is a function of $\mathbf{y}$ which includes the cytosolic $\Ca$ concentration. $f$ is a function describing the rate of change during time of all the state variables and its dependence on $\lambda$, $\dot{\lambda}$ and $T_a$. $f$ provides the cellular EC coupling mechanisms which are included to varying degrees in cardiac electromechanics models.
+\vspace{0.2cm}\noindent
+In the second step, active tension ($T_a$) is calculated as a function of time, fibre strain and strain rate and state variables which are varying over time, via a generic non-linear function $h$:
+%
+\begin{equation}\label{eq:activetensioncalc}
+    T_a = h(t,\, \lambda,\,\dot{\lambda},\,\mathbf{y}) \\
+\end{equation}
 
+\vspace{0.2cm}
+The coupling between the electrical and mechanical components of the model resides in the definition of the vector of state variables $\mathbf{y}$. In fact, this is in part given by the cell electrophysiology model components (gate and/or state variables) and in part given by the cell contraction model components (thin and thick filament proteins). The variation in the second components can depend on the current state of the first components. The most common example sees $\Ca$ binding to TnC which triggers the sarcomere to contract (Section~\ref{sec:ch1cardiac_cellular_contraction}). In this case, the current state of the electrophysiology model ($\Cai(t)$ for a fixed $t$) directly affects the variation in the $\Ca$-TnC bound complexes and consequently in the cross-bridge formation.
 
 
 %
@@ -620,7 +634,7 @@ HF can be accompanied by a systolic dysfunction, where the ventricular myocytes 
 HF can be accompanied by a diastolic dysfunction, where the ventricular myocytes retain the ability to contract, but cannot relax properly: this pathological condition is referred to as \textit{heart failure with preserved ejection fraction} (\acs{HFpEF}).
 
 \vspace{0.2cm}
-HFpEF is a heterogeneous disease mainly attributed to LV diastolic dysfunction. Diastolic function worsens as part of normal ageing \cite{Andersen:2014} and this likely explains much of the age-association with increasing HFpEF risk. Other potentially prominent risk factors for HFpEF include obesity, metabolic syndrome, hypertension, sedentary state, coronary disease, kidney disease~\cite{Pfeffer:2019}. Hypertension is the dominant substrate upon which HFpEF develops, being present in $\SI{80}{\percent}-\SI{90}{\percent}$ of patients in community-based studies e.g.~\cite{Borlaug:2009}. Diastolic dysfunction can be broadly dichotomised into impairments in the \textit{active} and \textit{passive} processes. Active relaxation refers to the rate of pressure decay during isovolumetric relaxation mediated by $\Ca$ re-uptake into the SR, which facilitates detachment in the actin-myosin complex within the cardiomyocyte. In HFpEF, there is an inability to enhance early diastolic relaxation and suction with exercise or tachycardia, contributing to increased filling pressures. There is also an increase in passive LV chamber stiffness in HFpEF, so that even if relaxation and suction were adequate, a higher filling pressure would be required to distend the chamber to an adequate preload volume. This increase in LV passive stiffness is related to changes in the extracellular matrix due to deposition of collagen (\textit{fibrosis})~\cite{Burlew:2002}, as well as changes within the cardiac myocyte, specifically abnormalities in $\Ca$ handling and in the isotype and phosphorylation status of titin sarcomeric macromolecule. Typical structural changes associated with HFpEF are left atrial (LA) enlargement and LV hypertrophy, characterised by an enlargement or thickening of the heart muscle~\cite{Zile:2004}, although investigations in broader HFpEF samples have established a much more heterogeneous cardiac phenotype, characterised by many patterns of cardiac remodelling including no remodelling at all~\cite{Shah:2012}.
+HFpEF is a heterogeneous disease mainly attributed to LV diastolic dysfunction. Diastolic function worsens as part of normal ageing \cite{Andersen:2014} and this likely explains much of the age-association with increasing HFpEF risk. Other potentially prominent risk factors for HFpEF include obesity, metabolic syndrome, hypertension, sedentary state, coronary disease, kidney disease~\cite{Pfeffer:2019}. Hypertension is the dominant substrate upon which HFpEF develops, being present in $\SI{80}{\percent}-\SI{90}{\percent}$ of patients in community-based studies e.g.~\cite{Borlaug:2009}. Diastolic dysfunction can be broadly dichotomised into impairments in the \textit{active} and \textit{passive} processes. Active relaxation refers to the rate of pressure decay during isovolumetric relaxation mediated by $\Ca$ re-uptake into the SR, which facilitates detachment in the actin-myosin complex within the cardiomyocyte. In HFpEF, there is an inability to enhance early diastolic relaxation and suction with exercise, contributing to increased filling pressures. There is also an increase in passive LV chamber stiffness in HFpEF, so that even if relaxation and suction were adequate, a higher filling pressure would be required to distend the chamber to an adequate preload volume. This increase in LV passive stiffness is related to changes in the extracellular matrix due to deposition of collagen (\textit{fibrosis})~\cite{Burlew:2002}, as well as changes within the cardiac myocyte, specifically abnormalities in $\Ca$ handling and in the isotype and phosphorylation status of titin sarcomeric macromolecule. Typical structural changes associated with HFpEF are left atrial (LA) enlargement and LV hypertrophy, characterised by an enlargement or thickening of the heart muscle~\cite{Zile:2004}, although investigations in broader HFpEF samples have established a much more heterogeneous cardiac phenotype, characterised by many patterns of cardiac remodelling including no remodelling at all~\cite{Shah:2012}.
 
 
 %
@@ -641,15 +655,20 @@ HFpEF is a heterogeneous disease mainly attributed to LV diastolic dysfunction. 
 Current treatments for HFpEF include angiotensin-converting enzyme inhibitors/aldosterone receptor blockers, calcium channel
 blockers and beta-blockers, but the mortality and the morbidity associated with the
 disease have so far remained high~\cite{Adamczak:2020}. This may be due to the disparateness of the disease as well as its multifactorial pathophysiology. Therefore, current pharmacotherapies are not effective and patients with HFpEF are
-currently considered the larger unmet need in cardiology. At present, there is no cure for HFpEF~\cite{Owan:2006}.
+currently considered the largest unmet need in cardiology. At present, there is no cure for HFpEF~\cite{Owan:2006}.
 
 \vspace{0.2cm}
-It is known that changes in cardiac contraction that give rise to HFpHF are potentially driven by altered electrophysiology, for example a prolongation in the AP can alter contractile function and a mishandling of $\Ca$ ion can alter the signal received by the sarcomere \cite{Asp:2013, Gorski:2015}. Quantitatively mapping changes in one part of this system to another to understand their role in disease or predicting how changing a single protein's function may affect whole organ function is complex and is not susceptible to intuitive analysis. For this reason, the main purpose of this project is to develop a computational framework to quantitatively link pathological and pharmacological manipulations across scales and physics in the heart. To do this, we propose to build a biophysically detailed $3$D mathematical model of the rat heart. By improving our understanding of the transduction of the electrical signal and sarcomere function through to whole organ contraction in healthy and diseased states, we hope to identify potential targets for treating HFpEF.
+It is known that changes in cardiac contraction that give rise to HFpHF are potentially driven by altered electrophysiology, for example a prolongation in the AP can alter contractile function and a mishandling of $\Ca$ ions can alter the signal received by the sarcomere \cite{Asp:2013, Gorski:2015}. Quantitatively mapping changes in one part of this system to another to understand their role in disease or predicting how changing a single protein's function may affect whole organ function is complex and is not susceptible to intuitive analysis. For this reason, the main purpose of this project is to develop a computational framework to quantitatively link pathological and pharmacological manipulations across scales and physics in the heart. To do this, we propose to build a biophysically detailed $3$D mathematical model of the rat heart. By improving our understanding of the transduction of the electrical signal and sarcomere function through to whole organ contraction in healthy and diseased states, we hope to identify potential targets for treating HFpEF.
 
 
 
 
 
+%
+%
+%
+\section{Summary}\label{sec:ch1summary}
+\todo{write}
 
 
 
