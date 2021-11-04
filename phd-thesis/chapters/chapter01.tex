@@ -13,13 +13,13 @@
 %
 %
 \section{Physiology of the heart}
-During each heartbeat, the chambers of the heart are activated by an electrical impulse that propagates across the entire tissue. The activation wave is initiated by a group of pacemaking cells, making up the \textit{sinoatrial node} and located in the right atria, and spreads throughout the ventricles via a specialised conduction system called the \textit{His-Purkinje system}. The arrival of the activation wave at each cardiac cardiac cell or \textit{myocyte} causes a depolarisation of the cell membrane that initiates an \textit{action potential} (\acs{AP}). This cellular electrical signal gives rise to a \textit{calcium transient} that activates the tension generating proteins inside the cell through a process called \textit{excitation-contraction} (\acs{EC}) coupling, causing concerted myocardial contraction and relaxation. This causes the heart walls to contract, pumping blood in and out of the heart and around the body or to the lungs.
+During each heartbeat, the chambers of the heart are activated by an electrical impulse that propagates across the entire tissue. The activation wave is initiated by a group of pacemaking cells, making up the \textit{sino-atrial} (\acs{SA}) \textit{node} and located in the right atrium, and immediately starts activating the atria before reaching the \textit{atrio-ventricular} (\acs{AV}) \textit{node}. The AV node slows down the activation signal before it passes to the AV \textit{bundle}. This allows the atria to fully contract to fill the ventricles with blood before the latters are activated. The activation signal through the AV bundle (which branches in two) spreads throughout the ventricles via a specialised, fast conduction system called the \textit{His-Purkinje system}. The arrival of the activation wave at each cardiac muscle cell or \textit{myocyte} causes a depolarisation of the cell membrane that initiates an \textit{action potential} (\acs{AP}). This cellular electrical signal gives rise to a \textit{calcium transient} that activates the tension generating proteins inside the cell through a process called \textit{excitation-contraction} (\acs{EC}) coupling. This causes the heart walls to contract, pumping blood in and out of the heart and around the body and to the lungs.
 
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=0.66\textwidth]{figures/chapter01/fig_elsv_8.png}
-    \caption{The heart and its conduction system. Adapted from~\cite{Guyton:2021}. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
-    \label{fig:my_label0}
+    \caption{The heart and its conduction system. Adapted from~\cite{Guyton:2021}, Unit III, Chapter 10, Page 128, Figure 10-1. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
+    \label{fig:heartcondactionsystem}
 \end{figure}
 
 
@@ -39,7 +39,7 @@ Another crucial property of the sarcolemma is its capacity to respond to electri
 	\item[\textsc{Phase $1$.}] The early repolarisation of the AP is primarily caused by the rapidly activating and inactivating transient outward $\K$ current ($I_{to}$).
 	\item[\textsc{Phase $2$.}] A plateau phase follows, resulting from a prolonged influx of $\Ca$ ions, as the voltage-gated L-type $\Ca$ channels ($I_{CaL}$) open upon depolarisation. This flow of $\Ca$ ions plays a crucial role in cardiac EC coupling, as it initiates a series of intracellular events that ultimately lead to myocardial contraction. Another current that contributes to the late Phase 2 plateau is the net inward current through the $\Na$/$\Ca$ \textit{exchanger} (\acs{NCX}) in $\Ca$ extrusion mode. This exchanger is a reversible counter-transport system that, when in forward ($\Ca$ extrusion) mode, uses the energy provided by the inward flux of $\Na$ ions down their electrochemical gradient to extrude $\Ca$ ions with a generally accepted stoichiometry of $3\colon 1$, thus moving one net charge into the cell. These two inward currents that determine the AP plateau are balanced by a reduced outward $\K$ current consequent to the membrane $\K$ conductance falling upon depolarisation. This phenomenon is called \textit{inward rectification}, caused by the obstruction of the inner mouth of $\K$ channels.
 	\item[\textsc{Phase $3$.}] The outward flow of $\K$ ions is the major factor causing repolarisation that determines the duration of the AP. The large number of $\K$ channels can be divided into two molecular families: the voltage-gated channels and the inward rectifier channels. The voltage-gated outward $\K$ channels are the rapidly ($I_{Kr}$) and slowly ($I_{Ks}$) activating delayed rectifiers, and are responsible for repolarisation, fully activated at around $\SI{-10}{\milli\volt}$ and deactivated by full repolarisation. The inward rectifier $\K$ channels, such as the time-independent $\K$ current $I_{K1}$, help regulating the resting membrane potential and contribute to late Phase $3$ repolarisation.
-	\item[\textsc{Phase $4$.}] $I_{K1}$ closes upon depolarisation and reopens during repolarisation to help terminate the AP and reset the membrane potential to the resting state, which for non-pacemaker cardiac cells such as the ventricular myocytes is around $\SI{-90}{mV}$. An important contribution to maintain resting membrane potential ionic homeostasis is given by the $\Na$/$\K$ \textit{ATPase} (\acs{NAK}). This is a key transporter and uses energy (in the form of adenosine triphosphate (\acs{ATP})) to establish a low intracellular $\Na$ concentration and a high intracellular $\K$ concentration by moving $3$ $\Na$ ions out and $2$ $\K$ ions into the cell by hydrolisation of $1$ ATP molecule. This transport is \textit{electrogenic}, meaning that it results in the extrusion of $1$ net charge per cycle.
+	\item[\textsc{Phase $4$.}] $I_{K1}$ closes upon depolarisation and reopens during repolarisation to help terminate the AP and reset the membrane potential to the resting state, which for non-pacemaker cardiac cells such as the ventricular myocytes is around $\SI{-90}{mV}$. An important contribution to maintain resting membrane potential ionic homeostasis is given by the $\Na$/$\K$ \textit{ATPase} (\acs{NAK}). This is a key transporter and uses energy (in the form of \textit{adenosine triphosphate} (\acs{ATP})) to establish a low intracellular $\Na$ concentration and a high intracellular $\K$ concentration by moving $3$ $\Na$ ions out and $2$ $\K$ ions into the cell by hydrolisation of $1$ ATP molecule. This transport is \textit{electrogenic}, meaning that it results in the extrusion of $1$ net charge per cycle.
 \end{description}
 
 \begin{figure}[!ht]
@@ -105,7 +105,7 @@ The basic contractile unit of each myocyte is called \textit{sarcomere} and is m
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=0.66\textwidth]{figures/chapter01/fig_elsv_5.png}
-    \caption{Proteins organisation within the sarcomere. Adapted from~\cite{Guyton:2021}. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
+    \caption{Proteins organisation within the sarcomere. Adapted from~\cite{Guyton:2021}, Unit II, Chapter 6, Page 81, Figure 6-3. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
     \label{fig:my_label3}
 \end{figure}
 
@@ -157,10 +157,10 @@ Biophysically detailed mathematical models have been developed to better underst
 Models of cardiac cells electrophysiology began with the work of Noble in 1962~\cite{Noble:1962}, who for the first time \textit{in silico} reproduced the long-lasting action and pace-maker potentials of Purkinje fibres of the heart. He continued on the pioneering work of Hodgkin and Huxley~\cite{Hodgkin:1952}, who in 1952 modelled $\Na$, $\K$ and leakage currents across the surface membrane of a squid giant nerve fibre, that give rise to dynamic changes in membrane potential and hence the AP.
 
 \vspace{0.2cm}
-The sarcolemma was modelled as an electrical circuit (\textit{equivalent circuit model}), comprised of a capacitor in parallel with resistors that represent ionic currents. The total membrane current was given as the sum of the capacitive current and the ionic current:
+The sarcolemma was modelled as an electrical circuit (\textit{equivalent circuit model}), comprised of a capacitor in parallel with resistors that represented ionic currents. The total membrane current was given as the sum of the capacitive current and the ionic current:
 %
 \begin{equation}\label{eq:membranecurrent}
-I_m = C_m\,\der{V_m}{t} + \sum_{\textrm{ion}}I_\textrm{ion}
+I_m = C_m\,\der{V_m}{t} + I_i\,,\quad\text{with}\quad I_i = \sum_{\textrm{ion}}I_\textrm{ion}
 \end{equation}
 
 \noindent
@@ -169,15 +169,16 @@ where
 \vspace{0.2cm}
 \begin{tabular}{ll}
     $I_m$            & total membrane current \\
-    $I_\textrm{ion}$ & individual transmembrane ionic current with sign \\ & (negative, positive for inward, outward currents respectively) \\ 
-    $C_m$            & capacitance of the cell membrane per unit area \\
+    $I_i$            & total ionic current, i.e. sum of all ionic currents $I_\textrm{ion}$ with sign \\
+    & (negative, positive for inward, outward currents respectively) \\ 
+    $C_m$            & cell membrane capacitance per unit area \\
     $V_m$            & transmembrane voltage
 \end{tabular}
 
 \vspace{0.2cm}\noindent
-and for each ion species the generic transmembrane current $I_{\textrm{ion}}$ was described as:
+and for each ion species the corresponding transmembrane current $I_{\textrm{ion}}$ was described by the \textit{Ohm's law} as:
 %
-\begin{equation}
+\begin{equation}\label{eq:ohmslawsinglechannel}
     I_{\textrm{ion}} = g_{\textrm{ion}}\,(V_m-E_{\textrm{ion}})
 \end{equation}
 
@@ -187,15 +188,14 @@ where
 \vspace{0.2cm}
 \begin{tabular}{ll}
     $g_{\textrm{ion}}$ & average channel conductance \\
-    $V_m$ & transmembrane voltage \\
-    $E_\textrm{ion}$ & equilibrium potential of the considered ion species
+    $E_\textrm{ion}$ & equilibrium potential of the ion
 \end{tabular}
 
 \vspace{0.2cm}\noindent
-The equilibrium potential for a particular ion at which its electrochemical gradient is balanced can be expressed through the \textit{Nernst equation}:
+The equilibrium potential of a given ion species is the electric potential that would be required to maintain a zero net ion flux if the ion was allowed to diffuse down to its concentration gradient, assuming the cell membrane being permeable to only that ion species. The \textit{Nernst equation} expresses the equilibrium potential of a ion as a function of the ion concentrations inside and outside the cell:
 %
 \begin{equation}
-    E_{\textrm{ion}}=\frac{\textrm{R}\textrm{T}}{\textrm{F}z}\,\ln{\frac{[\textrm{ion}]_{\textrm{ex}}}{[\textrm{ion}]_{\textrm{in}}}}
+    E_{\textrm{ion}}=\frac{\textrm{R}\textrm{T}}{\textrm{F}z}\,\ln{\frac{[\textrm{ion}]_{e}}{[\textrm{ion}]_{i}}}
 \end{equation}
 
 \noindent
@@ -206,19 +206,19 @@ where
     $\textrm{R}$  & gas constant \\
     $\textrm{T}$  & absolute temperature \\
     $\textrm{F}$  & Faraday's constant \\
-    $z$           & ion valence \\
-    $[\textrm{ion}]_{\textrm{in}}$  & ion intracellular concentration \\
-    $[\textrm{ion}]_{\textrm{ex}}$  & ion extracellular concentration \\
+    $z$           & ion valency \\
+    $[\textrm{ion}]_{i}$  & ion intracellular concentration \\
+    $[\textrm{ion}]_{e}$  & ion extracellular concentration \\
 \end{tabular}
 
-\vspace{0.5cm}
-Since Noble's work, many ionic cell models have been developed to represent the baseline physiology of both atrial, ventricular, and sinoatrial node myocytes~\cite{Corrado:2020}. These many currently available models all share the electric circuit way of modelling the cell membrane~\eqref{eq:membranecurrent}, and mostly differ in single ion channels kinetics representations. \todo{CONTINUE}
+\vspace{0.2cm}
+Since Noble's work, many ionic cell models have been developed to represent the baseline physiology of both atrial, ventricular, and sinoatrial node myocytes~\cite{Corrado:2020}. These many currently available models all share the same cell membrane modelling strategy by viewing it as an electric circuit (equation~\eqref{eq:membranecurrent}), and mostly differ in single ion channels' kinetics representation.
 
-\vspace{0.5cm}
-Now, the current $I_{\textrm{ion}}$ is produced by the movement of ions across the membrane through an ion channel, which is made of pore-forming proteins that span the membrane lipid bi-layer. Ion channels are regulated by one or more \textit{gates}, which allows ions to pass according to whether they are in an open or closed state. Changes in an ion channel conformation takes place in response to chemical or electrical signals, temperature, or mechanical force. Cardiac cells ion channels are mostly \textit{voltage-gated}, meaning that they change conformation with varying transmembrane voltage. Two approaches have been used to represent ionic channels kinetics: the first uses the Hodgkin-Huxley (\acs{HH}) formulation~\cite{Hodgkin:1952} while the second (a generalisation of the first) uses continuous-time Markov chain models (\acs{MM})~\cite{Fink:2009}.
+\vspace{0.2cm}\noindent
+The current $I_{\textrm{ion}}$ introduced in equation~\eqref{eq:membranecurrent} is the result of ions moving across the cell membrane through an ion channel, which is made of pore-forming proteins that span the membrane lipid bi-layer. Ion channels are regulated by one or more \textit{gates}, which allow ions to pass according to whether they are in an open or closed state. Changes in an ion channel conformation takes place in response to chemical or electrical signals, temperature, or mechanical stress. Cardiac cells ion channels are mostly \textit{voltage-gated}, meaning that they change conformation with varying transmembrane voltage. Two approaches are commonly being used to represent ionic channels kinetics: the first uses the Hodgkin-Huxley (\acs{HH}) formulation~\cite{Hodgkin:1952} while the second (a generalisation of the first) uses continuous-time Markov chain models (\acs{MM})~\cite{Fink:2009}.
 
 \vspace{0.2cm}
-In the HH characterisation of channels the conductance is given by the product of a maximal conductance term and one or more separate \textit{gating variables} that represent the probability of finding the channel open:
+In the HH characterisation of channels, the conductance $g_{ion}$ (equation~\eqref{eq:ohmslawsinglechannel}) is given by the product of a maximal conductance term and one or more separate \textit{gating variables} that represent the probability of finding the channel open:
 %
 \begin{equation}
     g_{\textrm{ion}} = g_{\textrm{ion}}^{\textrm{max}}\times y_i\cdot\dots\cdot y_N
@@ -425,7 +425,7 @@ A tissue model of cardiac electrophysiology is required to link cellular excitat
 When a single cardiac myocyte undergoes depolarisation, the evoked AP travels in the form of a depolarisation wave which is able to activate the neighbouring cells. We have seen that cardiac myocytes are microscopically organised into fibres, and further organised into sheets (Section \todo{describe these previously}). This peculiar spatial arrangment causes an anisotropic propagation of the depolarisation wavefront, which is faster along the principal axis of the fibre and slower in the other directions. Different factors can affect propagation, including the shape of the myocytes, the curvature of the wavefront, the relative positions of the gap junctions within the fibres, the extracellular matrix composition and the local vasculature~\cite{Clayton:2011}. In the $3$-dimensional ventricular tissue, the AP depolarisation wave propagation is mainly orthogonal, with the fibre, sheet, and sheet-normal being the three principal directions.
 
 \vspace{0.2cm}
-Cardiac tissue electrophysiology can be mathematically described by first considering the tissue as an agglomerate of electrically coupled cells, and successively homogenising it to conceive it as a continous, smooth space. In the \textit{bidomain model}, both the intracellular (subscript $i$) and the extracellular (subscript $e$) spaces are considered as smooth and overlapping domains, separated by the cell membrane. The electric current densities in the two domains are described by the \textit{Ohm's law} as:
+Cardiac tissue electrophysiology can be mathematically described by first considering the tissue as a \textit{syncytium}\footnote{A syncytium is a continuum of cytoplasmic mass containing several nuclei, formed by fusion of cells.} of electrically coupled cells, and successively homogenising it to treat it as a smooth space. In the \textit{bidomain model}, both the intracellular (subscript $i$) and the extracellular (subscript $e$) spaces are considered as smooth and overlapping domains, separated by the cell membrane. The electric current densities in the two domains are described by the Ohm's law as:
 %
 \begin{equation}\label{eq:ohmslaw}
     \mathbf{J}_{\text{d}} = -\mathbf{G}_{\text{d}}\nabla\phi_{\text{d}}\,,\quad\text{with}\quad \text{d}=i,\,e
@@ -452,10 +452,10 @@ Conservation of current and charge is then enforced:
 \end{equation}
 
 \noindent
-where $I_m$ is the cell membrane current calculated as in equation~\ref{eq:membranecurrent} using an ionic cellular model (Section~\ref{sec:cell_ep_modelling}), and additionally scaled by a factor $\beta_m$ to match the domains' $3$-dimensional nature:
+where $I_m$ is the cell membrane current calculated as in equation~\eqref{eq:membranecurrent} using an ionic cellular model (Section~\ref{sec:cell_ep_modelling}), and additionally scaled by a factor $\beta_m$ to match the domains' $3$-dimensional nature:
 %
 \begin{equation}\label{eq:membranecurrentsc}
-    I_m = \beta_m\left(C_m\,\der{V_m}{t} + \sum_{\textrm{ion}}I_\textrm{ion}\right)
+    I_m = \beta_m\left(C_m\,\der{V_m}{t} + I_i\right)
 \end{equation}
 
 \noindent
@@ -469,7 +469,7 @@ The transmembrane voltage can be expressed in terms of electric potentials as
 so that the final set of equations describing the bidomain model takes the following form:
 %
 \begin{align}\label{eq:bidomainmodel}
-    & \nabla\cdot(\mathbf{G}_i(\nabla V_m + \nabla \phi_{\text{e}})) = \beta_m\left(C_m\,\der{V_m}{t} + \sum_{\textrm{ion}}I_\textrm{ion}\right) \\
+    & \nabla\cdot(\mathbf{G}_i(\nabla V_m + \nabla \phi_{\text{e}})) = \beta_m\left(C_m\,\der{V_m}{t} + I_i\right) \\
     & \nabla\cdot((\mathbf{G}_i + \mathbf{G}_e)\nabla \phi_e) = -\nabla\cdot(\mathbf{G}_i\nabla V_m)
 \end{align}
 
