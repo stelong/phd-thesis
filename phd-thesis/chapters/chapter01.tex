@@ -5,15 +5,15 @@
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we...
+    In this chapter, we present the heart and how it functions, from single cell excitation through to whole-organ contraction and relaxation (Section~\ref{sec:ch1physiology_of_the_heart}). We then present how the key physiological mechanisms at different biological scales can be modelled using equations of bio-electro-mechanics (Section~\ref{sec:ch1mathematical_modelling_of_the_heart}). Heart failure pathology is then introduced, with emphasis on the two most common phenotypes of the disease, namely when the ejection fraction is reduce and when it is preserved (Section~\ref{sec:ch1heart_failure}). We continue by stating the motivation for the research carried out within this thesis (Section~\ref{sec:ch1motivation_and_goals}), and we conclude with a brief summary (Section~\ref{sec:ch1summary}).
 \end{remark}
 
 
 %
 %
 %
-\section{Physiology of the heart}
-During each heartbeat, the chambers of the heart are activated by an electrical impulse that propagates across the entire tissue. The activation wave is initiated by a group of pacemaking cells, making up the \textit{sino-atrial} (\acs{SA}) \textit{node} and located in the right atrium, and immediately starts activating the atria before reaching the \textit{atrio-ventricular} (\acs{AV}) \textit{node}. The AV node slows down the activation signal before it passes to the AV \textit{bundle}. This allows the atria to fully contract to fill the ventricles with blood before the latters are activated. The activation signal through the AV bundle (which branches in two) spreads throughout the ventricles via a specialised, fast conduction system called the \textit{His-Purkinje system}. The arrival of the activation wave at each cardiac muscle cell or \textit{myocyte} causes a depolarisation of the cell membrane that initiates an \textit{action potential} (\acs{AP}). This cellular electrical signal gives rise to a \textit{calcium transient} that activates the tension generating proteins inside the cell through a process called \textit{excitation-contraction} (\acs{EC}) coupling. This causes the heart walls to contract, pumping blood in and out of the heart and around the body and to the lungs.
+\section{Physiology of the heart}\label{sec:ch1physiology_of_the_heart}
+During each heartbeat, the chambers of the heart are activated by an electrical impulse that propagates across the entire tissue. The activation wave is initiated by a group of pacemaking cells, making up the \textit{sino-atrial} (\acs{SA}) \textit{node} and located in the right atrium, and immediately starts activating the atria before reaching the \textit{atrio-ventricular} (\acs{AV}) \textit{node}. The AV node slows down the activation signal before it passes to the \textit{atrio-ventricular bundle}. This allows the atria to fully contract to fill the ventricles with blood before the latters are activated. The activation signal through the AV bundle (which branches in two) spreads throughout the ventricles via the specialised, fast \textit{His-Purkinje} conduction system. The arrival of the activation wave at each cardiac muscle cell causes a depolarisation of the cell membrane that initiates an \textit{action potential} (\acs{AP}). This cellular electrical signal gives rise to a calcium transient that activates the tension generating proteins inside the cell through a process called \textit{excitation-contraction} (\acs{EC}) coupling. This causes the heart walls to contract, pumping blood in and out of the heart and around the body and to the lungs.
 
 \begin{figure}[!ht]
     \myfloatalign
@@ -53,7 +53,7 @@ Another crucial property of the sarcolemma is its capacity to respond to electri
 Every ventricular myocyte is in general not excitable (\textit{refractory}) between Phase $0$ through to half way through Phase $3$, meaning that the cell cannot produce another AP. This is due to all the $\Na$ channels moving to the \textit{inactivated} state after the initial Phase $0$ depolarisation. The period of time since the cell was last activated and it is unable to initiate another activation is called \textit{absolute refractory period}. However, cell \textit{hyperpolarisation} due to $\K$ ions leak which makes the membrane potential being more negative than the resting configuration makes the $\Na$ channels reset to the still closed but not inactivated state. In this moment (\textit{relative refractory period}), the cell can potentially evoke a new AP, although needing a larger-than-normal excitatory stimulus.
 
 \vspace{0.2cm}\noindent
-Myocytes' non-excitability has two major implications. The first one concerns the spread of excitation through the heart which is brought about by local electrical currents that act ahead of the action potential. In the depolarised, active region the membrane interior is positively charged, while the resting region ahead is negatively charged. The two internal active and resting regions are connected through a conductive pathway called \textit{gap junction}, and positive charge can therefore flow to the resting membrane region, depolarising it. Conversely, in the extracellular space positive charge flows from the resting membrane region to the active region. When in the resting region the membrane potential reaches the threshold for voltage-gated $\Na$ channels opening (Phase $0$), the active region is still in its refractory period, therefore the excitation can only proceed unidirectionally. The second major implication concerns myocyte contraction. As we shall see in Section~\ref{sec:ch1cardiac_cellular_contraction}, cell contraction takes place in response to an increase in intracellular $\Ca$ concentration (\acs{Cai}). The peak mechanical event (maximal contraction) is achieved after the peak chemical event (maximal $\Cai$) which is achieved after the peak electrical event (maximal membrane potential). More specifically, peak tension is reached during the AP absolute refractory period while the myocyte relaxes during the AP relative refractory period, so that tension development is completed before the myocyte becomes excitable again. The contractile behaviour of the heart is thus restricted to repeated single \textit{twitches}, preventing life threatening sustained myocardial contractions.
+Myocytes' non-excitability has two major implications. The first one concerns the spread of excitation through the heart which is brought about by local electrical currents that act ahead of the action potential. In the depolarised, active region the membrane interior is positively charged, while the resting region ahead is negatively charged. The two internal active and resting regions are connected through a fast conductive pathway so that positive charge can flow to the resting membrane region, depolarising it. Conversely, in the extracellular space positive charge flows from the resting membrane region to the active region. When in the resting region the membrane potential reaches the threshold for voltage-gated $\Na$ channels opening (Phase $0$), the active region is still in its refractory period, therefore the excitation can only proceed unidirectionally. The second major implication concerns myocyte contraction. As we shall see in Section~\ref{sec:ch1cardiac_cellular_contraction}, cell contraction takes place in response to an increase in intracellular $\Ca$ concentration (\acs{Cai}). The peak mechanical event (maximal contraction) is achieved after the peak chemical event (maximal $\Cai$) which is achieved after the peak electrical event (maximal membrane potential). More specifically, peak tension is reached during the AP absolute refractory period while the myocyte relaxes during the AP relative refractory period, so that tension development is completed before the myocyte becomes excitable again. The contractile behaviour of the heart is thus restricted to repeated single \textit{twitches}, preventing life threatening sustained myocardial contractions.
 
 \begin{figure}[!ht]
     \myfloatalign
@@ -86,14 +86,10 @@ Myocytes' non-excitability has two major implications. The first one concerns th
 Calcium plays a key role in signalling the cardiac cell to contract. The variation of $\Ca$ levels observed inside the cell during each heart beat is referred to as \textit{calcium transient} or \textit{calcium signal}. To understand the $\Ca$ dynamics that makes the common $\Cai$ transient shape, we need to introduce other important both structural and functional myocyte components.
 
 \vspace{0.2cm}
-Cardiac myocytes have a long cylindrical shape. The sarcolemma encapsulating the cell invagenates and forms an extensive tubular network called \textit{transverse} (\acs{T}) \textit{tubules} which allows the AP to penetrate rapidly to the interior of the cell. Next to the T-tubules inside the cell lies the terminal cisternae of the \textit{sarco(endo)plasmic reticulum} (\acs{SR}), forming a closely coupled structure called \textit{dyad}. The SR contains a store of $\Ca$ ions, which are partially released into the \textit{sarcoplasm} (another name for the cytoplasm within the sarcolemma) when the cell is excited. As the AP travels along the sarcolemma and along the T-tubules, $\Ca$ enters the cell through the L-type $\Ca$ channels. $\Ca$ then binds to and activates the \textit{ryanodine receptors} (\acs{RyR}s), which are $\Ca$ release channels located on the SR, triggering further release of a much greater number of $\Ca$ ions from the SR. This process is termed \textit{calcium-induced calcium release}. $\Ca$ diffuses from the dyadic space into the cytosol, and then on the sarcomeric proteins, activating contraction.
+Cardiac myocytes have a long cylindrical shape. The sarcolemma encapsulating the cell invagenates and forms an extensive tubular network called \textit{transverse} (\acs{T}) \textit{tubules} which allows the AP to penetrate rapidly to the interior of the cell. Next to the T-tubules inside the cell lies the terminal cisternae of the \textit{sarco(endo)plasmic reticulum} (\acs{SR}), forming a closely coupled structure called \textit{dyad}. The SR contains a store of $\Ca$ ions, which are partially released into the \textit{sarcoplasm} (another name for the cytoplasm within the sarcolemma) when the cell is excited. As the AP travels along the sarcolemma and along the T-tubules, $\Ca$ enters the cell through the L-type $\Ca$ channels. $\Ca$ then binds to and activates the \textit{ryanodine receptors} (\acs{RyR}s), which are $\Ca$ release channels located on the SR, triggering further release of a much greater number of $\Ca$ ions from the SR. This process is termed \textit{calcium-induced calcium release}. $\Ca$ diffuses from the dyadic space into the cytosol, and then on the sarcomeric proteins which make up the contractile machinery, activating contraction.
 
 \vspace{0.2cm}
-As $\Ca$ is removed from the cytosol, $\Cai$ decreases so that $\Ca$ dissociates from TnC, causing the sarcomere to relax. $\Ca$ removal is achieved either via $\Ca$ extrusion from the cell or $\Ca$ uptake into intracellular $\Ca$ stores. Two mechanisms are known to be responsible for the extrusion of $\Ca$ from myocytes: NCX and the \textit{plasma membrane} $\Ca$ \textit{ATPase} (\acs{PMCA}). The majority of the $\Ca$ entering the cytosol during a $\Cai$ transient is taken up back into the SR via the \textit{sarcoplasmic} $\Ca$ \textit{ATPase} (\acs{SERCA}), with $2$ $\Ca$ ions transported into the SR for every $1$ ATP molecule consumed, returning the cardiac myocyte to its resting state.
-
-% \vspace{0.2cm}
-% We have seen that $\Ca$ homeostasis is maintained via a careful balancing of $\Ca$ fluxes through different transporters and channels.
-% When the balance of inward and outward $\Ca$ (but also other ions) currents is upset, the homeostasis is disrupted: this phenomenon is known to be at the base of many life threatening cardiovascular diseases.
+As $\Ca$ is removed from the cytosol, $\Cai$ decreases so that $\Ca$ dissociates from the sarcomeric proteins, causing the sarcomere to relax. $\Ca$ removal is achieved either via $\Ca$ extrusion from the cell or $\Ca$ uptake into intracellular $\Ca$ stores. Two mechanisms are known to be responsible for the extrusion of $\Ca$ from the cell: NCX and the \textit{plasma membrane} $\Ca$ \textit{ATPase} (\acs{PMCA}). The majority of the $\Ca$ entering the cytosol during a $\Cai$ transient is taken up back into the SR via the \textit{sarcoplasmic} $\Ca$ \textit{ATPase} (\acs{SERCA}), with $2$ $\Ca$ ions transported into the SR for every $1$ ATP molecule consumed, returning the cardiac myocyte to its resting state.
 
 
 %
@@ -105,29 +101,58 @@ The basic contractile unit of each myocyte is called \textit{sarcomere} and is m
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=0.66\textwidth]{figures/chapter01/fig_elsv_5.png}
-    \caption{Proteins organisation within the sarcomere. Adapted from~\cite{Guyton:2021}, Unit II, Chapter 6, Page 81, Figure 6-3. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
+    \caption{Proteins' organisation within the sarcomere. Adapted from~\cite{Guyton:2021}, Unit II, Chapter 6, Page 81, Figure 6-3. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
     \label{fig:my_label3}
 \end{figure}
 
 \vspace{0.2cm}
-In the heart, contraction is initiated by a rise in $\Cai$. $\Ca$ binds to the calcium-binding subunit of Tn, namely \textit{troponin C} (\acs{TnC}), on the thin filament, which causes Tm to move out of the actin groove exposing actin binding sites. The myosin heads in the thick filament can then bind to actin. The mysoin heads then rotate in the power stoke, pulling the thick filaments past the thin filaments, causing the sarcomere to contract. The mysoin heads then unbind and can reattach to actin to further contract the sarcomere. Each biochemical bond which is formed through acto-myosin interaction is called \textit{cross-bridge}, and constitutes an independent generator of force: the force generated within the entire sarcomere is therefore the cumulative contribution of many formed cross-bridges. 
+In the heart, contraction is initiated by a rise in $\Cai$. $\Ca$ binds to the calcium-binding subunit of Tn, namely \textit{troponin C} (\acs{TnC}), on the thin filament, which causes Tm to move out of the actin groove exposing actin binding sites. The thick filament, made of many myosin molecules, has its main body composed by centrally aligned myosin \textit{tails} and protruding myosin \textit{heads} exposed: these can now bind to actin. Contraction then follows as described by the \textit{sliding filament theory}. The attached myosin heads rotate in the \textit{power stoke}, pulling the thick filaments past the thin filaments, causing the sarcomere to contract. The myosin heads then unbind and can reattach to actin to further contract the sarcomere. The acto-myosin bond which is formed through attachment of myosin heads on the actin filament is called \textit{cross-bridge}, and constitutes an independent generator of force: the force generated within the entire sarcomere is therefore proportional to the number of attached myosin heads. 
 
-% cross-bridge theory states that actin and myosin form a protein complex (classically called actomyosin) by attachment of myosin head on the actin filament, thereby forming a sort of cross-bridge between the two filaments. The sliding filament theory is a widely accepted explanation of the mechanism that underlies muscle contraction.[6]
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=0.66\textwidth]{figures/chapter01/fig_elsv_10.png}
+    \caption{The sliding filament mechanisms at the basis of sarcomere contraction. Adapted from~\cite{Guyton:2021}, Unit II, Chapter 6, Page 84, Figure 6-8. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
+    \label{fig:powerstroke}
+\end{figure}
 
-% % Heart contraction is the result of sarcomere shortening, which is the result of thin filaments sliding into the thick filaments space. Myofilaments movement past each other is possible because of a repeated making, rotation and breaking of biochemical bonds between the thin and the thick filaments called \textit{crossbrigdes}. Crossbridges are simply myosin heads protruding from the side of the thick filament when they are attached to the thin filament. Their movement after being anchored and consequent detachment in turns shortens the sarcomere. Each single head represents an independent generator of force: the force generated within the entire sarcomere is therefore the cumulative contribution of many myosin heads.
 
-% \vspace{0.2cm}
-% The myofilaments effectively constitute the contractile machinery within the sarcomere. However, these can only initiate contraction in a $\Ca$-dependent manner. At rest when $\Cai$ is low, the thin filament regulatory Tn-Tm complex in fact blocks the myosin binding sites on actin, thereby sterically preventing crossbridges formation and tension generation. As $\Cai$ rises, $\Ca$ ions bind to the calcium-binding subunit of Tn, namely TnC and enable the movement of the Tn-Tm complex to expose the binding sites and allow acto-myosin interaction.
+% In
+% the ventricles, fibre orientation has been known to smoothly rotate
+% between endocardium and epicardium ever since original work by
+% Streeter (Streeter et al., 1969). This finding obtained by visual
+% inspection of tissue has been confirmed using various techniques,
+% such as histology (Streeter et al., 1969), optical techniques (Hucker
+% et al., 2008; Sands et al., 2005; Smith et al., 2008), and diffusion
+% tensor MRI (Gilbert et al., 2007) (Fig. 3). Peskin also used mechanical
+% principles to derive the fibre architecture of the ventricles with
+% a prediction of about 180  of rotation between endocardium and
+% epicardium (Peskin, 1989).
 
-
-
+% In addition to the fibrous structure described above, ventricular
+% myocytes are organised into laminar structures, also called sheets,
+% which were first described in detail by Feneis and Hort (Hort, 1957a,
+% 1957b, 1960). These sheets are typically 4e6 myocytes thick and are
+% separated by cleavage planes and layers of connective tissue.
 
 
 %
 %
 %
-\subsection{Cardiac physiologic anatomy and hemodynamics}
-The heart is composed of two muscular pumps, the right and left ventricles (\acs{RV}, \acs{LV}), each one filled from a contractile reservoir, respectively the right and left atria (\acs{RA}, \acs{LA}). The \textit{cardiac cycle} consists of a period of relaxation called \textit{diastole}, during which the ventricles fill with blood, followed by a period of contraction called \textit{systole}.
+\subsection{Cardiac physiologic anatomy}\label{sec:ch1cardiac_physiologic_anatomy}
+The heart is composed of two muscular pumps, the right and left ventricles (\acs{RV}, \acs{LV}), each one filled from a contractile reservoir, respectively the right and left atria (\acs{RA}, \acs{LA}). Atrial and ventricular cells are the two major types of cardiac muscle along with His-Purkinje system cells, although the latters are mainly responsable for controlling the rhythmical beating of the heart rather than generating tension. Cardiac muscle cells take the name of \textit{cardiomyoctytes}. As we will not deal with skeletal muscle in this thesis, we will refer to them as simply \textit{myocytes} with no ambiguities.
+
+\vspace{0.2cm}
+In the heart, myocytes are joined together at their ends by \textit{intercalated discs} to form long \textit{fibres}. At the intercalated discs, each myocyte effectively connects to a network of electrochemically coupled cells (\textit{syncytium}). This is due to the presence of \textit{gap junctions} where the membranes of two interfacing cells almost fuse with one another, allowing rapid diffusion of ions. Fibers are further arranged into \textit{sheets}, and many sheets form the main layer of the heart walls, namely the \textit{myocardium}, encapsulated within the \textit{endocardium} (internal layer) and the \textit{epicardium} (external layer). The sheets spread within the myocardium in many different and specific directions resulting in the heart contracting in a twisting motion, thereby maximising the amount of blood ejected from the ventricles. The epicardium is the innermost layer of a more complex structure called \textit{pericardium} which surrounds the heart, conferring both structural and mechanical stability and lubrification.
+
+\vspace{0.2cm}
+The atria and the ventricles are two distinct functional syncytia, meaning that activation in the atria does not directly pass to the ventricles: this is mediated by the AV bundle (Section~\ref{sec:ch1physiology_of_the_heart}). The two syncytia are in fact separated by fibrous, non-conductive tissue surrounding two openings called \textit{atrio-ventricular valves}. AV valves physically connect the \textit{blood pools} or \textit{chambers} in the left and the right heart enclosed within the atrial and ventricular syncytia. The heart chambers are further connected to the arterial \textit{pulmonary circulation} and \textit{systemic circulation} through the \textit{pulmonary} and \textit{aortic valves}, respectively, and to the venous same circulatory systems' part through the inferior and superior vena cava and four pulmonary veins. \todo{continue anatomy then adjust circulation}
+
+
+%
+%
+%
+\subsection{Cardiac cycle}\label{sec:ch1cardiac_cycle}
+The \textit{cardiac cycle} consists of a period of relaxation called \textit{diastole}, during which the ventricles fill with blood, followed by a period of contraction called \textit{systole}.
 
 \vspace{0.2cm}
 Atria and ventricles are separated by fibrous tissue surrounding two openings called \textit{atrioventricular valves}. Venous blood flows through \textit{superior} and \textit{inferior} \textit{venae cavae} and \textit{coronary sinus} for the RA, and through four \textit{pulmonary veins} for the LA to the atria, and then up to $\SI{80}{\percent}$ goes directly into the ventricles. Atrial contraction serves as primer pump to additionally fill the ventricles by a further $\sim\SI{20}{\percent}$. The volume of blood in a ventricle at the end of its \textit{filling} is called \textit{end-diastolic volume} (\acs{EDV}), while the corresponding chamber pressure is called \textit{end-diastolic pressure} (\acs{EDP}). Atrial systole is followed by ventricular systole. This is accompanied by a sharp ventricular pressure rise above the atrial pressure which makes the atrioventricular valves close by a reversed pressure gradient, preventing retrograde blood flow. However, as the developed pressure is not yet sufficient to push the \textit{aortic valve} and the \textit{pulmonary valve} open (respectively connecting the LV and RV with the \textit{systemic} and \textit{pulmonary} circulations), ventricle contraction initially occurs with no emptying. Cardiac muscle tension is thus increasing but little or no shortening of the muscle fibres is occurring, producing an \textit{isovolumetric contraction} (\acs{IVC}) with further pressure increase. When the ventricular pressure exceeds the arterial pressure, this opens the aortic and pulmonary valves and starts the ventricle \textit{ejection} of blood. The ejected blood volume also called \textit{stroke volume} (\acs{SV}) is only about two-thirds of the available EDV of blood: a residual blood volume, namely the \textit{end-systolic volume} (\acs{ESV}), remains. The proportion of ejected blood, i.e. SV divided by EDV, takes the name of \textit{ejection fraction} (\acs{EF}). The ejection rate is initially rapid and then progressively slows down. Since the rate at which the aortic blood is draining away into the peripheral circulation now exceeds ventricular ejection, ventricular pressure also begins to fall until reaching the \textit{end-systolic pressure} (\acs{ESP}) when the outflow valves close. At this point, both the ventricles become closed chambers again, and a rapid pressure fall occurs driven by the elastic recoil of the deformed and relaxing myocardium. This process takes place at constant blood volumes and is called \textit{isovolumetric relaxation} (\acs{IVR}). When the intraventricular pressures decrease back to their low diastolic levels, the atrioventricular valves open and blood floods in from the atria (which have themselves been filling up during ventricular systole) and the next cardiac cycle begins.
@@ -146,7 +171,7 @@ To summarise, isovolumetric contraction, ejection, isovolumetric relaxation and 
 %
 %
 %
-\section{Mathematical modelling of the heart}
+\section{Mathematical modelling of the heart}\label{sec:ch1mathematical_modelling_of_the_heart}
 Biophysically detailed mathematical models have been developed to better understand cardiac physiology at different scales of the system, from cell to the whole-organ levels, and to gain insight into the pathophysiology of complex cardiovascular diseases and help interpret clinical observations to improve patients treatment.
 
 
@@ -212,7 +237,7 @@ where
 \end{tabular}
 
 \vspace{0.2cm}
-Since Noble's work, many ionic cell models have been developed to represent the baseline physiology of both atrial, ventricular, and sinoatrial node myocytes~\cite{Corrado:2020}. These many currently available models all share the same cell membrane modelling strategy by viewing it as an electric circuit (equation~\eqref{eq:membranecurrent}), and mostly differ in single ion channels' kinetics representation.
+Since Noble's work, many ionic cell models have been developed to represent the baseline physiology of both atrial, ventricular, and SA node myocytes~\cite{Corrado:2020}. These many currently available models all share the same cell membrane modelling strategy by viewing it as an electric circuit (equation~\eqref{eq:membranecurrent}), and mostly differ in single ion channels' kinetics representation.
 
 \vspace{0.2cm}\noindent
 The current $I_{\textrm{ion}}$ introduced in equation~\eqref{eq:membranecurrent} is the result of ions moving across the cell membrane through an ion channel, which is made of pore-forming proteins that span the membrane lipid bi-layer. Ion channels are regulated by one or more \textit{gates}, which allow ions to pass according to whether they are in an open or closed state. Changes in an ion channel conformation takes place in response to chemical or electrical signals, temperature, or mechanical stress. Cardiac cells ion channels are mostly \textit{voltage-gated}, meaning that they change conformation with varying transmembrane voltage. Two approaches are commonly being used to represent ionic channels kinetics: the first uses the Hodgkin-Huxley (\acs{HH}) formulation~\cite{Hodgkin:1952} while the second (a generalisation of the first) uses continuous-time Markov chain models (\acs{MM})~\cite{Fink:2009}.
@@ -403,29 +428,11 @@ The coupling between the electrical and mechanical components of the model resid
 \subsection{Tissue electrophysiology}\label{sec:tissue_ep_math_modelling}
 A tissue model of cardiac electrophysiology is required to link cellular excitation through to whole organ electrical activation.
 
-% In
-% the ventricles, fibre orientation has been known to smoothly rotate
-% between endocardium and epicardium ever since original work by
-% Streeter (Streeter et al., 1969). This finding obtained by visual
-% inspection of tissue has been confirmed using various techniques,
-% such as histology (Streeter et al., 1969), optical techniques (Hucker
-% et al., 2008; Sands et al., 2005; Smith et al., 2008), and diffusion
-% tensor MRI (Gilbert et al., 2007) (Fig. 3). Peskin also used mechanical
-% principles to derive the fibre architecture of the ventricles with
-% a prediction of about 180  of rotation between endocardium and
-% epicardium (Peskin, 1989).
-
-% In addition to the fibrous structure described above, ventricular
-% myocytes are organised into laminar structures, also called sheets,
-% which were first described in detail by Feneis and Hort (Hort, 1957a,
-% 1957b, 1960). These sheets are typically 4e6 myocytes thick and are
-% separated by cleavage planes and layers of connective tissue.
+\vspace{0.2cm}
+When a single cardiac myocyte undergoes depolarisation, the evoked AP travels in the form of a depolarisation wave which is able to activate the neighbouring cells. We have seen that cardiac myocytes are microscopically organised into fibres, and further organised into sheets (Section~\ref{sec:ch1cardiac_physiologic_anatomy}). This peculiar spatial arrangment causes an anisotropic propagation of the depolarisation wavefront, which is faster along the principal axis of the fibre and slower in the other directions. Different factors can affect propagation, including the shape of the myocytes, the curvature of the wavefront, the relative positions of the gap junctions within the fibres, the extracellular matrix composition and the local vasculature~\cite{Clayton:2011}. In the $3$-dimensional ventricular tissue, the AP depolarisation wave propagation is mainly orthogonal, with the fibre, sheet, and sheet-normal being the three principal directions.
 
 \vspace{0.2cm}
-When a single cardiac myocyte undergoes depolarisation, the evoked AP travels in the form of a depolarisation wave which is able to activate the neighbouring cells. We have seen that cardiac myocytes are microscopically organised into fibres, and further organised into sheets (Section \todo{describe these previously}). This peculiar spatial arrangment causes an anisotropic propagation of the depolarisation wavefront, which is faster along the principal axis of the fibre and slower in the other directions. Different factors can affect propagation, including the shape of the myocytes, the curvature of the wavefront, the relative positions of the gap junctions within the fibres, the extracellular matrix composition and the local vasculature~\cite{Clayton:2011}. In the $3$-dimensional ventricular tissue, the AP depolarisation wave propagation is mainly orthogonal, with the fibre, sheet, and sheet-normal being the three principal directions.
-
-\vspace{0.2cm}
-Cardiac tissue electrophysiology can be mathematically described by first considering the tissue as a \textit{syncytium}\footnote{A syncytium is a continuum of cytoplasmic mass containing several nuclei, formed by fusion of cells.} of electrically coupled cells, and successively homogenising it to treat it as a smooth space. In the \textit{bidomain model}, both the intracellular (subscript $i$) and the extracellular (subscript $e$) spaces are considered as smooth and overlapping domains, separated by the cell membrane. The electric current densities in the two domains are described by the Ohm's law as:
+Cardiac tissue electrophysiology can be mathematically described by first considering the tissue as a syncytium of electrically coupled cells, and successively homogenising it to treat it as a smooth, continous space. In the \textit{bidomain model}, both the intracellular (subscript $i$) and the extracellular (subscript $e$) spaces are considered as smooth and overlapping domains, separated by the cell membrane. The electric current densities in the two domains are described by the Ohm's law as:
 %
 \begin{equation}\label{eq:ohmslaw}
     \mathbf{J}_{\text{d}} = -\mathbf{G}_{\text{d}}\nabla\phi_{\text{d}}\,,\quad\text{with}\quad \text{d}=i,\,e
@@ -616,7 +623,7 @@ Briefly, the heart is inflated to a prescribed end-diastolic pressure ($p$) and 
 %
 %
 %
-\section{Heart failure}
+\section{Heart failure}\label{sec:ch1heart_failure}
 Heart failure (\acs{HF}) affects $920,000$ people in the UK \cite{Bhf:2021} and increases the risk of cardiovascular disease, stroke and death \cite{Adelborg:2017, Henkel:2008}.
 
 
@@ -640,7 +647,7 @@ HFpEF is a heterogeneous disease mainly attributed to LV diastolic dysfunction. 
 %
 %
 %
-\section{Motivation and goals}
+\section{Motivation and goals}\label{sec:ch1motivation_and_goals}
 
 
 %
