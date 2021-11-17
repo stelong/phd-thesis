@@ -19,23 +19,29 @@ The Ishigami function is a function of...
 %
 \begin{align}\label{eq:ishigamifun}
 	& Y = \sin{X_1} + a\,\sin^2{X_2} + b\,X_3^4\sin{X_1}\,,\quad\text{with} \\
-	& X_i\,\,\sim\,\,\mathcal{U}([-\pi,\,\pi])\,\,\text{for}\,\,i=1,2,3\,\,\text{and}\,\, a,b>0
+	& X_i\,\,\sim\,\,\mathcal{U}([-\pi,\,\pi])\quad \text{for}\quad i=1,2,3\quad \text{and}\quad a,b>0
 \end{align}
 
-\begin{equation}
-	V = 1/2 + a^2/8 + b\pi^4/5 + b^2\pi^8/18
+\vspace{0.2cm}\noindent
+The model total variance is given in terms of $a$ and $b$ model parameters as:
+%
+\begin{equation}\label{eq:ifun_total_var}
+	V = \frac{1}{2} + a^2\,\frac{1}{8} + b\,\frac{\pi^4}{5} + b^2\,\frac{\pi^8}{18}
 \end{equation}
 
+\vspace{0.2cm}\noindent
+Sobol' sensitivity indices can be then calculated by dividing the partial variances (which are also given in terms of $a$ and $b$ parameters) by the total variance of equation~\eqref{eq:ifun_total_var}:
+%
 \begin{align}
-	& S_{1} = \frac{V_{1}}{V},\quad V_{1} = 1/2 + b\pi^4/5 + b^2\pi^8/50 \\
-	& S_{2} = \frac{V_{2}}{V},\quad V_{2} = a^2/8 \\
+	& S_{1} = \frac{V_{1}}{V},\quad V_{1} = \frac{1}{2} + b\,\frac{\pi^4}{5} + b^2\,\frac{\pi^8}{50} \\
+	& S_{2} = \frac{V_{2}}{V},\quad V_{2} = a^2\,\frac{1}{8} \\
 	& S_{3} = \frac{V_{3}}{V},\quad V_{3} = 0
 \end{align}
 
 \begin{align}
-	& S_{T1} = \frac{V_{T1}}{V},\quad V_{T1} = (1/2)(1+b\pi^4/5)^2 + 8b^2\pi^8/255 \\
+	& S_{T1} = \frac{V_{T1}}{V},\quad V_{T1} = \frac{1}{2}\left(1+b\,\frac{\pi^4}{5}\right)^2 + b^2\,\frac{8\pi^8}{255} \\
 	& S_{T2} = \frac{V_{T2}}{V},\quad V_{T2} = V_2 \\
-	& S_{T3} = \frac{V_{T3}}{V},\quad V_{T3} = 8b^2\pi^8/255
+	& S_{T3} = \frac{V_{T3}}{V},\quad V_{T3} = b^2\,\frac{8\pi^8}{255}
 \end{align}
 
 %
@@ -51,13 +57,19 @@ The G*-function is an extension of the Sobol' G-function proposed for...
 \end{align}
 
 \vspace{0.2cm}\noindent
-where $I[X_i+\delta_i]$ indicates the integer part of $X_i+\delta_i$. A low $a_i$ coefficient means important $X_i$ factor, while a high $a_i$ coefficients means negligible $X_i$ effect. If more than one $a_i$ coefficient is low, higher order interaction effects will be present as well. $\delta_i$ is a shift parameter, while $\alpha_i$ is a curvature parameter. The partial variances of the first order are given in terms of the curvature parameters $\alpha_i$s and of the $a_i$s coefficients:
+where $I[X_i+\delta_i]$ indicates the integer part of $X_i+\delta_i$. A low $a_i$ coefficient means important $X_i$ factor, while a high $a_i$ coefficients means negligible $X_i$ effect. If more than one $a_i$ coefficient is low, higher order interaction effects will be present as well. $\delta_i$ is a shift parameter, while $\alpha_i$ is a curvature parameter.
+
+\vspace{0.2cm}
+The partial variances of the first order are given in terms of the curvature parameters $\alpha_i$s and of the $a_i$s coefficients, while the partial total variances can be calculated as a function of the first-order ones:
 %
 \begin{align}
-	& V_i = \frac{\alpha_i^2}{(1+2\alpha_i)(1 + a_i)^2}\,,\quad\text{for}\quad i=1,\dots,k \\
-	& V_{Ti} = V_i \prod_{j=1,\,j\neq i}^{k}(1 + V_j)\,,\quad\text{for}\quad i=1,\dots,k
+	& V_i = \frac{\alpha_i^2}{(1+2\alpha_i)(1 + a_i)^2}\,,\quad\text{for}\quad i=1,\dots,k \label{eq:gfun_partial_var_first}\\
+	& V_{Ti} = V_i \prod_{j=1,\,j\neq i}^{k}(1 + V_j)\,,\quad\text{for}\quad i=1,\dots,k \label{eq:gfun_partial_var_total}
 \end{align}
 
+\vspace{0.2cm}\noindent
+Sobol' sensitivity indices can be then calculated by dividing the partial variances of equations~\eqref{eq:gfun_partial_var_first}--\eqref{eq:gfun_partial_var_total} by the total variance, which is again given as a function of the first-order partial variances as:
+%
 \begin{align}
 	& S_i = \frac{V_i}{V} \quad\text{and}\quad S_{Ti} = \frac{V_{Ti}}{V} \quad\text{for}\quad i=1,\dots,k,\,\quad\text{with} \\
 	& V = -1 + \prod_{i=1}^{k}(1 + V_i) 
@@ -67,6 +79,93 @@ where $I[X_i+\delta_i]$ indicates the integer part of $X_i+\delta_i$. A low $a_i
 %
 %
 \subsection{Simulator estimates}
+
+\begin{table}[ht!]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XXX}
+    \toprule
+    \tableheadline{Input factor} & \multicolumn{2}{c}{\spacedlowsmallcaps{Sobol' sensitivity index}} \\
+    \midrule   
+    & \tableheadline{$S_{i}$} & \tableheadline{$S_{Ti}$} \\
+    \cmidrule{2-3}
+    $X_{1}$ & $0.3139$ & $0.5576$ \\
+    $X_{2}$ & $0.4424$ & $0.4424$ \\
+    $X_{3}$ & $0.0000$ & $0.2437$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{Ishigami function Sobol' first-order and total effects' theoretical values for $a=7,\,b=0.1$.}
+    \label{tab:ifun_theo_vals}
+\end{table}
+
+\begin{table}[ht!]
+    \myfloatalign
+    \begin{tabularx}{\textwidth}{XXX}
+    \toprule
+    \tableheadline{Input factor} & \multicolumn{2}{c}{\spacedlowsmallcaps{Sobol' sensitivity index}} \\
+    \midrule   
+    & \tableheadline{$S_{i}$} & \tableheadline{$S_{Ti}$} \\
+    \cmidrule{2-3}
+    $X_{1}$   & $0.5607$ & $0.6705$ \\
+    $X_{2}$   & $0.1402$ & $0.2063$ \\
+    $X_{3}$   & $0.0623$ & $0.0958$ \\
+    $X_{4}$   & $0.0350$ & $0.0547$ \\
+    $X_{5}$   & $0.0224$ & $0.0353$ \\
+    $X_{6}$   & $0.0156$ & $0.0246$ \\
+    $X_{7}$   & $0.0114$ & $0.0181$ \\
+    $X_{8}$   & $0.0088$ & $0.0139$ \\
+    $X_{9}$   & $0.0069$ & $0.0110$ \\
+    $X_{10}$  & $0.0056$ & $0.0089$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{G*-function Sobol' first-order and total effects' theoretical values for $k=10$, $\alpha_i=1$, $\delta_i\,\,\sim\,\,\mathcal{U}([0,\,1])$, $a_i=i-1$, for $i=1,\dots,k$.}
+    \label{tab:gfun_theo_vals}
+\end{table}
+
+\begin{table}[ht!]
+    \myfloatalign
+    \begin{tabularx}{0.8\textwidth}{lX}
+    \toprule
+    \tableheadline{Multiplicative factor} & \tableheadline{$R^2$ score} \\
+    \midrule
+    $10\times$   & $0.3796$ \\
+    $20\times$   & $0.5187$ \\
+    $30\times$   & $0.5438$ \\
+    $40\times$   & $0.8563$ \\
+    $50\times$   & $0.9526$ \\
+    $60\times$   & $0.9770$ \\
+    $70\times$   & $0.9806$ \\
+    $80\times$   & $0.9862$ \\
+    $90\times$   & $0.9876$ \\
+    $100\times$  & $0.9941$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{Ishigami function emulators' predictivity as described by the $R^2$ score.}
+    \label{tab:ifun_scores}
+\end{table}
+
+\begin{table}[ht!]
+    \myfloatalign
+    \begin{tabularx}{0.8\textwidth}{lX}
+    \toprule
+    \tableheadline{Multiplicative factor} & \tableheadline{$R^2$ score} \\
+    \midrule
+    $10\times$   & $0.6470$ \\
+    $20\times$   & $0.7689$ \\
+    $30\times$   & $0.7534$ \\
+    $40\times$   & $0.7881$ \\
+    $50\times$   & $0.8332$ \\
+    $60\times$   & $0.8396$ \\
+    $70\times$   & $0.8427$ \\
+    $80\times$   & $0.8569$ \\
+    $90\times$   & $0.8805$ \\
+    $100\times$  & $0.8896$ \\
+    \bottomrule
+    \end{tabularx}
+    \caption{G*-function scores.}
+    \label{tab:gfun_scores}
+\end{table}
+
+
 
 
 %
