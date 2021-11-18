@@ -9,13 +9,13 @@
 %
 %
 \section{GPE-based GSA technique validation using analytic solutions for Sobol' indices of test functions}\label{chA:GPE-based_GSA_technique_validation_using_analytic_solutions_for_Sobol'_indices_of_test_functions}
-We validated the GPE-based GSA technique by emulating test functions whose Sobol' sensitivity indices can be calculated analytically. After training, the emulators were used to estimate the Sobol' indices and the estimates were compared with the corresponding known theoretical values.
+We validated the GPE-based GSA technique used throughout the entire work (second emulation-based approach presented in equations~\eqref{eq:emulpostsamplesgsa1}--\eqref{eq:emulpostsamplesgsa2}, Section~\ref{sec:ch3emulatorbasedestimates}) by emulating test functions whose Sobol' sensitivity indices could be calculated analytically. After training, the emulators were used to estimate the Sobol' indices and the estimates were compared with the corresponding known theoretical values.
 
 %
 %
 %
 \subsection{Ishigami function}
-The Ishigami function is a function of...
+The Ishigami function~\cite{Ishigami:1990} is commonly used in sensitivity analysis and uncertainty quantification studies \todo{REFSaltellibook}, because it exhibits strong nonlinearity and nonmonotonicity. This function is regulated by a vector of $D=3$ input variables $\mathbf{X}=(X_1,\,X_2,\,X_3)$, which are assumed to be independent and uniformly distributed in $[-\pi,\,\pi]$:
 %
 \begin{align}\label{eq:ishigamifun}
 	& Y = \sin{X_1} + a\,\sin^2{X_2} + b\,X_3^4\sin{X_1}\,,\quad\text{with} \\
@@ -23,52 +23,53 @@ The Ishigami function is a function of...
 \end{align}
 
 \vspace{0.2cm}\noindent
-The model total variance is given in terms of $a$ and $b$ model parameters as:
+The function output total variance is given in terms of the $a$ and $b$ parameters:
 %
 \begin{equation}\label{eq:ifun_total_var}
 	V = \frac{1}{2} + a^2\,\frac{1}{8} + b\,\frac{\pi^4}{5} + b^2\,\frac{\pi^8}{18}
 \end{equation}
 
 \vspace{0.2cm}\noindent
-Sobol' sensitivity indices can be then calculated by dividing the partial variances (which are also given in terms of $a$ and $b$ parameters) by the total variance of equation~\eqref{eq:ifun_total_var}:
+Sobol' sensitivity indices are then calculated by dividing the partial variances (which are also given in terms of the $a$ and $b$ parameters) by the total variance of equation~\eqref{eq:ifun_total_var}:
 %
 \begin{align}
-	& S_{1} = \frac{V_{1}}{V},\quad V_{1} = \frac{1}{2} + b\,\frac{\pi^4}{5} + b^2\,\frac{\pi^8}{50} \\
-	& S_{2} = \frac{V_{2}}{V},\quad V_{2} = a^2\,\frac{1}{8} \\
+	& S_{1} = \frac{V_{1}}{V},\quad V_{1} = \frac{1}{2}\left(1 + b\frac{\pi^4}{5}\right)^2 \\
+	& S_{2} = \frac{V_{2}}{V},\quad V_{2} = a^2\frac{1}{8} \\
 	& S_{3} = \frac{V_{3}}{V},\quad V_{3} = 0
 \end{align}
 
 \begin{align}
-	& S_{T1} = \frac{V_{T1}}{V},\quad V_{T1} = \frac{1}{2}\left(1+b\,\frac{\pi^4}{5}\right)^2 + b^2\,\frac{8\pi^8}{255} \\
+	& S_{T1} = \frac{V_{1}}{V},\quad V_{T1} = \frac{1}{2}\left(1 + b\frac{\pi^4}{5}\right)^2 + b^2\frac{8\pi^8}{225} \\
 	& S_{T2} = \frac{V_{T2}}{V},\quad V_{T2} = V_2 \\
-	& S_{T3} = \frac{V_{T3}}{V},\quad V_{T3} = b^2\,\frac{8\pi^8}{255}
+	& S_{T3} = \frac{V_{T3}}{V},\quad V_{T3} = b^2\frac{8\pi^8}{225}
 \end{align}
+
 
 %
 %
 %
 \subsection{G*-function}
-The G*-function is an extension of the Sobol' G-function proposed for...
+The G*-function proposed by Saltelli~\cite{Saltelli:2010} is a modified version of the classic Sobol' G-function \todo{REFSobol} which is commonly used for sensitivity analysis and uncertainty quantification purposes as its input variables' importance can be directly controlled by tuning specific function parameters. Saltelli's G*-function is a shifted and curved G-function, and overcomes the issue when low-discrepancy quasi-random Sobol' sequences (whose initial sequence point is $1/2$) are used to estimate the Sobol' sensitivity indices, since the classic G-function has got a singularity in each $i$-th dimension exactly at the point $X_{i}=1/2$. The G*-function is regulated by an arbitrary positive integer number $D$ of input variables $\mathbf{X}=(X_1,\,\dots,\,X_D)$, assumed to be independent and uniformly distributed in $[0,\,1]$: 
 %
-\begin{align}\label{eq:sobolgfun}
-	& Y = \prod_{i=1}^{k}g_i(X_i),\quad\text{with} \\
+\begin{align}\label{eq:gstarfun}
+	& Y = \prod_{i=1}^{D}g_i(X_i),\quad\text{with} \\
 	& g_i(X_i)=\frac{(1+\alpha_i)\vert 2(X_i+\delta_i-I[X_i+\delta_i])-1\vert^{\alpha_i}+a_i}{1+a_i}\quad\text{and} \\
-	& X_i\,\,\sim\,\,\mathcal{U}([0,\,1]),\,\,\alpha_i > 0,\,\,\delta_i\in [0,\,1],\,\,a_i>0\quad\text{for}\,\,i=1,\dots,k
+	& X_i\,\,\sim\,\,\mathcal{U}([0,\,1]),\,\,\alpha_i > 0,\,\,\delta_i\in [0,\,1],\,\,a_i>0\quad\text{for}\,\,i=1,\dots,D
 \end{align}
 
 \vspace{0.2cm}\noindent
-where $I[X_i+\delta_i]$ indicates the integer part of $X_i+\delta_i$. A low $a_i$ coefficient means important $X_i$ factor, while a high $a_i$ coefficients means negligible $X_i$ effect. If more than one $a_i$ coefficient is low, higher order interaction effects will be present as well. $\delta_i$ is a shift parameter, while $\alpha_i$ is a curvature parameter.
+where $I[X_i+\delta_i]$ indicates the integer part of $X_i+\delta_i$. Parameter $a_i$ controls the importance of input factor $X_i$ into affecting the total variance of the function output. A low $a_i$ means an important $X_i$ factor, while a high $a_i$ indicates a negligible $X_i$ effect. If more than one $a_i$ parameters is low, higher order interaction effects will be present as well. $\delta_i$ is the parameter through which the classic G-function is shifted, while the $\alpha_i$ parameter changes the curvature of the function. The choice of $\delta_i=0$ and $\alpha_i=1,\,\forall\,i=1,\dots,D$ gives back the original G-function formulation.
 
 \vspace{0.2cm}
-The partial variances of the first order are given in terms of the curvature parameters $\alpha_i$s and of the $a_i$s coefficients, while the partial total variances can be calculated as a function of the first-order ones:
+The partial variances of the first order are given in terms of the $a_i$s parameters and of the curvature parameters $\alpha_i$s, while the partial total variances are calculated as a function of the first-order ones:
 %
 \begin{align}
-	& V_i = \frac{\alpha_i^2}{(1+2\alpha_i)(1 + a_i)^2}\,,\quad\text{for}\quad i=1,\dots,k \label{eq:gfun_partial_var_first}\\
-	& V_{Ti} = V_i \prod_{j=1,\,j\neq i}^{k}(1 + V_j)\,,\quad\text{for}\quad i=1,\dots,k \label{eq:gfun_partial_var_total}
+	& V_i = \frac{\alpha_i^2}{(1+2\alpha_i)(1 + a_i)^2}\,,\quad\text{for}\quad i=1,\dots,D \label{eq:gfun_partial_var_first}\\
+	& V_{Ti} = V_i \prod_{j=1,\,j\neq i}^{D}(1 + V_j)\,,\quad\text{for}\quad i=1,\dots,D \label{eq:gfun_partial_var_total}
 \end{align}
 
 \vspace{0.2cm}\noindent
-Sobol' sensitivity indices can be then calculated by dividing the partial variances of equations~\eqref{eq:gfun_partial_var_first}--\eqref{eq:gfun_partial_var_total} by the total variance, which is again given as a function of the first-order partial variances as:
+Sobol' sensitivity indices are then calculated by dividing the partial variances of equations~\eqref{eq:gfun_partial_var_first}--\eqref{eq:gfun_partial_var_total} by the total variance, which is again given as a function of the first-order partial variances as:
 %
 \begin{align}
 	& S_i = \frac{V_i}{V} \quad\text{and}\quad S_{Ti} = \frac{V_{Ti}}{V} \quad\text{for}\quad i=1,\dots,k,\,\quad\text{with} \\
@@ -79,6 +80,10 @@ Sobol' sensitivity indices can be then calculated by dividing the partial varian
 %
 %
 \subsection{Simulator estimates}
+We first calculated the Sobol' first-order and total sensitivity indices using the forward models (the functions themselves, or simulators) and the estimators presented in equations~\eqref{eq:gsaestimators}--\eqref{eq:varianceestimate}, Section~\ref{sec:ch3estimatingsobolsensitivityindices}. In particular, we used the Ishigami function (equation~\eqref{eq:ishigamifun}) with $a=7,\,b=0.1$, and we used the G*-function (equation~\eqref{eq:gstarfun}) with $D=10$ and $\alpha_i=1$, $\delta_i\,\,\sim\,\,\mathcal{U}([0,\,1])$, $a_i=i-1$, for $i=1,\dots,D$. This particular particular choice of the $a_i$ coefficients coupled with the chosen problem dimension of $D=10$ ensured that at least one "very-important'' and one "non-important'' input factors were present~\cite{Saltelli:2010,Marrel:2008}, respectively modelled using parameter values $a_1=0$ and $a_{10}=9$. We calculated the Sobol' sensitivity indices by testing $5$ different values (spaced evenly on a log scale) in the range $[10^2,\,10^4]$ for the number of samples $N$ (introduced in Section~\ref{sec:ch3estimatingsobolsensitivityindices}) to be used when approximating the partial and total variances' integrals. We recall that the cost of calculating all the main and total effects is $N\times(D+2)$ model evaluations. The theoretical Sobol' indices' values are summarised in Tables~\ref{tab:ifun_theo_vals}--\ref{tab:gfun_theo_vals} for the Ishigami and G*- functions, respectively.
+
+\vspace{0.2cm}\noindent
+In Figures~\ref{fig:ishigami_theoretical}--\ref{fig:gstar_theoretical} the estimated Sobol' sensitivity indices are compared with the respective theoretical values. Bootstrap (number of resamples $=100$) $\SI{95}{\percent}$ confidance intervals for the estimates are also provided. We can see that the estimates perfectly match the theoratical values, with better matching as the number of quadrature formulae samples increases. Although an absolute statement cannot be derived about the optimal choice of $N$ by simply looking at the two presented example test functions, we decided to fix $N=10^3$ in the next analysis for emulation-based estimates, to have a balance between small enough bootstrap confidence intervals, good match in the theoretical values and not too high number of model evaluations to be performed (although the latter will not be an issue anymore when using emulators).
 
 \begin{table}[ht!]
     \myfloatalign
@@ -96,6 +101,18 @@ Sobol' sensitivity indices can be then calculated by dividing the partial varian
     \caption{Ishigami function Sobol' first-order and total effects' theoretical values for $a=7,\,b=0.1$.}
     \label{tab:ifun_theo_vals}
 \end{table}
+
+\begin{figure}[ht!]
+    \myfloatalign
+    \subfloat[Main effects.]
+    {\label{fig:ishigami_s1_theo}
+    \includegraphics[width=\linewidth]{figures/chapterA/Ishigami_S1.pdf}}\quad
+    \subfloat[Total effects.]
+    {\label{fig:ishigami_st_theo}
+    \includegraphics[width=\linewidth]{figures/chapterA/Ishigami_ST.pdf}}
+    \caption{Ishigami function Sobol' first-order (main) and total sensitivity indices estimated using the simulator.}
+    \label{fig:ishigami_theoretical}
+\end{figure}
 
 \begin{table}[ht!]
     \myfloatalign
@@ -117,9 +134,29 @@ Sobol' sensitivity indices can be then calculated by dividing the partial varian
     $X_{10}$  & $0.0056$ & $0.0089$ \\
     \bottomrule
     \end{tabularx}
-    \caption{G*-function Sobol' first-order and total effects' theoretical values for $k=10$, $\alpha_i=1$, $\delta_i\,\,\sim\,\,\mathcal{U}([0,\,1])$, $a_i=i-1$, for $i=1,\dots,k$.}
+    \caption{G*-function Sobol' first-order and total effects' theoretical values for $D=10$ and $\alpha_i=1$, $\delta_i\,\,\sim\,\,\mathcal{U}([0,\,1])$, $a_i=i-1$, for $i=1,\dots,k$.}
     \label{tab:gfun_theo_vals}
 \end{table}
+
+\begin{figure}[ht!]
+    \myfloatalign
+    \subfloat[Main effects.]
+    {\label{fig:gstar_s1_theo}
+    \includegraphics[width=\linewidth]{figures/chapterA/GStar_S1.pdf}}\quad
+    \subfloat[Total effects.]
+    {\label{fig:gstar_st_theo}
+    \includegraphics[width=\linewidth]{figures/chapterA/GStar_ST.pdf}}
+    \caption{G*-function Sobol' first-order (main) and total sensitivity indices estimated using the simulator.}
+    \label{fig:gstar_theoretical}
+\end{figure}
+
+
+%
+%
+%
+\clearpage
+\subsection{Emulator estimates}
+We wanted to test whether we could obtain reliable estimates of the Sobol' sensitivity indices this time by using emulators of the above presented test functions. For this purpose, we sampled points from a LHD over the hypercubes $[-\pi,\,pi]^3$ and $[0,\,1]^{10}$ for respectively the Ishigami and the G*- functions.
 
 \begin{table}[ht!]
     \myfloatalign
@@ -142,6 +179,7 @@ Sobol' sensitivity indices can be then calculated by dividing the partial varian
     \caption{Ishigami function emulators' predictivity as described by the $R^2$ score.}
     \label{tab:ifun_scores}
 \end{table}
+
 
 \begin{table}[ht!]
     \myfloatalign
@@ -167,16 +205,10 @@ Sobol' sensitivity indices can be then calculated by dividing the partial varian
 
 
 
-
 %
 %
 %
-\subsection{Emulator estimates}
-
-
-%
-%
-%
+\cleardoublepage
 \section{HM validation using syntatic data}\label{chA:HM_validation_using_syntatic_data}
 We validated HM technique against \textit{synthetic data}, generated using the \textit{in silico} model of SHAM rat heart contraction mechanics (Section~\ref{sec:ch4ratheartcontractionmodel}).
 
