@@ -327,7 +327,7 @@ We finally apply \textit{maximum likelihood-II} (ML-II) type of inference. This 
 \end{equation}
 
 \noindent
-Gradient descent optimisation algorithms are commonly used \todo{REF} to minimise an objective function (or \textit{loss function}), which in this case is simply the log marginal likelihood with inverted sign:
+Gradient descent optimisation algorithms are commonly used~\cite{Ruder:2016} to minimise an objective function (or \textit{loss function}), which in this case is simply the log marginal likelihood with inverted sign:
 %
 \begin{equation}
     J(\boldsymbol{\theta}) := -\log{p(\mathbf{y}\;\vert\; X,\,\boldsymbol{\theta})}
@@ -457,7 +457,7 @@ At each HM wave, we will perform the following operations.
 \end{description}
 
 \vspace{0.2cm}
-In \textsc{step 1}, we have seen that NROY points are to be sampled such that they uniformely cover the high-dimensional input parameter space. This is a trivial task for the first wave's space where e.g. a Latin hypercube design (\acs{LHD}) \todo{REF} can be used. In fact, the initial space is normally given as a $D$-dimensional hypercube, i.e. given as the Cartesian product of $D$ $1$-dimensional intervals. However, the situation is more complicated starting from wave $2$, as this time NROY points are to be sampled such that they uniformely cover the $X_{NIMP}$ space, which in general has a not well defined topological structure. For wave $2$ and successive waves, we therefore employ the \textit{cloud} technique as described in~\cite{Coveney:2018}. Briefly, every point in the $X_{NIMP}$ space is used to generate new points by sampling from a multivariate normal distribution centred on that point and scaled into the current range of the known $X_{NIMP}$ points, and then further scaled by a factor so that only $10\%$ of the new points are retained. These generated points are then tested against the implausibility condition using the emulators of the current wave, and only the non-implausible points are retained. The queried number of points to be sampled for generating the NROY are finally selected using the \textit{part-and-select} algorithm~\cite{Salomon:2013}, which ensures that these are the best well-spread representatives of all the non-implausible points generated using the multivariate normal distribution. 
+In \textsc{step 1}, we have seen that NROY points are to be sampled such that they uniformely cover the high-dimensional input parameter space. This is a trivial task for the first wave's space where e.g. a Latin hypercube design (\acs{LHD})~\cite{Iman:1981} can be used. In fact, the initial space is normally given as a $D$-dimensional hypercube, i.e. given as the Cartesian product of $D$ $1$-dimensional intervals. However, the situation is more complicated starting from wave $2$, as this time NROY points are to be sampled such that they uniformely cover the $X_{NIMP}$ space, which in general has a not well defined topological structure. For wave $2$ and successive waves, we therefore employ the \textit{cloud} technique as described in~\cite{Coveney:2018}. Briefly, every point in the $X_{NIMP}$ space is used to generate new points by sampling from a multivariate normal distribution centred on that point and scaled into the current range of the known $X_{NIMP}$ points, and then further scaled by a factor so that only $10\%$ of the new points are retained. These generated points are then tested against the implausibility condition using the emulators of the current wave, and only the non-implausible points are retained. The queried number of points to be sampled for generating the NROY are finally selected using the \textit{part-and-select} algorithm~\cite{Salomon:2013}, which ensures that these are the best well-spread representatives of all the non-implausible points generated using the multivariate normal distribution. 
 
 \vspace{0.2cm}
 In \textsc{step 5}, refocusing on the $X_{NIMP}$ space will not take place if a stopping criterion is reached. HM process can be stopped by observing at each wave the proportions of space's volume cut-out-of/retained-in the current $NROY$ space. If the percentage of $X_{NIMP}$ space volume out of the total $NROY$ space volume does not decrease in consecutive waves, this means that we have reached \textit{convergence of the non-implausible space}, and we can stop. A more advanced stopping criterion consists in looking at the emulator variance for each $X_{NIMP}$ point and compare it with the sum of the observation error and model discrepancy variances: if the former is significantly smaller than this sum, and the same trend is observed throughout the entire $X_{NIMP}$ space, this means that increasing the accuracy of the emulators for the next wave will not be of any use and the space will not be cut, so that we can stop. Finally, a combination of percentage of $X_{NIMP}$ space's volume reduction analysis and of variance analysis can be used to create arbitrarely complex stopping criteria.
@@ -479,7 +479,7 @@ By assuming that for our specific biophysical system model $f$ (=$f_{simul}$) on
 \end{equation}
 
 \noindent
-If $f$ is square integrable over the unit hypercube $\Omega := [0,\,1]^{D}$, the decomposition~\eqref{eq:hdmr} is unique given that \todo{REF Sobol1993}:
+If $f$ is square integrable over the unit hypercube $\Omega := [0,\,1]^{D}$, the decomposition~\eqref{eq:hdmr} is unique given that~\cite{Sobol:2003}:
 %
 \begin{align}\label{eq:integralformfi}
     & \int_0^1 f_{i_1,\,i_2,\,\dots,\,i_s}(X_{i_1},\,X_{i_2},\,\dots,\,X_{i_s})\,dX_{i_{w}} = 0\,,\quad\text{with} \\
@@ -624,7 +624,7 @@ while for both the effects' denominators we will use the following estimate:
 \end{equation}
 
 \noindent
-In addition, the initial matrix $\mathbf{M}$ will not be sampled uniformely in the unit hypercube $\Omega$, but it will be sampled in the same space using a low-discrepancy, quasi-random Sobol' sequence \todo{REF}, in order to obtain better estimates as described in~\cite{Saltelli:2010}. It is worth mentioning that every column of the obtained matrices $\mathbf{A}$ and $\mathbf{B}$ will be rescaled to the respective original interval $[p_i^{inf}, p_i^{sup}]$ of the component $X_i$ it represents, before calculating $f(\mathbf{A})$, $f(\mathbf{B})$ and $f(\mathbf{A}_{\mathbf{B}}^{(i)})s$. This is done by using the simple bijection:
+In addition, the initial matrix $\mathbf{M}$ will not be sampled uniformely in the unit hypercube $\Omega$, but it will be sampled in the same space using a low-discrepancy, quasi-random Sobol' sequence~\ref{Sobol:1967}, in order to obtain better estimates as described in~\cite{Saltelli:2010}. It is worth mentioning that every column of the obtained matrices $\mathbf{A}$ and $\mathbf{B}$ will be rescaled to the respective original interval $[p_i^{inf}, p_i^{sup}]$ of the component $X_i$ it represents, before calculating $f(\mathbf{A})$, $f(\mathbf{B})$ and $f(\mathbf{A}_{\mathbf{B}}^{(i)})s$. This is done by using the simple bijection:
 %
 \begin{align}
     b \colon [0,\,1] &\to [p_i^{inf}, p_i^{sup}] \\
