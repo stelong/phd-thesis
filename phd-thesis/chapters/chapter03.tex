@@ -23,7 +23,7 @@ We want to create a quantitative link of cell, tissue and hemodynamic properties
 %
 %
 \section{Model input parameters}\label{sec:ch3modelinputparameters}
-The presented full rat heart contraction model is regulated by $71$, $17$, $18$ parameters for respectively the ionic, cell contraction, tissue $+$ boundary components. We selected specific parameters as representative regulators of each of these sub-models, for a total of $8$ parameters. Specifically, $2$ parameters ($\Caif$, $\koff$) described the thin filament kinetics, $2$ parameters ($\kxb$, $\tref$) described the thick filament kinetics, and $4$ parameters ($\p$, $\pao$, $\Z$, $\Cone$) described boundary conditions and tissue properties. The $8$ parameters considered are described in Table~\ref{tab:paramswithdef}. A fixed calcium transient simulated using the adopted ionic model was used as electrical stimulus for the whole heart activation.
+The presented multi-scale rat heart contraction model is regulated by $71$, $17$, $18$ parameters for respectively the ionic, cell contraction, tissue $+$ boundary components. We selected specific parameters as representative regulators of each of these sub-models, for a total of $8$ parameters. Specifically, $2$ parameters ($\Caif$, $\koff$) described the thin filament kinetics, $2$ parameters ($\kxb$, $\tref$) described the thick filament kinetics, and $4$ parameters ($\p$, $\pao$, $\Z$, $\Cone$) described boundary conditions and tissue properties. The $8$ parameters considered are described in Table~\ref{tab:paramswithdef}. A fixed calcium transient simulated using the adopted ionic model was used as electrical stimulus for the whole heart activation.
 
 \begin{table}[!ht]
     \myfloatalign
@@ -608,7 +608,7 @@ In total, only $N\times (D + 2)$ model evaluations, corresponding to $f(\mathbf{
 
 
 \vspace{0.2cm}
-We will make use of the Sobol-Saltelli~\cite{Saltelli:2010} estimator for the main effect's and of the Jansen \todo{REF} estimator for the total effect's numerators calculation:
+We will make use of the Sobol'-Saltelli~\cite{Saltelli:2010} estimator for the main effect's and of the Jansen~\cite{Jansen:1999} estimator for the total effect's numerators calculation:
 %
 \begin{align}\label{eq:gsaestimators}
     & \mathbb{V}_{X_i}[\mathbb{E}_{\mathbf{X}_{\sim i}}[Y|X_i]] \approx \frac{1}{N}\sum_{j=1}^{N}f(\mathbf{B})_j\,(f(\mathbf{A}_{\mathbf{B}}^{(i)})_j - f(\mathbf{A})_j) \\
@@ -687,7 +687,7 @@ with sample space $\omega\in [0,\,1]$. We can finally use the expectation of the
 \end{equation}
 
 \noindent
-and the variance (and more generally the entire distribution) as an indicator of the sensitivity index accuracy \todo{REF Marrel2008}.
+and the variance (and more generally the entire distribution) as an indicator of the sensitivity index accuracy~\cite{Marrel:2009}.
 
 \vspace{0.2cm}
 So far we have considered Sobol' indices estimates without taking into account the numerical error which is present when expecations and variances integrals are approximated using quadrature formulas. This uncertainty in the Sobol' indices estimates is commonly quantified using the \textit{bootstrapping} technique~\cite{Archer:1997}. This consists in resampling (i.e. sampling with replacement) $B$ times the MC points from the unit hypercube $\Omega$, and each time re-calculating the Sobol' indices. A \textit{moment method} is then used to construct confidence intervals from the bootstrap distribution, giving a symmetric distribution around the mean estimate of the Sobol' index value. Good practice is to use $B=100$ \todo{REF}, although even if one would want to use a higher value for better accuracy, it is worth noticing that the most expensive part will still reside in the model evaluation process rather than in the resampling process.

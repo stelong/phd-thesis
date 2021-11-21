@@ -182,9 +182,9 @@ where
 \vspace{0.3cm}\noindent
 At the resting sarcomere configuration ($\lambda=1$), length-dependence effects are not present and no consequent shift in the calcium sensitivity is observed ($\Caift=\Caif$).
 
-
 % The parametrization of the velocity dependence was based on sinusoidal analysis experiments as done in \cite{palmer2007}. detailed data on the velocity-dependent response are often required.
 % The \emph{fading memory model} was employed to represent the velocity response as several strain-rate-dependent variables decay with time. An advantage of this model is that it is independent of the contraction model, as it can be added as an addition after modelling isometric tension and length-dependence. Use of the FMM model allows the tension development dependence on crossbridge kinetics to be phenomenologically represented. It 
+
 
 %
 %
@@ -428,8 +428,14 @@ have shown that heterogeneous activation patterns have negligible impact in the 
 We applied spatial boundary conditions to the mesh throughout all the mechanics solution process. Specifically, we constrained all the ventricles basal plane mesh nodes along the apex-base axis, and allowed no movement along any direction one mesh node on the interior LV wall. This constraint prevented free rotation and translation without limiting the deformation~\cite{Land:2012}.
 
 \vspace{0.2cm}
-We also set hemodynamic boundary conditions to control blood flow and pressures at the computational domain boundaries, thereby coupling the biventricular heart with the rest of the body circulatory system. We used a three-element Windkessel model~\cite{Westerhof:1971} to regulate ejection, and we used the Windkessel model generalised formulation (equation~\eqref{eq:windkgeneral}) to regulate the other phases of the cardiac cycle, namely initial preload filling, isovolumetric contraction, isovolumetric relaxation and diastolic filling, as described in Section~\ref{sec:hemodynamics_math_modelling}.
+We also set hemodynamic boundary conditions to control blood flow and pressures at the computational domain boundaries, thereby coupling the biventricular heart with the rest of the body circulatory system. We used a three-element Windkessel model~\cite{Westerhof:1971} to regulate ejection, and we used the Windkessel model generalised formulation (equation~\eqref{eq:windkgeneral}) to regulate the other phases of the cardiac cycle, namely initial preload filling, isovolumetric contraction, isovolumetric relaxation and diastolic filling, as described in Section~\ref{sec:hemodynamics_math_modelling}. The RV boundary condition pressures (atrial and pulmonary artery) were set to be $1/3$ of the equivalent LV values. The RV Windkessel parameters were scaled to be equal to $R/3$, $Z/3$, $3C$ from the reference LV Windkessel parameter set ($R$, $Z$, $C$).
 
+
+%
+%
+%
+\section{Simulation protocol}\label{sec:ch2simulationprotocol}
+The whole-organ full cardiac cycle was simulated using the protocol described in~\cite{Land:2012, Land:2012*a, Land:2015}. Briefly, dynamic changes in the LV and RV cavities' boundary conditions were cyclically applied. During diastole, a fixed atrial preload pressure and filling resistance was applied. At activation, the cavity boundary conditions were switched to an isovolumetric constraint in both chambers. When each chamber reached pre-set aortic and pulmonary artery pressures, a three-element Windkessel model boundary condition was applied to each chamber to represent the aortic and pulmonary artery afterload. Once each chamber stopped ejecting, an isovolumetric boundary condition was applied to represent isovolumetric contraction. Once the cavity pressure fell below its respective atrial pressure, the heart returned to the diastolic cavity boundary conditions to complete the PV loop.
 
 
 %
@@ -437,3 +443,6 @@ We also set hemodynamic boundary conditions to control blood flow and pressures 
 %
 \section{Concluding remarks}\label{sec:ch2concludingremarks}
 \todo{write}
+% We modelled the healthy rat heart using a $3$D biventricular contraction model previously~\cite{Longobardi:2020} fitted to anatomic, structural, and hemodynamic and volumetric functional data from sham-operated controls~\cite{Roe:2017}. This rat model will be referred to as ``SHAM" throughout the entire work. At the cellular level, ion fluxes and calcium dynamics were simulated using the Gattoni et al.~\cite{Gattoni:2017} model of rat left ventricular myocyte electrophysiology at $\SI{37}{\celsius}$ and $\SI{6}{\hertz}$ pacing frequency. Active tension generation was described using the Land et al.~\cite{Land:2012*a} model of sarcomere contraction, comprising thin and thick filament dynamics, and accounting for sarcomere-length and -velocity dependencies. Left and right ventricular (RV) anatomy was represented by a cubic Hermite finite element mesh~\cite{Lamata:2011} fitted to manually segmented MRI images related to a time point of the cardiac cycle which was half-way through diastole to approximate the stress-free configuration. Rule-based fibres~\cite{Bayer:2012} were included, with a transmural variation of $\SI{-60}{\degree}$ to $\SI{80}{\degree}$ from epicardium to endocardium. Passive material properties were modelled using the transversly isotropic cardiac strain energy function proposed by Guccione~\cite{Guccione:1991}. This was further combined with a Lagrange multiplier scheme to enforce incompressibility, coupled with a penalty term to \st{allow for nearly-incompressibility which} improve\st{d} stability of mechanics simulations~\cite{Land:2012, Land:2015}. The calcium transient was assumed not to vary spatially and it homogeneously activated contraction throughout the ventricular walls. Spatial boundary conditions were applied by constraining all the ventricle basal plane mesh nodes along the apex-base axis, and by allowing no movement along any direction one mesh node on the interior LV wall to prevent free rotation and translation of the mesh during the solution process without limiting the deformation~\cite{Land:2012*a}. The hemodynamics (blood flow and pressures) at the computational domain boundaries was controlled by coupling the heart with the rest of the body circulatory system via a three-element Windkessel model~\cite{Westerhof:1991}.
+
+% \vspace{0.2cm}

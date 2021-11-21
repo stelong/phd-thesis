@@ -152,7 +152,7 @@ The affinity is described by the Hill coefficient $h$ and the half-maximal inhib
 \end{equation}
 
 \vspace{0.2cm}\noindent
-For each given compound, we calculated $B$ for each channel when $C$ was set to equally-spaced values in a log-molar space. By subtracting the obtained $B$ values from $1$, we obtained a matrix of scaling coefficients for the channels' conductances, representing the fractions of active channels in the presence of the compounds at different concentrations. We tested $13$ equally-spaced values (in $-\log{\SI{}{\Molar}}$ units) in the range $[4,\,10]$ (extremes included), which corresponded to compounds' concentrations between $\SI{e-10}{\Molar}$ and $\SI{e-4}{\Molar}$. We then run the Gattoni et al.~\cite{Gattoni:2017} model by scaling the ion channels' conductances to simulate the action of different concentrations of each compound at cellular level and collected the resulting $\Ca$ transients (last beat curves of stead-state, $5000$ beats simulations). An example of $\Ca$ transients obtained after simulating the effect of verapamil is provided in Figure~\ref{fig:calciumverapamil}.
+For each given compound, we calculated $B$ for each channel when $C$ was set to equally-spaced values in a log-molar space. By subtracting the obtained $B$ values from $1$, we obtained a matrix of scaling coefficients for the channels' conductances, representing the fractions of active channels in the presence of the compounds at different concentrations. We tested $13$ equally-spaced values (in $-\log{\SI{}{\Molar}}$ units) in the range $[4,\,10]$ (extremes included), which corresponded to compounds' concentrations between $\SI{e-10}{\Molar}$ and $\SI{e-4}{\Molar}$. We then run the Gattoni et al.~\cite{Gattoni:2017} model by scaling the ion channels' conductances to simulate the action of different concentrations of each compound at cellular level and collected the resulting $\Ca$ transients (last beat curves of limit cycle, $5000$ beats simulations). An example of $\Ca$ transients obtained after simulating the effect of verapamil is provided in Figure~\ref{fig:calciumverapamil}.
 
 \begin{figure}[!ht]
     \myfloatalign
@@ -177,11 +177,55 @@ We can notice that in the $\tp$ and $\rtf$ cases the response is not following a
 \vspace{0.2cm}
 We finally used the full multi-scale healthy rat model (Section) to simulate the LV features' values using as an input the obtained $\Ca$ transients and the remaining parameters fixed to the reference values. This allowed us to obtain the LV features' change from baseline values in a dose-dependent manner. PeakP, maxdP and mindP features' simulated responses to different doses of all the tested compounds are reported in Figure~\ref{fig:LVfeatsallcompoundsrespcurves}.
 
+% \begin{figure}[!ht]
+%     \myfloatalign
+%     \includegraphics[width=1\textwidth]{figures/chapter06/lvp_features_responses_to_all_drugs.pdf}
+%     \caption{LV pressure features' dose-response curves for the eight CiPA compounds. Simulated PeakP, maxdP and mindP features are given as percentages of the respective control values, and are displayed as dots in blue variants colour-coded with the compound doses.}
+%     \label{fig:LVfeatsallcompoundsrespcurves}
+% \end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \caption{{\bf Qualitative change in three LV pressure features observed in literature rat experiments for eight different CiPA compounds.} Down-facing arrow means that the specific LV feature decreases from its control value with the specific compound; left-right arrow means that the compound has no effect on that feature; dash symbol means that the specific information could not be retrieved from literature.}
+    \begin{tabular}{lcccl}
+    \hline
+    \textbf{Compound}           & \multicolumn{3}{c}{\textbf{LV feature}} & \textbf{References} \\
+    \hline
+    & PeakP & maxdP & mindP & \\
+    \hline
+    bepridil       & $\downarrow$ & $-$ & $-$ & \cite{Leiris:1984, Amsterdam:1988, Huizer:1987} \\
+    chlorpromazine & $\downarrow$ & $-$ & $-$ & \cite{Katsuoka:1989, Langslet:1971, Sakai:2017} \\
+    diltiazem      & $\downarrow$ & $\downarrow$ & $\downarrow$ & \cite{Flaim:1982, Koltai:1989, Dong:1997} \\
+    mexiletine     & $\leftrightarrow$ & $\downarrow$ & $-$ & \cite{Kamiyama:1995, Hesketh:2020, Marshall:1981} \\
+    nifedipine     & $\downarrow$ & $\downarrow$ & $\downarrow$ & \cite{Dong:1997, Saponara:2007, Nishimura:1992} \\
+    ranolazine     & $\leftrightarrow$ & $\leftrightarrow$ & $\leftrightarrow$ & \cite{Wang:2007, Hwang:2009, Wang:2019} \\
+    sotalol        & $\downarrow$ & $\downarrow$ & $\leftrightarrow$ & \cite{Mackin:2019, Hoffmeister:1988, Lamontagne:1989} \\
+    verapamil      & $\downarrow$ & $\downarrow$ & $\downarrow$ & \cite{Simonovic:2019, Stojic:2017, Kolar:1990} \\
+    \hline
+    \end{tabular}
+    \label{tab:drugvalidationrefs}
+\end{table}
+
 \begin{figure}[!ht]
     \myfloatalign
-    \includegraphics[width=1\textwidth]{figures/chapter06/lvp_features_responses_to_all_drugs.pdf}
-    \caption{LV pressure features' dose-response curves for the eight CiPA compounds. Simulated PeakP, maxdP and mindP features are given as percentages of the respective control values, and are displayed as dots in blue variants colour-coded with the compound doses.}
-    \label{fig:LVfeatsallcompoundsrespcurves}
+    \includegraphics[width=\textwidth]{figures/chapter06/simulated_emulated_cipa_compounds_effects_on_lv_pressure_features_with_exp_data.pdf}
+    \caption{LV pressure features' dose-response curves for the eight CiPA compounds. Simulated (dots in blue variants, colour-coded with the compound doses), emulated (full lines and shaded areas in blue) and experimentally observed (dots in red) PeakP, maxdP and mindP features' values are given as percentages of the respective control values. Experimental data taken from~\cite{Amsterdam:1988} (bepridil and verapamil -- PeakP), \cite{Langslet:1971} (chlorpromazine, PeakP), \cite{Koltai:1989} (diltiazem -- PeakP and maxdP), \cite{Saponara:2007} (nifedipine -- PeakP), \cite{Wang:2007} (ranolazine -- PeakP, maxdP and mindP), \cite{Kolar:1990} (verapamil -- maxdP).}
+    \label{fig:LVfeatsalldrugsrespcurves}
+\end{figure}
+
+Fig.~\ref{fig:LVfeatsalldrugsrespcurves} shows that both the model (simulator) and the surrogate model (emulator) predict the same LV features' trend of change from control in the presence of increasing compounds' concentrations. In the case of LV features' decreasing trends, the emulators' predictions were more accurate for lower compounds' concentrations than for higher compounds' concentrations, where we observed increased uncertainties and unphysiological (negative) predicted values (see Discussion of the main manuscript).
+
+\vspace{0.2cm}\noindent
+The simulated and predicted LV features' percentage changes were also compared with quantitative experimental measurements~\cite{Amsterdam:1988,Langslet:1971,Koltai:1989,Saponara:2007,Wang:2007,Kolar:1990} of compounds' effects when these were available (Table~\ref{tab:drugvalidationrefs}). Experimental data (highlighted in red in Fig.~\ref{fig:LVfeatsalldrugsrespcurves}) confirmed the trend (decreasing or unchanged) simulated/predicted by the simulator/emulator, although with a non-negligible mismatch in the absolute values (see Discussion of the main manuscript) for bepridil, chlorpromazine, diltiazem and nifedipine compounds (more pronounced) and ranolazine and verapamil compounds (mild).
+
+\vspace{0.2cm}
+The compounds' \textit{in silico} effect on the pressure features of the right ventricle (RV) are reported as dose-response curves in Fig.~\ref{fig:LVRVfeatsalldrugsrespcurves}, and compared with the predicted response seen for the LV. We can see that the simulated change in function in the RV is consistent with the LV.
+
+\begin{figure}[!ht]
+    \myfloatalign
+    \includegraphics[width=\textwidth]{figures/chapter06/simulated_cipa_compounds_effects_on_lv_rv_pressure_features.pdf}
+    \caption{LV and RV pressure features' dose-response curves for the eight CiPA compounds. Simulated PeakP, maxdP and mindP features' values are given as percentages of the respective control values, and are represented as dots in blue/orange variants, colour-coded with the compound doses for respectively the left/right ventricles. Black dots indicate the control values when no compound is present.}
+    \label{fig:LVRVfeatsalldrugsrespcurves}
 \end{figure}
 
 \noindent
@@ -201,7 +245,7 @@ These features' qualitative responses after \textit{in silico} compound ``admini
     mexiletine     & $\leftrightarrow$ & $\downarrow$ & $-$ & \cite{Kamiyama:1995, Hesketh:2020, Marshall:1981} \\
     nifedipine     & $\downarrow$ & $\downarrow$ & $\downarrow$ & \cite{Dong:1997, Saponara:2007, Nishimura:1992} \\
     ranolazine     & $\leftrightarrow$ & $\leftrightarrow$ & $\leftrightarrow$ & \cite{Wang:2007, Hwang:2009, Wang:2019} \\
-    sotalol        & $\downarrow$ & $\downarrow$ & $\leftrightarrow$ & \cite{Mackin:2019, Peralta:2000, Hoffmeister:1988} \\
+    sotalol        & $\downarrow$ & $\downarrow$ & $\leftrightarrow$ & \cite{Mackin:2019, Lamontagne:1989, Hoffmeister:1988} \\
     verapamil      & $\downarrow$ & $\downarrow$ & $\downarrow$ & \cite{Simonovic:2019, Stojic:2017, Kolar:1990} \\
     \hline
     \end{tabular}
