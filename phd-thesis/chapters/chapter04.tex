@@ -5,14 +5,14 @@
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we personalise the $3$D biventricular rat heart contraction mechanics mathematical model to the specific clinical data obtained from a cohort of sham-operated and $6$-weeks-post-surgery aortic banded rats. We specifically fit one representative model for each cohort (control and diseased ones). Models' sensitivities are then characterised. Differences in the parameter space between the two models confirm that impaired cardiac function is linked to altered sarcomere kinetics. 
+    In this chapter, we personalise the $3$D biventricular rat heart contraction mechanics mathematical model to clinical data obtained from a cohort of sham-operated and $6$-weeks-post-surgery aortic banded rats. We specifically fit one representative model for each cohort (control and diseased ones). Models' sensitivities are then characterised. Differences in the parameter space between the two models confirm that impaired cardiac function is linked to altered sarcomere kinetics.
 \end{remark}
 
 
 %
 %
 %
-\section{Motivation}
+\section{Motivation}\label{sec:ch4motivation}
 \todo{this is Abstract copy-pasted from the paper: adapt it to thesis}
 
 \noindent
@@ -39,7 +39,7 @@ We also seek to quantitatively characterise the AB rats' impaired LV contractile
 %
 %
 %
-\section{Rat data}
+\section{Rat data}\label{sec:ch4rat_data}
 We used healthy control and diseased rat data from experimental studies conducted by R{\o}e et al. \cite{Roe:2017}. Briefly, \textit{aortic banding} (\acs{AB}) was performed in male Wistar rats ($n=29$), while \textit{sham-operated} (\acs{SHAM}) rats ($n=23$) served as controls. \textit{In vivo} cardiac function was characterised by echocardiography six weeks after surgery. The criterion for inclusion in the AB group was posterior wall thickening ($>1.9$ mm). A cohort of rats ($n=8$, $n=15$ from SHAM, AB groups, respectively) underwent an examination with \textit{magnetic resonance imaging} (\acs{MRI}). Rats in the AB cohort showed a preserved systolic function (ejection fraction and fractional shortening). Concentric LV hypertrophy arose, as an increase in LV mass and wall thickness was observed. Moreover, evidence of reduced peak early diastolic velocity (e’) and increased early mitral inflow velocity / mitral annular early diastolic velocity (E/e’) confirmed an impaired diastolic function in the rats.
 
 
@@ -562,8 +562,9 @@ In the implausibility measure (equation ($4$) in the Supplementary materials) ca
 
 Finally, global sensitivity indices were estimated using the mean of the available emulator, ignoring the uncertainty of the emulator itself. However, the emulator's uncertainty was small, therefore the estimated sensitivity indices were still able to capture the parameters' influence on the model outputs (see Supplementary materials for an example on ejection fraction feature). This can be further improved in future studies by looking for alternative estimations of the sensitivity indices which directly make use of the emulator mean and variance.
 
-\vspace{0.2cm}\noindent
-\todo{this is Conclusion copy-pasted from the paper: adapt it to thesis}
 
-\noindent
-We have shown that GPE can effectively be used to robustly and rapidly constrain multi-scale cardiac models from organ-scale measurements. The obtained virtual bi-ventricular rat hearts are a valuable system to be used for further investigation of heart failure. Moreover, we demonstrated that our GPE-based GSA approach enables the computationally efficient identification of key components in 3D ventricular mechanics, giving a deeper insight into the link between cell, tissue, shape and boundary conditions properties and organ-scale function.
+%
+%
+%
+\section{Summary}\label{sec:ch4summary}
+\todo{this is Conclusion copy-pasted from the paper: adapt it to thesis.} We have shown that GPE can effectively be used to robustly and rapidly constrain multi-scale cardiac models from organ-scale measurements. The obtained virtual bi-ventricular rat hearts are a valuable system to be used for further investigation of heart failure. Moreover, we demonstrated that our GPE-based GSA approach enables the computationally efficient identification of key components in 3D ventricular mechanics, giving a deeper insight into the link between cell, tissue, shape and boundary conditions properties and organ-scale function.

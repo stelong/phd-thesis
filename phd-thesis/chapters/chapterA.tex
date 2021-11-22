@@ -8,7 +8,7 @@
 %
 %
 %
-\section{GPE-based GSA technique validation using analytic solutions for Sobol' indices of test functions}\label{chA:GPE-based_GSA_technique_validation_using_analytic_solutions_for_Sobol'_indices_of_test_functions}
+\section[GPE-based GSA technique validation using analytic solutions for Sobol' indices of test functions]{GPE-based GSA technique validation using analytic\\ solutions for Sobol' indices of test functions}\label{sec:chAGPE-based_GSA_technique_validation_using_analytic_solutions_for_Sobol'_indices_of_test_functions}
 We validated the GPE-based GSA technique used throughout the entire work (second emulation-based approach presented in equations~\eqref{eq:emulpostsamplesgsa1}--\eqref{eq:emulpostsamplesgsa2}, Section~\ref{sec:ch3emulatorbasedestimates}) by emulating test functions whose Sobol' sensitivity indices could be calculated analytically. After training, the emulators were used to estimate the Sobol' indices and the estimates were compared with the corresponding known theoretical values.
 
 %
@@ -79,7 +79,7 @@ Sobol' sensitivity indices are then calculated by dividing the partial variances
 %
 %
 %
-\subsection{Simulator estimates}\label{chA:simulator_estimates}
+\subsection{Simulator estimates}\label{sec:chAsimulator_estimates}
 We first calculated the Sobol' first-order and total sensitivity indices using the forward models (the functions themselves, or simulators) and the estimators presented in equations~\eqref{eq:gsaestimators}--\eqref{eq:varianceestimate}, Section~\ref{sec:ch3estimatingsobolsensitivityindices}. In particular, we used the Ishigami function (equation~\eqref{eq:ishigamifun}) with $a=7,\,b=0.1$, and we used the G*-function (equation~\eqref{eq:gstarfun}) with $D=10$ and $\alpha_i=1$, $\delta_i\,\,\sim\,\,\mathcal{U}([0,\,1])$, $a_i=i-1$, for $i=1,\dots,D$. This particular particular choice of the $a_i$ coefficients coupled with the chosen problem dimension of $D=10$ ensured that at least one "very-important'' and one "non-important'' input factors were present~\cite{Saltelli:2010,Marrel:2008}, respectively modelled using parameter values $a_1=0$ and $a_{10}=9$. We calculated the Sobol' sensitivity indices by testing $5$ different values (spaced evenly on a log scale) in the range $[10^2,\,10^4]$ for the number of samples $N$ (introduced in Section~\ref{sec:ch3estimatingsobolsensitivityindices}) to be used when approximating the partial and total variances' integrals. We recall that the cost of calculating all the main and total effects is $N\times(D+2)$ model evaluations.
 
 \vspace{0.2cm}
@@ -155,11 +155,11 @@ The theoretical Sobol' indices' values are summarised in Tables~\ref{tab:ifun_th
 %
 %
 \clearpage
-\subsection{Emulator estimates}\label{chA:emulator_estimates}
+\subsection{Emulator estimates}\label{sec:chAemulator_estimates}
 We wanted to test whether we could obtain reliable estimates of the Sobol' sensitivity indices this time by using emulators of the above presented test functions.
 
 \vspace{0.2cm}
-For this purpose, we sampled points $\mathbf{X}$ from a LHD over the hypercubes $[-\pi,\,\pi]^3$ and $[0,\,1]^{10}$ for respectively the Ishigami and the G*- functions. We then simulated these points $Y=f_{simul}(\mathbf{X})$ to form a dataset $(\mathbf{X},\,Y)$ to be used as learning sample. The leaning sample size was given by $\vert\mathbf{X}\vert=\text{factor}\times D$, being $D$ the problem dimension ($D=3$ and $D=10$ for the Ishigami and G*- functions, respectively). Common practice for computer model experiments is to take at least $10\times D$ learning samples in Gaussian process regression settings~\cite{Rasmussen:2006}. In this study, we tested different multiplicative factors, taken from the set $\{10,\,20,\,30,\dots,\,100\}$. We also simulated an additional set of points (size $=\SI{20}{\percent}$ of the biggest learning sample used) to be used as a testing dataset for evaluating each of the trained emulators predictivity, as described by the coefficient of determination ($R^2$ score). After training and for each emulator, $1,000$ emulator posterior distribution's samples were used to obtain Sobol' sensitivity indices' distributions as described in Section~\ref{sec:ch3emulatorbasedestimates}. In this case, we only investigated the uncertainty in the estimates arising from the use of the emulators, while the quadrature formulae numerical errors were neglected (and not estimated using the bootstrap technique as done in Section~\ref{chA:simulator_estimates}).
+For this purpose, we sampled points $\mathbf{X}$ from a LHD over the hypercubes $[-\pi,\,\pi]^3$ and $[0,\,1]^{10}$ for respectively the Ishigami and the G*- functions. We then simulated these points $Y=f_{simul}(\mathbf{X})$ to form a dataset $(\mathbf{X},\,Y)$ to be used as learning sample. The leaning sample size was given by $\vert\mathbf{X}\vert=\text{factor}\times D$, being $D$ the problem dimension ($D=3$ and $D=10$ for the Ishigami and G*- functions, respectively). Common practice for computer model experiments is to take at least $10\times D$ learning samples in Gaussian process regression settings~\cite{Rasmussen:2006}. In this study, we tested different multiplicative factors, taken from the set $\{10,\,20,\,30,\dots,\,100\}$. We also simulated an additional set of points (size $=\SI{20}{\percent}$ of the biggest learning sample used) to be used as a testing dataset for evaluating each of the trained emulators predictivity, as described by the coefficient of determination ($R^2$ score). After training and for each emulator, $1,000$ emulator posterior distribution's samples were used to obtain Sobol' sensitivity indices' distributions as described in Section~\ref{sec:ch3emulatorbasedestimates}. In this case, we only investigated the uncertainty in the estimates arising from the use of the emulators, while the quadrature formulae numerical errors were neglected (and not estimated using the bootstrap technique as done in Section~\ref{sec:chAsimulator_estimates}).
 
 \vspace{0.2cm}
 The obtained $R^2$ scores are summarised in Tables~\ref{tab:ifun_scores}--\ref{tab:gfun_scores} for the Ishigami and G*- functions, respectively. We can see that the emulator predictivity generally increases as the number of learning samples increases, although this behaviour eventually saturates, meaning that "the more points'' does not always imply "the better accuracy''. In Figures~\ref{fig:ishigami_emulator_estimates}--\ref{fig:gstar_emulator_estimates}, the estimated Sobol' sensitivity indices are compared with the respective theoretical values. The estimated values are given as distributions, and each distribution is plotted against the multiplicative factor used to build the training dataset of the corresponding emulator which was used to obtain the distribution itself. We can see that the distributions progressively center around (i.e. their mean values match) the theoretical values as the number of learning samples used to train the emulator increases. In particular, for both the Ishigami and G*- functions we can see that at least $40\times D$ learning samples were necessary to achieve a satisfactory match with theoretical values. Again, we cannot derive absolute statements concerning what is the optimal choice of the multiplicative factor, and investigating this goes beyond the scope of the project. Nevertheless, we have demonstrated the feasibility of estimating Sobol' sensitivity indices with good accuracy by using emulators of both example $3$D and $10$D nonlinear and nonmonotonic computer codes.
@@ -238,7 +238,7 @@ The obtained $R^2$ scores are summarised in Tables~\ref{tab:ifun_scores}--\ref{t
 %
 %
 \cleardoublepage
-\section{HM validation using syntatic data}\label{chA:HM_validation_using_syntatic_data}
+\section{HM validation using synthetic data}\label{sec:chAHM_validation_using_synthetic_data}
 We validated HM technique against \textit{synthetic data}, generated using the \textit{in silico} model of SHAM rat heart contraction mechanics (Section~\ref{sec:ch4ratheartcontractionmodel}).
 
 \vspace{0.2cm}
