@@ -76,7 +76,7 @@ we have that:
     & h = h(\mathbf{q}) = \nxb\,\ntrpn\,(1-\trpnf) \label{eq:h}
 \end{align}
 
-Parameters appearing in equations~\eqref{eq:pCa50params}--\eqref{eq:hparams} are defined in Table~\ref{tab:baselineparamsvalues}, while the Land et al.~\cite{Land:2012} model equations, their steady-state solutions and details for deriving equations~\eqref{eq:pCa50}--\eqref{eq:h} can be found in the Supplementary material.
+Parameters appearing in equations~\eqref{eq:pCa50params}--\eqref{eq:hparams} were introduced in Section\todo{fixa}Table~\ref{tab:bestfitparametersvalues}, while the Land et al.~\cite{Land:2012} model equations, their steady-state solutions and details for deriving equations~\eqref{eq:pCa50}--\eqref{eq:h} can be found in the Supplementary material.
 
 
 %
@@ -110,45 +110,14 @@ is such that
 We computed this scaling coefficient for each parameter $\p_i$ by solving for $\alpha_i$ equation~\eqref{eq:delta} (see results in Section~\ref{sec:changespCa50result1}).
 
 \vspace{0.2cm}
-In the two-parameter case, we proceeded as follows. We allowed $2$ parameters to take equally-spaced values in the range obtained as a $\pm\SI{50}{\percent}$ perturbation around their baseline values (Table~\ref{tab:baselineparamsvalues}). We then generated a $2$D uniform grid from all the combinations of $2$ parameter values, and used the Land et al.~\cite{Land:2012} cell contraction model to calculate the $\pCaf$ value at each parameter point of the grid. By plotting the resulting $\pCaf$ values across the whole grid as a heat map, we could discern regions in the $2$D parameter space which share the same $\pCaf$ value (isolines). The same process was repeated for every pair of parameters coming from vector $\mathbf{p}$ (equation~\eqref{eq:pCa50params}), which was shown to regulate the $\pCaf$ feature of the F-pCa curve in equation~\eqref{eq:pCa50} (see results in Section~\ref{sec:changespCa50result2}).
+In the two-parameter case, we proceeded as follows. We allowed $2$ parameters to take equally-spaced values in the range obtained as a $\pm\SI{50}{\percent}$ perturbation around their baseline values (Table~\ref{tab:bestfitparametersvalues}). We then generated a $2$D uniform grid from all the combinations of $2$ parameter values, and used the Land et al.~\cite{Land:2012} cell contraction model to calculate the $\pCaf$ value at each parameter point of the grid. By plotting the resulting $\pCaf$ values across the whole grid as a heat map, we could discern regions in the $2$D parameter space which share the same $\pCaf$ value (isolines). The same process was repeated for every pair of parameters coming from vector $\mathbf{p}$ (equation~\eqref{eq:pCa50params}), which was shown to regulate the $\pCaf$ feature of the F-pCa curve in equation~\eqref{eq:pCa50} (see results in Section~\ref{sec:changespCa50result2}).
 
 
 %
 %
 %
 \subsection{A quantitative link between sarcomere properties and whole heart function}\label{subsec:quantlink}
-To quantitatively link sarcomere properties to whole heart function, we employed a personalised model of $3$D biventricular healthy rat heart contraction~\cite{Longobardi:2020}, which integrates the Land et al.~\cite{Land:2012} cell contraction model (Section~\ref{sec:cellcontr}) in the context of whole-organ simulations. The full $3$D model simulation input comprises: $4$ parameters encoding the shape of the intracellular $\Ca$ transient used to electrically activate the myocardium, namely $\dca$, $\ampl$, $\tp$, $\rtf$; $8$ parameters regulating the sarcomere, namely $\Caif$, $\betaone$, $\koff$, $\ntrpn$, $\kxb$, $\nxb$, $\trpnf$, $\tref$; $4$ parameters describing boundary hemodynamics conditions and tissue properties, namely $\p$, $\pao$, $\Z$, $\Cone$. Each parameter definition and baseline value is reported in Table~\ref{tab:baselineparamsvalues}. The model simulation output comprises LV volume and pressure transients and the associated pressure-volume (PV) loop. LV contractile function is described using scalar quantities of clinical interest extracted from the model output, such as end-diastolic volume (EDV), end-systolic volume (ESV), SV and EF.
-
-\begin{table}[h!]
-    \myfloatalign
-    \begin{tabularx}{\textwidth}{XXX}
-        \toprule
-        \tableheadline{Parameter} & \tableheadline{Definition} & \tableheadline{Value} \\
-        \midrule
-        $\dca$ & $\Ca$ diastolic concentration & $\SI{0.4632}{\micro\Molar}$ \\
-        $\ampl$ & $\Ca$ transient amplitude & $\SI{1.0341}{\micro\Molar}$ \\
-        $\tp$ & time to peak $\Ca$ concentration & $\SI{25.9474}{\milli\second}$ \\
-        $\rtf$ & time to $\Ca$ half relaxation & $\SI{40.0807}{\milli\second}$ \\
-        \phantom{$\rtf$} & from peak $\Ca$ concentration & \\
-        $\Caif$ & reference $\Ca$ thin filament sensitivity & $\SI{2.1723}{\micro\Molar}$ \\
-        $\betaone$ & phenomenological tension length & $\SI{-1.5}{}$ \\
-        \phantom{$\betaone$} & -dependence scaling factor & \phantom{$\SI{-1.5}{}$} \\
-        $\koff$ & unbinding rate of $\Ca$ from TnC & $\SI{0.0515}{\per\milli\second}$ \\
-        $\ntrpn$ & $\Ca$-TnC binding degree of cooperativity & $\SI{2.0}{}$ \\
-        $\kxb$ & cross-bridges cycling rate & $\SI{0.0172}{\per\milli\second}$ \\
-        $\nxb$ & cross-bridge formation degree of cooperativity & $\SI{5.0}{}$ \\
-        $\trpnf$ & fraction of $\Ca$-TnC bounds for half maximal & $\SI{0.35}{}$ \\
-        \phantom{$\trpnf$} & cross-bridges activation & \phantom{$\SI{0.35}{}$} \\
-        $\tref$ & maximal reference tension & $\SI{156.067}{\kilo\pascal}$ \\
-        $\p$ & end-diastolic pressure & $\SI{0.3122}{\kilo\pascal}$ \\
-        $\pao$ & systolic aortic pressure & $\SI{7.1136}{\kilo\pascal}$ \\
-        $\Z$ & aortic characteristic impedance & $\SI{5.6234}{\mmHg\second\per\milli\liter}$ \\
-        $\Cone$ & tissue stiffness & $\SI{0.9141}{\kilo\pascal}$ \\
-        \bottomrule
-    \end{tabularx}
-    \caption{Model parameters with Longobardi et al.~\cite{Longobardi:2020} baseline values.}
-    \label{tab:baselineparamsvalues}
-\end{table}
+To quantitatively link sarcomere properties to whole heart function, we employed a personalised model of $3$D biventricular healthy rat heart contraction~\cite{Longobardi:2020}, which integrates the Land et al.~\cite{Land:2012} cell contraction model (Section~\ref{sec:cellcontr}) in the context of whole-organ simulations. The full $3$D model simulation input comprises: $4$ parameters encoding the shape of the intracellular $\Ca$ transient used to electrically activate the myocardium, namely $\dca$, $\ampl$, $\tp$, $\rtf$; $8$ parameters regulating the sarcomere, namely $\Caif$, $\betaone$, $\koff$, $\ntrpn$, $\kxb$, $\nxb$, $\trpnf$, $\tref$; $4$ parameters describing boundary hemodynamics conditions and tissue properties, namely $\p$, $\pao$, $\Z$, $\Cone$. Each parameter definition and baseline value is reported in Table~\ref{tab:bestfitparametersvalues}. The model simulation output comprises LV volume and pressure transients and the associated pressure-volume (PV) loop. LV contractile function is described using scalar quantities of clinical interest extracted from the model output, such as end-diastolic volume (EDV), end-systolic volume (ESV), SV and EF.
 
 
 %
@@ -165,7 +134,7 @@ The full model can be viewed as a multi-scale function that maps the $16$ input 
 This map takes the name of \textit{simulator}.
 
 \vspace{0.2cm}
-We firstly investigated the EDV, ESV, SV and EF features' dependence on model parameters. For this purpose, we run the simulator at parameter sets $\mathbf{x}_i,\,i=1,\,\dots,\,128$ where all the components were fixed to their baseline values (Table~\ref{tab:baselineparamsvalues}) but one component, which instead was taking $128$ equally-spaced values in the $\pm\SI{50}{\percent}$ range of perturbation around its baseline value. The simulator was therefore run $128$ times, and each time LV features' values were collected. In this way, we were able to obtain the relationship between each of the LV features and one model input parameter. The entire process was repeated by changing the free parameter to be each of the $\Caif$, $\koff$, $\ntrpn$, $\trpnf$ parameters in turn. These parameters were chosen as they directly modulated the $\pCaf$ feature of the F-pCa curve, as seen in equation~\eqref{eq:pCa50}.
+We firstly investigated the EDV, ESV, SV and EF features' dependence on model parameters. For this purpose, we run the simulator at parameter sets $\mathbf{x}_i,\,i=1,\,\dots,\,128$ where all the components were fixed to their baseline values (Table~\ref{tab:bestfitparametersvalues}) but one component, which instead was taking $128$ equally-spaced values in the $\pm\SI{50}{\percent}$ range of perturbation around its baseline value. The simulator was therefore run $128$ times, and each time LV features' values were collected. In this way, we were able to obtain the relationship between each of the LV features and one model input parameter. The entire process was repeated by changing the free parameter to be each of the $\Caif$, $\koff$, $\ntrpn$, $\trpnf$ parameters in turn. These parameters were chosen as they directly modulated the $\pCaf$ feature of the F-pCa curve, as seen in equation~\eqref{eq:pCa50}.
 
 
 %
@@ -242,7 +211,7 @@ We show that an observed change in $\pCaf$ can be caused by multiple different c
     \myfloatalign
     \begin{tabularx}{\textwidth}{XX}
         \toprule
-        \tableheadline{Parameter} & \tableheadline{Scaling coefficient $\boldsymbol{\alpha}$} \\
+        \tableheadline{Parameter} & \tableheadline{Scaling coefficient $\alpha$} \\
         \midrule
         & \\
         $\Caif$ & $10^{\Delta}$ \\ & \\
@@ -252,13 +221,13 @@ We show that an observed change in $\pCaf$ can be caused by multiple different c
         $\ntrpn$ & $\dfrac{\log\left(\frac{\koff}{\kon}\frac{\trpnf}{1-\trpnf}\right)}{\Delta\cdot\ntrpn+\log\left(\frac{\koff}{\kon}\frac{\trpnf}{1-\trpnf}\right)}$ \\ & \\
         \bottomrule
     \end{tabularx}
-    \caption{By scaling each parameter $p_i$ by the corresponding $\alpha_i$ coefficient, the cellular contraction model simulates a $\pCaf$ value which is shifted by exactly $\Delta$ units from the reference value.}
+    \caption{The mapping of sarcomere properties to F-pCa variations is non-unique. By scaling each parameter $p_i$ by the corresponding $\alpha_i$ coefficient, the cellular contraction model simulates a $\pCaf$ value which is shifted by exactly $\Delta$ units from the reference value.}
     \label{tab:alphavalues}
 \end{table}
 
 \begin{figure}[h!]
     \myfloatalign
-    \includegraphics[width=0.6\textwidth]{figures/chapter08/Fig4.pdf}
+    \includegraphics[width=0.8\textwidth]{figures/chapter08/Fig4.pdf}
     \caption{Different parameters can be individually perturbed to achieve the very same shift in the force-calcium relationship. Example showing $\SI{2}{\percent}$ leftwards (upper plot) and rightwards (bottom plot) shifts of the reference $\pCaf$ value. As $\trpnf$ and $\ntrpn$ also regulate the force-pCa curve's Hill coefficient (equation~\eqref{eq:h}), notice that for these two parameters the shift in the $\pCaf$ value is also affecting the curve's slope.}
     \label{fig:2perclwrwshift}
 \end{figure}
