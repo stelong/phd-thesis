@@ -1,4 +1,63 @@
 %==============================================================================
 \chapter{Summary and concluding remarks}\label{cha:chapter9}
 %==============================================================================
-\todo{Write general limitations which are shared across the different studies and coincise conclusions and future work.}
+
+
+%
+%
+%
+\section{Limitations}\label{sec:ch9limitations}
+This thesis work has got many limitations which can be grouped under five main topics: rat heart model, experimental data, model emulation, emulation-based model fitting and global sensitivity analysis. We shall discuss each of these separately in the next paragraphs.
+
+
+%
+%
+%
+\subsection{Rat heart model}\label{sec:ch9rat_heart_model}
+We have developed a $3$D biophysically-detailed model of rat heart contraction mechanics. This model is inherently a simplification of the underlying real biological system it aims to \textit{in silico} represent.
+
+\vspace{0.2cm}
+Firstly, the model is a two-chamber simplification of a real heart (no atria), and spatial boundary conditions do not account for the pericardium. Furthermore, this is not a closed loop system, being pressure boundary conditions modelled using a three-element Windkessel model. Because of the used boundary conditions, this virtual rat heart is closer to an \textit{ex vivo} preparation rather than to an \textit{in vivo} heart. All these factors (missing atria and pericardium, no closed loop system) could play a role in constraining the cardiac mechanics~\cite{Strocchi:2020}\todo{cite paper on atria influence on mechanics}.
+
+\vspace{0.2cm}
+We have also not accounted for potential spatial variations in cellular properties and $\Ca$ transient, and the latter homogeneously activates contraction throughout ventricular walls. For what concerns single cell contractile function, both thin and thick filament dynamics were modelled using a simplified representation of the sarcomere, without a detailed mechanistic description of its components. Specifically, the cross-bridge kinetics is described by a two-state model where the strongly-/weakly-/un-bound states are collapsed into a single state. While more detailed models exist~\cite{Land:2015}, their parameters are not necessarily constrained using experimental data due to difficulties in measuring subcellular processes, and are not easily integrable into multi-scale whole-organ simulations. The used model is still able to recapitulate all the main sarcomere processes including the length and velocity dependencies.
+
+
+%
+%
+%
+\subsection{Experimental data}\label{sec:ch9experimental_data}
+
+%
+%
+%
+\subsection{Model emulation}\label{sec:ch9model_emulation}
+Finally, we fitted the model to the data using an emulator, which itself has uncertainty, and this can increase the overall uncertainty. A self-consistent multi-scale data of the effects of OM on cell, tissue and organ scales would allow us to better identify and address the source of these discrepancies.
+
+\vspace{0.2cm}
+If the model is an approximation of the real system it represents, when we substitute it with an emulator we are adding an extra level of model discrepancy which will require further experts knowledge to be quantified.
+
+\vspace{0.2cm}
+For both HM and GSA we used independent GPEs for each output. This univariate approach provided us the flexibility to tune the hyperparameters and choose basis functions for each output independently. However, it did not account for potential correlations in outputs, which could be accounted for with a multi-output strategy e.g.~\cite{Conti:2009}, although this assumes common hyperparameters across all outputs. A multi-variate implausibility measure could be constructed from multi-output GPEs, which could potentially assist in ruling out more implausible parameter space.
+
+\vspace{0.2cm}
+Third, the use of emulators adds an additional layer of uncertainty in modelling the LV function, since emulators are probabilistic surrogates of the simulator, which is already an \textit{in-silico} representation of the real world biological system. However, the speedup that we gain by using emulators which enables efficient identification of the sarcomere parameters which play a key role in determining the LV function at whole-organ overcomes by far the slight loss in quantitative accuracy when making predictions.
+
+
+%
+%
+%
+\subsection{Model fitting}\label{sec:ch9model_fitting}
+Secondly, HM provides a bounded region of non-implausible parameter sets. Parameter bounds do not define parameter distributions. Including a Markov chain Monte Carlo parameter fit using the HM bounds as priors would extend this method to estimate likely parameter distributions as opposed to parameter bounds.
+
+\vspace{0.2cm}
+The heterogeneity of the data used to constrain the models is another limitation. Specifically, pressure measurements were not available for the rats used as an animal model and were therefore collected and averaged over similar experimental studies. Related to this, we only used a single representative anatomy for the healthy rats' cohort and single representative anatomy for the aortic-banded rats' cohort: ET and IVRT features were constrained according to single measurements coming from these two anatomies' segmentations.
+
+\vspace{0.2cm}
+In the implausibility measure (equation ($4$) in the Supplementary materials) calculation we omitted the model discrepancy term, for which we did not have any estimate available. To completely replace animal models with virtual representations of them, further experts knowledge will be needed to quantify the difference between the \textit{in-silico} model and the real world system that it represents.
+
+
+%
+%
+%
+\subsection{Model uncertainty quantification}\label{sec:ch9model_uncertainty_quantification}

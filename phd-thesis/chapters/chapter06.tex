@@ -91,7 +91,7 @@ An important property of this $\Ca$ scaling strategy is that the features scale 
 The employed Gattoni et al.~\cite{Gattoni:2017} ionic model simulates a $\Ca$ transient for a fixed pacing rate ($\SI{6}{Hz}$), so that it occurs within a fixed time span. At physiological pacing rates, the rat $\Ca$ transient never reaches an equilibrium in diastole, so that during a $\Ca$ transient time is spent rising or relaxing. As the cell is paced at a fixed cycle length, the sum of time to peak and relaxation time is capped. This means that one cannot increase without the other decreasing, and independent perturbation of $\tp$ and $\rtf$ can only decrease. If relaxation does interdependently slow, this will mean that the cell will not have enough time to fully relax, and this effect is captured by elevating $\dca$ while decreasing $\ampl$. From an algorithmic view point, not all the randomly picked $\Ca$ features' scaling coefficient sets will therefore be viable. The ``if" statement in Alg.~\ref{alg:cascaling} controls this behaviour by discarding all those curves that decay outside the fixed time interval without fully repolarising.
 
 \vspace{0.2cm}
-The existing coupling between $\tp$ and $\rtf$ $\Ca$ features manifests as regions of the feature space that can not be captured by our $\Ca$ transient scaling strategy. These are indiecated by the blank triangels in the $p_3$-vs-$\rtf$ and $p_4$-vs-$\tp$ subplots, visible in Figure~\ref{fig:scalersvscafeatures}.
+The existing coupling between $\tp$ and $\rtf$ $\Ca$ features manifests as regions of the feature space that can not be captured by our $\Ca$ transient scaling strategy. These are indicated by the blank triangles in the $p_3$-vs-$\rtf$ and $p_4$-vs-$\tp$ subplots, visible in Figure~\ref{fig:scalersvscafeatures}.
 
 
 %
@@ -177,16 +177,10 @@ We can notice that in the $\tp$ and $\rtf$ cases the response is not following a
 \vspace{0.2cm}
 We finally used the full multi-scale healthy rat model (Section) to simulate the LV features' values using as an input the obtained $\Ca$ transients and the remaining parameters fixed to the reference values. This allowed us to obtain the LV features' change from baseline values in a dose-dependent manner. PeakP, maxdP and mindP features' simulated responses to different doses of all the tested compounds are reported in Figure~\ref{fig:LVfeatsallcompoundsrespcurves}.
 
-% \begin{figure}[!ht]
-%     \myfloatalign
-%     \includegraphics[width=1\textwidth]{figures/chapter06/lvp_features_responses_to_all_drugs.pdf}
-%     \caption{LV pressure features' dose-response curves for the eight CiPA compounds. Simulated PeakP, maxdP and mindP features are given as percentages of the respective control values, and are displayed as dots in blue variants colour-coded with the compound doses.}
-%     \label{fig:LVfeatsallcompoundsrespcurves}
-% \end{figure}
 
 \begin{table}[!ht]
     \centering
-    \caption{{\bf Qualitative change in three LV pressure features observed in literature rat experiments for eight different CiPA compounds.} Down-facing arrow means that the specific LV feature decreases from its control value with the specific compound; left-right arrow means that the compound has no effect on that feature; dash symbol means that the specific information could not be retrieved from literature.}
+    \caption{Qualitative change in three LV pressure features observed in literature rat experiments for eight different CiPA compounds. Down-facing arrow means that the specific LV feature decreases from its control value with the specific compound; left-right arrow means that the compound has no effect on that feature; dash symbol means that the specific information could not be retrieved from literature.}
     \begin{tabular}{lcccl}
     \hline
     \textbf{Compound}           & \multicolumn{3}{c}{\textbf{LV feature}} & \textbf{References} \\
@@ -213,13 +207,13 @@ We finally used the full multi-scale healthy rat model (Section) to simulate the
     \label{fig:LVfeatsalldrugsrespcurves}
 \end{figure}
 
-Fig.~\ref{fig:LVfeatsalldrugsrespcurves} shows that both the model (simulator) and the surrogate model (emulator) predict the same LV features' trend of change from control in the presence of increasing compounds' concentrations. In the case of LV features' decreasing trends, the emulators' predictions were more accurate for lower compounds' concentrations than for higher compounds' concentrations, where we observed increased uncertainties and unphysiological (negative) predicted values (see Discussion of the main manuscript).
+Figure~\ref{fig:LVfeatsalldrugsrespcurves} shows that both the model (simulator) and the surrogate model (emulator) predict the same LV features' trend of change from control in the presence of increasing compounds' concentrations. In the case of LV features' decreasing trends, the emulators' predictions were more accurate for lower compounds' concentrations than for higher compounds' concentrations, where we observed increased uncertainties and unphysiological (negative) predicted values (see Discussion of the main manuscript).
 
 \vspace{0.2cm}\noindent
-The simulated and predicted LV features' percentage changes were also compared with quantitative experimental measurements~\cite{Amsterdam:1988,Langslet:1971,Koltai:1989,Saponara:2007,Wang:2007,Kolar:1990} of compounds' effects when these were available (Table~\ref{tab:drugvalidationrefs}). Experimental data (highlighted in red in Fig.~\ref{fig:LVfeatsalldrugsrespcurves}) confirmed the trend (decreasing or unchanged) simulated/predicted by the simulator/emulator, although with a non-negligible mismatch in the absolute values (see Discussion of the main manuscript) for bepridil, chlorpromazine, diltiazem and nifedipine compounds (more pronounced) and ranolazine and verapamil compounds (mild).
+The simulated and predicted LV features' percentage changes were also compared with quantitative experimental measurements~\cite{Amsterdam:1988,Langslet:1971,Koltai:1989,Saponara:2007,Wang:2007,Kolar:1990} of compounds' effects when these were available (Table~\ref{tab:drugvalidationrefs}). Experimental data (highlighted in red in Figure~\ref{fig:LVfeatsalldrugsrespcurves}) confirmed the trend (decreasing or unchanged) simulated/predicted by the simulator/emulator, although with a non-negligible mismatch in the absolute values (see Discussion of the main manuscript) for bepridil, chlorpromazine, diltiazem and nifedipine compounds (more pronounced) and ranolazine and verapamil compounds (mild).
 
 \vspace{0.2cm}
-The compounds' \textit{in silico} effect on the pressure features of the right ventricle (RV) are reported as dose-response curves in Fig.~\ref{fig:LVRVfeatsalldrugsrespcurves}, and compared with the predicted response seen for the LV. We can see that the simulated change in function in the RV is consistent with the LV.
+The compounds' \textit{in silico} effect on the pressure features of the right ventricle (RV) are reported as dose-response curves in Figure~\ref{fig:LVRVfeatsalldrugsrespcurves}, and compared with the predicted response seen for the LV. We can see that the simulated change in function in the RV is consistent with the LV.
 
 \begin{figure}[!ht]
     \myfloatalign
@@ -278,11 +272,15 @@ The presented validation workflow is summarised in Figure~\ref{fig:validationsch
 %
 %
 \section{Discussion}\label{sec:ch6discussion}
-The used approach simulates the compound induced changes in the $\Ca$ transient, thereby overcoming the issue when no directly recorded $\Ca$ transients are available. In so doing, we created a fully simulated map from compound properties to whole organ function. \todo{start of limitations:} Most of the compounds we tested were calcium channel blockers, which are known to induce negative chronotropic effects. This means that they reduce the heart rate. Although this can be neutralised by secondary effects such as a reflex increase in beta adrenergic tone in response to systemic vascular dilation, so that because of the level of reflex beta adrenergic discharge the net effect on heart rate could be balanced out~\cite{Low:1982}, our model doesn't account for heart rate variations, so the validation was performed by evaluating the effects of compounds at a fixed, physiological rate. \todo{start of conclusion:} Having a validated, personalised model of rat heart contraction is powerful as it can be trusted when this is used to predict compounds' mechanisms of action or for identifying in silico pharmacological cellular targets, as we shall see in the next Chapter.
+The used approach simulates the compound induced changes in the $\Ca$ transient, thereby overcoming the issue when no directly recorded $\Ca$ transients are available. In so doing, we created a fully simulated map from compound properties to whole organ function.
+
+\vspace{0.2cm}
+\todo{start of limitations:} most of the compounds we tested were calcium channel blockers, which are known to reduce the heart rate. Although this can be neutralised by secondary effects such as a reflex increase in beta adrenergic tone in response to systemic vascular dilation, so that because of the level of reflex beta adrenergic discharge the net effect on heart rate could be balanced out~\cite{Low:1982}, our model doesn't account for heart rate variations, so the validation was performed by evaluating the effects of compounds at a fixed, physiological rate. The negative chronotropic effect, coupled with the impact calcium channel blockers have on muscle sympathetic nerve activity~\cite{Binggeli:2002}, can also partially explain the mismatch observed (S4 Text) when quantitatively comparing compounds' effects onto LV pressure features with the model simulations. Another source of mismatch can be linked to the fixed LV volume setup normally used in the considered experimental studies to evaluate the compounds' effects, which differ from our rat heart model.
+
 
 
 %
 %
 %
 \section{Summary}\label{sec:ch6summary}
-\todo{write}
+Having a validated, personalised model of rat heart contraction is powerful as it can be trusted when this is used to predict compounds' mechanisms of action or for identifying in silico pharmacological cellular targets, as we shall see in the next Chapter.
