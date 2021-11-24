@@ -1,6 +1,10 @@
 %==============================================================================
 \chapter{Summary and concluding remarks}\label{cha:chapter9}
 %==============================================================================
+%
+%
+%
+\section{Contribution}\label{sec:ch9contribution}
 
 
 %
@@ -31,8 +35,8 @@ We have also not accounted for potential spatial variations in cellular properti
 %
 %
 %
-\subsection{Model emulation}\label{sec:ch9model_emulation}
-Finally, we fitted the model to the data using an emulator, which itself has uncertainty, and this can increase the overall uncertainty. A self-consistent multi-scale data of the effects of OM on cell, tissue and organ scales would allow us to better identify and address the source of these discrepancies.
+\subsection{Model emulation, fitting and uncertainty quantification}\label{sec:ch9model_emulation_fitting_and_uncertainty_quantification}
+We fitted the model to the data using an emulator, which itself has uncertainty, and this can increase the overall uncertainty. A self-consistent multi-scale data of the effects of OM on cell, tissue and organ scales would allow us to better identify and address the source of these discrepancies.
 
 \vspace{0.2cm}
 If the model is an approximation of the real system it represents, when we substitute it with an emulator we are adding an extra level of model discrepancy which will require further experts knowledge to be quantified.
@@ -41,13 +45,9 @@ If the model is an approximation of the real system it represents, when we subst
 For both HM and GSA we used independent GPEs for each output. This univariate approach provided us the flexibility to tune the hyperparameters and choose basis functions for each output independently. However, it did not account for potential correlations in outputs, which could be accounted for with a multi-output strategy e.g.~\cite{Conti:2009}, although this assumes common hyperparameters across all outputs. A multi-variate implausibility measure could be constructed from multi-output GPEs, which could potentially assist in ruling out more implausible parameter space.
 
 \vspace{0.2cm}
-Third, the use of emulators adds an additional layer of uncertainty in modelling the LV function, since emulators are probabilistic surrogates of the simulator, which is already an \textit{in-silico} representation of the real world biological system. However, the speedup that we gain by using emulators which enables efficient identification of the sarcomere parameters which play a key role in determining the LV function at whole-organ overcomes by far the slight loss in quantitative accuracy when making predictions.
+Third, the use of emulators adds an additional layer of uncertainty in modelling the LV function, since emulators are probabilistic surrogates of the simulator, which is already an \textit{in-silico} representation of the real world biological system. However, the speed-up that we gain by using emulators which enables efficient identification of the sarcomere parameters which play a key role in determining the LV function at whole-organ overcomes by far the slight loss in quantitative accuracy when making predictions.
 
-
-%
-%
-%
-\subsection{Model fitting}\label{sec:ch9model_fitting}
+\todo{start Model fitting}
 Secondly, HM provides a bounded region of non-implausible parameter sets. Parameter bounds do not define parameter distributions. Including a Markov chain Monte Carlo parameter fit using the HM bounds as priors would extend this method to estimate likely parameter distributions as opposed to parameter bounds.
 
 \vspace{0.2cm}
@@ -60,4 +60,4 @@ In the implausibility measure (equation ($4$) in the Supplementary materials) ca
 %
 %
 %
-\subsection{Model uncertainty quantification}\label{sec:ch9model_uncertainty_quantification}
+\section{Next steps}\label{sec:ch9next_steps}

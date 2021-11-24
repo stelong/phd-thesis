@@ -1,5 +1,5 @@
 %==============================================================================
-\chapter{Novel biophysical insight: in silico quantitatively mapping force-pCa curves to the whole heart contraction and relaxation}\label{cha:chapter8}
+\chapter{In silico quantitatively mapping force-pCa curves to the whole heart contraction and relaxation}\label{cha:chapter8}
 %==============================================================================
 %
 %
@@ -305,15 +305,15 @@ Indications from the GSA coupled with the information of F-pCa curve vs. LV func
     \label{fig:schematic}
 \end{figure}
 
-\vspace{0.2cm}\noindent
-\todo{this is Limitations copy-pasted from the paper: adapt it to thesis}
 
-% \noindent
-% This work has different limitations. First, the used cellular contraction model is only a simplified representation of the sarcomere, without a detailed mechanistic description of its components. Specifically, the cross-bridge kinetics is described by a two-state model where the strongly-/weakly-/un-bound states are collapsed into a single state. While more detailed models exist~\cite{Land:2015}, their parameters are not necessarily constrained using experimental data due to difficulties in measuring subcellular processes, and are not easily integrable into multi-scale whole-organ simulations. The used model is still able to recapitulate all the main sarcomere processes including the length and velocity dependencies. Second, the employed $3$D healthy rat heart contraction mechanics model that incorporated the cellular contraction model does not account for the pericardium and the atria and is not a closed loop system, being more close to an \textit{ex-vivo} rather than an \textit{in-vivo} rat heart model. All these factors could play a role in constraining the heart contraction mechanics, however we have previously~\cite{Longobardi:2021} demonstrated that this model is still able to capture and reproduce pharmacological interventions' effects at the sarcomere level in the form of F-pCa curve changes and map those to whole heart behaviour, consistently with literature preclinical experimental evidence. Third, the use of emulators adds an additional layer of uncertainty in modelling the LV function, since emulators are probabilistic surrogates of the simulator, which is already an \textit{in-silico} representation of the real world biological system. However, the speedup that we gain by using emulators which enables efficient identification of the sarcomere parameters which play a key role in determining the LV function at whole-organ overcomes by far the slight loss in quantitative accuracy when making predictions. This is because the focus was on mapping changes from reference values in the F-pCa curve to changes from reference values in the LV function and vice-versa, rather than mapping absolute values.
+%
+%
+%
+\subsection{Limitations}\label{sec:ch8limitations}
 
 
 %
 %
 %
 \section{Summary}\label{sec:ch8summary}
-\todo{this is Conclusion copy-pasted from the paper: adapt it to thesis.} We have used a biophysically detailed mathematical model of a healthy rat heart contraction to quantitatively map sarcomere properties to whole heart function. Using this mapping, we demonstrated that the relationship between F-pCa curve and LV function is non-linear and non-monotonic. This results in the non-interpretability of observed changes in the LV function in terms of unique sarcomere modulations, which highlights the need for muscle experimental findings to be put into a broader context where not only the $\pCaf$ and Hill coefficient, but also active and passive force, length and velocity dependencies, calcium transient and boundary conditions are analysed.
+We have used a biophysically detailed mathematical model of a healthy rat heart contraction to quantitatively map sarcomere properties to whole heart function. Using this mapping, we demonstrated that the relationship between F-pCa curve and LV function is non-linear and non-monotonic. This results in the non-interpretability of observed changes in the LV function in terms of unique sarcomere modulations, which highlights the need for muscle experimental findings to be put into a broader context where not only the $\pCaf$ and Hill coefficient, but also active and passive force, length and velocity dependencies, calcium transient and boundary conditions are analysed.

@@ -542,24 +542,19 @@ HM produced different constraints for the SHAM and AB models, even if starting f
 
 We have performed the first GSA of cardiac mechanics. Previous models have performed local sensitivity analysis \cite{Sher:2013}, or attempted GSA on simplified cardiac cell models \cite{Pathmanathan:2019}. Our GSA approach highlighted that left ventricular function is mostly influenced by cellular-level properties, consistent with our HM results.
 
-\vspace{0.2cm}\noindent
-\todo{this is Limitations copy-pasted from the paper: adapt it to thesis}
 
-% \noindent
-% We have developed a detailed biophysical rat heart model. However, this model is inherently a simplification of the underlying system, with four specific limitations.
+%
+%
+%
+\subsection{Limitations}\label{sec:ch4limitations}
+The heterogeneity of the data used to constrain the models is another limitation. Specifically, pressure measurements were not available for the rats used as an animal model and were therefore collected and averaged over similar experimental studies. Related to this, we only used a single representative anatomy for the healthy rats' cohort and single representative anatomy for the aortic-banded rats' cohort: ejection time and isovolumetric relaxation time features were constrained according to single measurements coming from these two anatomies' segmentations.
 
-% Firstly, the boundary conditions do not account for the pericardium that may be important in constraining cardiac mechanics \cite{Strocchi:2020}. We have not accounted for potential spatial variations in cellular properties and $\textrm{Ca}^{2+}$ transients, and the latter homogeneously activates contraction throughout ventricular walls. Extending the sensitivity analysis to include $\textrm{Ca}^{2+}$ transient features would allow us to estimate if this has a major effect on our results.
+\vspace{0.2cm}
+The fourth limitation concerns the GPE, HM and GSA implementations. In Section we have fitted the mean function separately and then trained the GP on the residuals, following the GPE-HM approach applied previously~\cite{Salter:2016,Vernon:2018}. However, different emulation strategies exist (see e.g.)~\cite{Oakley:2004}, where the linear regression model parameters and the GP hyperparameters are jointly optimised;~\cite{Coveney:2018} uses this GP formulation for HM), and may impact the implausibility measure. 
 
-% Secondly, HM provides a bounded region of non-implausible parameter sets. Parameter bounds do not define parameter distributions. Including a MCMC parameter fit using the HM bounds as priors would extend this method to estimate likely parameter distributions as opposed to parameter bounds.
+% To test if this choice of GP formulation impacted our final results we have preformed a preliminary comparison with the Oakley and O'Hagan~\cite{Oakley:2004} emulation strategy (see Supplementary materials). This suggests that HM can potentially converge to the same reduced parameter space, however, the optimal choice of GP for fitting cardiac models requires further research.
 
-% The heterogeneity of the data used to constrain the models is another limitation. Specifically, pressure measurements were not available for the rats used as an animal model and were therefore collected and averaged over similar experimental studies. Related to this, we only used a single representative anatomy for the healthy rats' cohort and single representative anatomy for the aortic-banded rats' cohort: ejection time and isovolumetric relaxation time features were constrained according to single measurements coming from these two anatomies' segmentations.
-
-% The fourth limitation concerns the GPE, HM and GSA implementations. In Section we have fitted the mean function separately and then trained the GP on the residuals, following the GPE-HM approach applied previously~\cite{Salter:2016,Vernon:2018}. However, different emulation strategies exist (see e.g.)~\cite{Oakley:2004}, where the linear regression model parameters and the GP hyperparameters are jointly optimised;~\cite{Coveney:2018} uses this GP formulation for HM), and may impact the implausibility measure. To test if this choice of GP formulation impacted our final results we have preformed a preliminary comparison with the Oakley and O'Hagan~\cite{Oakley:2004} emulation strategy (see Supplementary materials). This suggests that HM can potentially converge to the same reduced parameter space, however, the optimal choice of GP for fitting cardiac models requires further research.
-
-% For both HM and GSA we used independent GPEs for each output. This univariate approach provided us the flexibility to tune the hyperparameters and choose basis functions for each output independently. However, it did not account for potential correlations in outputs, which could be accounted for with a multi-output strategy e.g.~\cite{Conti:2009}, although this assumes common hyperparameters across all outputs. A multi-variate implausibility measure could be constructed from multi-output GPEs, which could potentially assist in ruling out more implausible parameter space.
-
-% In the implausibility measure (equation ($4$) in the Supplementary materials) calculation we omitted the model discrepancy term, for which we did not have any estimate available. To completely replace animal models with virtual representations of them, further experts knowledge will be needed to quantify the difference between the \textit{in-silico} model and the real world system that it represents. 
-
+\vspace{0.2cm}
 % Finally, global sensitivity indices were estimated using the mean of the available emulator, ignoring the uncertainty of the emulator itself. However, the emulator's uncertainty was small, therefore the estimated sensitivity indices were still able to capture the parameters' influence on the model outputs (see Supplementary materials for an example on ejection fraction feature). This can be further improved in future studies by looking for alternative estimations of the sensitivity indices which directly make use of the emulator mean and variance.
 
 
@@ -567,4 +562,4 @@ We have performed the first GSA of cardiac mechanics. Previous models have perfo
 %
 %
 \section{Summary}\label{sec:ch4summary}
-\todo{this is Conclusion copy-pasted from the paper: adapt it to thesis.} We have shown that GPE can effectively be used to robustly and rapidly constrain multi-scale cardiac models from organ-scale measurements. The obtained virtual bi-ventricular rat hearts are a valuable system to be used for further investigation of heart failure. Moreover, we demonstrated that our GPE-based GSA approach enables the computationally efficient identification of key components in 3D ventricular mechanics, giving a deeper insight into the link between cell, tissue, shape and boundary conditions properties and organ-scale function.
+We have shown that GPE can effectively be used to robustly and rapidly constrain multi-scale cardiac models from organ-scale measurements. The obtained virtual bi-ventricular rat hearts are a valuable system to be used for further investigation of heart failure. Moreover, we demonstrated that our GPE-based GSA approach enables the computationally efficient identification of key components in 3D ventricular mechanics, giving a deeper insight into the link between cell, tissue, shape and boundary conditions properties and organ-scale function.
