@@ -6,7 +6,7 @@ quantification}\label{cha:chapter3}
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we present the principal tools we employed for model emulation, fitting and uncertainty quantification. First, the full multi-scale $3$D biventricular rat heart contraction model is represented as a non-linear mapping between selected input parameters and scalar output features of interest (Section~\ref{sec:ch3multiscalemap}). Second, the non-linear mapping is emulated using probabilistic surrogates based on Gaussian process emulation (Section~\ref{sec:ch3gaussianprocessemulation}). Finally, two applications of emulators are presented: Bayesian history matching technique for model fitting (Section~\ref{sec:ch3historymatching}) and emulator-based Sobol' global sensitivity analysis for model uncertainty quantification (Section~\ref{sec:ch3globalsensitivityanalysis}).
+    In this chapter, we present the principal tools we employed for model emulation, fitting and uncertainty quantification. First, the full multi-scale $3$D biventricular rat heart contraction model is represented as a non-linear mapping between selected input parameters and scalar output features of interest (Section~\ref{sec:ch3multiscalemap}). Second, the non-linear mapping is emulated using probabilistic surrogates based on Gaussian process emulation (Section~\ref{sec:ch3gaussianprocessemulation}). Finally, two applications of emulators are presented: Bayesian history matching technique for model fitting (Section~\ref{sec:ch3historymatching}) and emulation-based Sobol' global sensitivity analysis for model uncertainty quantification (Section~\ref{sec:ch3globalsensitivityanalysis}).
 \end{remark}
 
 We want to create a quantitative link of cell, tissue and haemodynamic properties to whole heart function. To do this, we first need to define quantities of interest that will vary to reflect model properties and quantities of interest that will consequently vary to reflect model behaviour. The quantitative mapping that will result from this work is summarised in Figure~\ref{fig:simulatorframework}, and it is progressively constructed in Sections~\ref{sec:ch3modelinputparameters}--\ref{sec:ch3modeloutputfeatures}--\ref{sec:ch3multiscalemap}.
@@ -14,7 +14,7 @@ We want to create a quantitative link of cell, tissue and haemodynamic propertie
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter03/simulator_framework.pdf}
-    \caption{Multi-scale $3$D biventricular rat heart contraction model. Given a fixed calcium transient (a) and mesh with fibres (b), parameters representing cell, tissue and haemodynamics properties (left grey column, described in Table~\ref{tab:paramswithdef}) constitutes the input for the model. LV volume and pressure transients and PV loop are obtained after a four-beats model run. The LV features (right grey column, described in Table~\ref{tab:lvfeatures}), extracted from the fourth-beat curves (c1-c2), constitutes the output for the model. \todo{renew figure}}
+    \caption{Multi-scale $3$D biventricular rat heart contraction model. Given a fixed calcium transient (a) and mesh with fibres (b), parameters representing cell, tissue and haemodynamics properties (left grey column, described in Table~\ref{tab:paramswithdef}) constitute the input for the model. LV volume and pressure transients and PV loop are obtained after a four-beats model run. The LV features (right grey column, described in Table~\ref{tab:lvfeatures}), extracted from the $4$th-beat curves (c1-c2), constitute the output for the model.}
     \label{fig:simulatorframework}
 \end{figure}
 
@@ -23,7 +23,7 @@ We want to create a quantitative link of cell, tissue and haemodynamic propertie
 %
 %
 \section{Model input parameters}\label{sec:ch3modelinputparameters}
-The presented multi-scale rat heart contraction model is regulated by $71$, $17$, $18$ parameters for respectively the ionic, cell contraction, tissue $+$ boundary components. We selected specific parameters as representative regulators of each of these sub-models, for a total of $8$ parameters. Specifically, $2$ parameters ($\Caif$, $\koff$) described the thin filament kinetics, $2$ parameters ($\kxb$, $\tref$) described the thick filament kinetics, and $4$ parameters ($\p$, $\pao$, $\Z$, $\Cone$) described boundary conditions and tissue properties. The $8$ parameters considered are described in Table~\ref{tab:paramswithdef}. A fixed calcium transient simulated using the adopted ionic model was used as electrical stimulus for the whole heart activation.
+The presented multi-scale rat heart contraction model (Chapter~\ref{cha:chapter02}) is regulated by $71$, $17$, $18$ parameters for respectively the ionic, cell contraction, tissue $+$ boundary components. We selected specific parameters as representative regulators of each of these sub-models, for a total of $8$ parameters. Specifically, $2$ parameters ($\Caif$, $\koff$) described the thin filament kinetics, $2$ parameters ($\kxb$, $\tref$) described the thick filament kinetics, and $4$ parameters ($\p$, $\pao$, $\Z$, $\Cone$) described boundary conditions and tissue properties. The $8$ parameters considered are described in Table~\ref{tab:paramswithdef}. A fixed calcium transient simulated using the adopted ionic model was used as electrical stimulus for the whole heart activation.
 
 \begin{table}[!ht]
     \myfloatalign
@@ -50,17 +50,17 @@ The presented multi-scale rat heart contraction model is regulated by $71$, $17$
 %
 %
 \section{Model output features}\label{sec:ch3modeloutputfeatures}
-We are interested in characterising the LV contractile function in the rat models. A typical full rat heart contraction mechanics model's output consists in LV volume and pressure transients, along with the corresponding \textit{pressure-volume} (\acs{PV}) \textit{loop}. Multiple-beats simulations are commonly run to reach a more stable \enquote{limit cycle}, and only the last-beat's curves are analysed. In Figure~\ref{fig:examplepvloop}, an example $4$-beat simulation is shown with the limit cycle curves highlighted.
+We are interested in characterising the LV contractile function in the rat model. A typical full rat heart contraction mechanics model output consists in LV volume (\acs{LVV}) and LV pressure (\acs{LVP}) transients (i.e. the blood volume and pressure variations within the LV chamber during time), along with the corresponding \textit{pressure-volume} (\acs{PV}) \textit{loop}. Multiple-beats simulations are commonly run to reach a more numerically stable \textit{limit cycle}, and only the last-beat curves are analysed. In Figure~\ref{fig:examplepvloop}, an example $4$-beat simulation is shown with the limit cycle curves highlighted.
 
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter03/a_typical_model_output.pdf}
-    \caption{Rat heart contraction mechanics model $4$-beat simulation output. LV volume and pressure transients are drawn in a thin blue line, and their last-beat's tracts, along with the corresponding PV loop, are drawn in a thick blue line.}
+    \caption{Rat heart contraction mechanics model $4$-beat simulation output. LVV and LVP transients (left panel) are drawn with a thin blue line, and their last-beat parts, along with the corresponding PV loop (right panel), are drawn with a thick blue line.}
     \label{fig:examplepvloop}
 \end{figure}
 
 \vspace{0.2cm}
-To quantitatively characterise the LV activity, we extracted from the last-beat's curves $12$ scalar features of interest which are commonly used to characterise LV systolic and diastolic functions:
+To quantitatively describe the LV behaviour, we extracted from the last-beat curves $12$ scalar features of clinical interest and commonly used to characterise the LV systolic and diastolic functions:
 %
 \begin{align}
     &\text{EDV}= \max_{t>0}{v_{\textrm{LV}}(t)} \\
@@ -88,12 +88,12 @@ where
 \end{tabular}
 
 \vspace{0.3cm}\noindent
-The process of LV output features extraction is illustrated in Figure~\ref{fig:lvfeatsextraction}, and all the features' definitions are provided in Table~\ref{tab:lvfeatures}.
+The process of LV output features extraction is illustrated in Figure~\ref{fig:lvfeatsextraction}, while features' definitions are provided in Table~\ref{tab:lvfeatures}.
 
 \begin{figure}[!ht]
     \myfloatalign
     \includegraphics[width=0.8\textwidth]{figures/chapter03/lvv_lvp_features_explained_together.pdf}
-    \caption{The rat heart contraction model is run for a specific input parameters set for $4$ heart beats. The $12$ features of interest are then extracted from the fourth beat's LV volume and pressure curves.}
+    \caption{The $12$ LV features of interest are extracted from the LV volume and pressure curves (EF feature not showed as it is a derived quantity).}
     \label{fig:lvfeatsextraction}
 \end{figure}
     
