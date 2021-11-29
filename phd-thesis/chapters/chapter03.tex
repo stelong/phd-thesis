@@ -87,12 +87,12 @@ where
     $p_{\textrm{LV}}(t)$ & LV pressure transient
 \end{tabular}
 
-\vspace{0.3cm}\noindent
+\vspace{0.2cm}\noindent
 The process of LV output features extraction is illustrated in Figure~\ref{fig:lvfeatsextraction}, while features' definitions are provided in Table~\ref{tab:lvfeatures}.
 
 \begin{figure}[!ht]
     \myfloatalign
-    \includegraphics[width=0.8\textwidth]{figures/chapter03/lvv_lvp_features_explained_together.pdf}
+    \includegraphics[width=0.6\textwidth]{figures/chapter03/lvv_lvp_features_explained_together.pdf}
     \caption{The $12$ LV features of interest are extracted from the LV volume and pressure curves (EF feature not showed as it is a derived quantity).}
     \label{fig:lvfeatsextraction}
 \end{figure}
@@ -225,7 +225,7 @@ Their joint probability distribution will be:
 \noindent
 To incorporate the knowledge that the observations provide about the function $f$, we condition this distribution on the learning sample. Because multivariate Gaussian distributions are closed under conditioning, the conditional distribution (also called \textit{posterior distribution}) we get is again normally distributed:
 %
-\begin{equation}
+\begin{equation}\label{eq:gpepostdistrnonoise}
     \mathbf{f}_{*}\;\vert\; X_{*},\,X,\,\mathbf{f}\,\,\sim\,\,\mathcal{N}(\boldsymbol{\mu},\Sigma)
 \end{equation}
     
@@ -274,6 +274,10 @@ where
     &\Sigma := \Sigma_{X_{*}X_{*}}-\Sigma_{X_{*}X}(\Sigma_{XX}+\sigma_n^2)^{-1}\Sigma_{XX_{*}}
 \end{align}
 
+\noindent
+It is worth noticing that the most computational expensive operation that needs to be performed when assembling the posterior distribution (both the noise-free~\eqref{eq:gpepostdistrnonoise} and the noisy~\eqref{eq:gpepostdistr} ones) is the inversion of a symmetric, positive definite $N\times N$ matrix (the kernel-induced covariance matrices $\Sigma_{XX}$ and $\Sigma_{XX}+\sigma_n^2$, respectively). This operation is commonly performed by using a \textit{Cholesky factorisation} of the matrix to be inverted, with total cost $\mathcal{O}(N^3)$, and by solving the resulting triangular system given by the obtained Cholesky factor, with total cost $\mathcal{O}(N^2)$~\cite{Rasmussen:2006}. From an algorithmic viewpoint, if the learning sample does not change (matrix $X$ used to assemble the covariance matrix $\Sigma_{XX}$), its Cholesky factor can be stored so that doing inference on many different new sets of test points $X_{*}$ will every time only cost $\mathcal{O}(N^2)$. This feature of Gaussian process emulators being fast to be evaluated will prove crucial for the applications we shall present in the next two Sections.
+
+\vspace{0.2cm}
 So far we have introduced many free-parameters which belong to the non-parametric part of the model. They can be summarised in the so-called vector of \textit{hyperparameters}:
 \begin{equation}
     \boldsymbol{\theta}:=(\{\Lambda\},\,\sigma_f^2,\,\sigma_n^2)    
@@ -620,11 +624,11 @@ We will make use of the Sobol'-Saltelli~\cite{Saltelli:2010} estimator for the m
 while for both the effects' denominators we will use the following estimate:
 %
 \begin{equation}\label{eq:varianceestimate}
-    \mathbb{V}[Y] \approx \frac{1}{2N} \sum_{j=1}^{2N} f([A^\mathsf{T}\,|\,B^\mathsf{T}]^\mathsf{T})_j
+    \mathbb{V}[Y] \approx \frac{1}{2N} \sum_{j=1}^{2N} f([\mathbf{A}^\mathsf{T}\,|\,\mathbf{B}^\mathsf{T}]^\mathsf{T})_j
 \end{equation}
 
 \noindent
-In addition, the initial matrix $\mathbf{M}$ will not be sampled uniformly in the unit hypercube $\Omega$, but it will be sampled in the same space using a low-discrepancy, quasi-random Sobol' sequence~\ref{Sobol:1967}, in order to obtain better estimates as described in~\cite{Saltelli:2010}. It is worth mentioning that every column of the obtained matrices $\mathbf{A}$ and $\mathbf{B}$ will be rescaled to the respective original interval $[p_i^{inf}, p_i^{sup}]$ of the component $X_i$ it represents, before calculating $f(\mathbf{A})$, $f(\mathbf{B})$ and $f(\mathbf{A}_{\mathbf{B}}^{(i)})s$. This is done by using the simple bijection:
+In addition, the initial matrix $\mathbf{M}$ will not be sampled uniformly in the unit hypercube $\Omega$, but it will be sampled in the same space using a low-discrepancy, quasi-random Sobol' sequence~\cite{Sobol:1967}, in order to obtain better estimates as described in~\cite{Saltelli:2010}. It is worth mentioning that every column of the obtained matrices $\mathbf{A}$ and $\mathbf{B}$ will be rescaled to the respective original interval $[p_i^{inf}, p_i^{sup}]$ of the component $X_i$ it represents, before calculating $f(\mathbf{A})$, $f(\mathbf{B})$ and $f(\mathbf{A}_{\mathbf{B}}^{(i)})s$. This is done by using the simple bijection:
 %
 \begin{align}
     b \colon [0,\,1] &\to [p_i^{inf}, p_i^{sup}] \\
@@ -690,14 +694,14 @@ with sample space $\omega\in [0,\,1]$. We can finally use the expectation of the
 and the variance (and more generally the entire distribution) as an indicator of the sensitivity index accuracy~\cite{Marrel:2009}.
 
 \vspace{0.2cm}
-So far we have considered Sobol' indices estimates without taking into account the numerical error which is present when expectations and variances integrals are approximated using quadrature formulas. This uncertainty in the Sobol' indices estimates is commonly quantified using the \textit{bootstrapping} technique~\cite{Archer:1997}. This consists in resampling (i.e. sampling with replacement) $B$ times the MC points from the unit hypercube $\Omega$, and each time re-calculating the Sobol' indices. A \textit{moment method} is then used to construct confidence intervals from the bootstrap distribution, giving a symmetric distribution around the mean estimate of the Sobol' index value. Good practice is to use $B=100$ \todo{REF}, although even if one would want to use a higher value for better accuracy, it is worth noticing that the most expensive part will still reside in the model evaluation process rather than in the resampling process.
+So far we have considered Sobol' indices estimates without taking into account the numerical error which is present when expectation and variance integrals are approximated using quadrature formulae. This uncertainty in the Sobol' indices estimates is commonly quantified using the \textit{bootstrapping} technique~\cite{Archer:1997}. This consists in resampling (i.e. sampling with replacement) a number of times the MC points from the unit hypercube $\Omega$, and each time re-calculating the Sobol' indices. A \textit{moment method} is then used to construct confidence intervals from the bootstrap distribution, giving a symmetric distribution around the mean estimate of the Sobol' index value. It is worth noticing that the number of resamples used can be easily increased to improve the accuracy of bootstrap confidence intervals, since the most expensive part will still reside in the model evaluation process rather than in the resampling process.
 
 \vspace{0.2cm}\noindent
-If in the case of~\eqref{eq:modelevalsgsa} and \eqref{eq:emulmeangsa} the bootstrapping approach can be directly applied, the situation changes in the case where we make use of emulator samples to estimate the Sobol' indices as in~\eqref{eq:emulpostsamplesgsa1}. In fact, quantifying how the uncertainty of the emulator predictions propagates into the uncertainty of the integral estimates is a non-trivial task and also an actively researched topic of probabilistic numerics~\cite{Hennig:2015,Oates:2017,Cockayne:2019,Fisher:2019}. As further analysis on this topic are out of the scope for this project, we neglected the uncertainty arising from the integral estimates and only considered the uncertainty arising from the fact that we are using an emulator to replace the true forward model. This choice is consistent with the assumption that as the number of MC samples $N$ grows, the numerical error of the quadrature formulas will converge to $0$, and what is left will be only the uncertainty of the emulator which does not change with $N$ for a fixed learning sample (training dataset).
+In the case when either full simulator evaluations (equation~\eqref{eq:modelevalsgsa}) or emulator posterior distribution mean point-wise predictions (equation~\eqref{eq:emulmeangsa}) are used to estimate the Sobol' indices, the bootstrapping approach can be easily applied to derive estimates' confidence intervals. The situation changes when we make use of emulator posterior distribution samples to estimate the Sobol' indices (equation~\eqref{eq:emulpostsamplesgsa1}). In fact, quantifying how the uncertainty of the emulator predictions propagates into the uncertainty of the integral estimates is a non-trivial task and also an actively researched topic of probabilistic numerics~\cite{Hennig:2015,Oates:2017,Cockayne:2019,Fisher:2019}. As further analysis on this topic are out of the scope for this project, we neglected the uncertainty arising from the integral estimates and only considered the uncertainty arising from the fact that we are using an emulator to replace the true forward model. This choice is consistent with the assumption that as the number of MC samples $N$ grows, the numerical error of the quadrature formulae will converge to $0$, and what is left will be only the uncertainty of the emulator which does not change with $N$ for a fixed learning sample (training dataset).
 
 
 %
 %
 %
 \section{Summary}\label{sec:ch3summary}
-\todo{write}
+We have shown how the complex $3$D biophysically-detailed model of rat heart contraction mechanics can be seen as a multi-scale function that maps a multi-dimensional input parameter vector to a one-dimensional output feature scalar. We have presented the main probabilistic tools to replace this map with a fast-evaluating surrogate model, which in turns enables performance of expensive analysis such as model fitting through HM technique and uncertainty quantification through Sobol' GSA.
