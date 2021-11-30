@@ -5,7 +5,8 @@
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we use the personalised SHAM rat heart contraction model as a reference model of a healthy rat to show that it is possible to quantitatively map pharmacological interventions at the sarcomere level through to whole-organ function. Moreover, we show that we can infer cell-level compound effects from whole-organ observations, making the inverse mapping possible. We apply this framework to an example drug, namely to omecamtiv mecarbil, which has been proposed as a possible treatment of heart failure with reduced ejection fraction.
+    In this chapter, we use the personalised SHAM rat heart contraction model as a reference model of a healthy rat heart to show that it is possible to quantitatively map pharmacological interventions at the sarcomere level through to whole-organ function. Moreover, we show that we can infer cell-level pharmacological compounds' effects from whole-organ observations, making the inverse mapping possible. We apply this framework to an example drug, namely to omecamtiv mecarbil, which has been proposed as a possible treatment of HF.
+    We first present the variability observed in the drug effects from preclinical data, namely from ($1$) \textit{in vivo} whole-heart haemodynamics measurements and ($2$) \textit{in vitro} steady-state F-pCa measurements (Section~\ref{sec:ch5preclinical_data}). We then model the drug mechanism of action using $4$ model parameters (Section~\ref{sec:ch5inputparameterspace}), and we use emulators to map these to the usual LV features and to characterise the latter global sensitivities (Section~\ref{sec:ch5trainingdatasetandemulators}). We then constrain the $4$-parameter space using the preclinical data (Sections~\ref{sec:ch5inferringomeffectswholeorganfpca}--\ref{sec:ch5inferringomeffectsfpcawholeorgan}). The constrained parameter space from case ($1$) is then mapped to F-pCa curves (Section~\ref{sec:ch5model_predicted_om_effects_on_the_fpca_relationship}), while the one resulting from case ($2$) is mapped to the LV features (Section~\ref{sec:ch5model_predicted_om_effects_on_the_lv_function}). We conclude with a brief summary (Section~\ref{sec:ch5summary}).
 \end{remark}
 
 
@@ -13,17 +14,13 @@
 %
 %
 \section{Motivation}\label{sec:ch5motivation}
-\todo{this is Abstract, Introduction copy-pasted from the paper: adapt it to thesis}
-
-\noindent
-Omecamtiv mecarbil (OM) is a cardiac myosin activator developed as a treatment of heart failure. OM acts on cross-bridge formation without disrupting intracellular calcium homeostasis. OM effects are extensively characterised both \textit{in vitro} and \textit{in vivo} yet how these mechanistically translate from the sarcomere to whole-heart function is not fully understood. We employed a $3$D biventricular contraction model of a healthy rat heart that was fitted to anatomic, structural, and haemodynamic and volumetric functional data. The model incorporates pre-load, after-load, fibre orientation, passive material properties, anatomy, calcium transients, and thin and thick filament dynamics. We identified $4$ sarcomere model parameters that reflect cross-bridge behaviour. Gaussian process emulators (GPEs) were trained to map these parameters to pressure- and volume-based indexes of left ventricular (LV) function. We constrained the $4$-parameter space using preclinical OM data, either ($1$) \textit{in vivo} whole-heart haemodynamics data (using the Bayesian history matching technique), or ($2$) \textit{in vitro} F-pCa measurements. The OM-compatible sarcomere parameter space from case ($1$) was used to directly calculate F-pCa curves, while the one resulting from case ($2$) was mapped to the LV indexes using the trained GPEs. We found that our mapping from LV features to F-pCa and vice versa was in agreement with experimental data. In addition, our simulations supported the latest evidence that OM indirectly alters thin filament calcium sensitivity. Our work demonstrates how quantitative mapping from cellular to whole-organ level can be used to improve our understanding of drug action mechanisms.
-
-\vspace{0.2cm}
 Heart failure (HF) is a leading cause of hospitalisation worldwide, with more than one million admissions annually in the US and Europe~\cite{Benjamin:2018}. However, the treatment options are limited and, therefore, new pharmacotherapies are continuously sought. HF pathways can involve impaired cellular function and propagate up to the whole-organ dysfunction. Multi-scale contraction modelling represents a useful tool for understanding the underlying mechanisms and possibly identifying targets in these pathways.
 
-Building on a previously developed multi-scale rat bi-ventricle mechanics modelling framework~\cite{Longobardi:2020}, we can investigate drug mechanisms of action and better understand the mechanistic processes linking cellular and whole-heart contraction. For this case study, we chose omecamtiv mecarbil (OM), a novel drug currently in Phase $3$ clinical trial~\cite{Teerlink:2021} for treating HF. OM is a selective allosteric cardiac myosin modulator. It increases the rate of cross-bridge cycling by accelerating phosphate release~\cite{Malik:2011}, without disrupting intracellular calcium dynamics~\cite{Horvath:2017}. Recently, OM was shown to enhance the duty ratio, resulting in increased calcium sensitivity and slowed force development~\cite{Swenson:2017, Kampourakis:2018}.
+Building on a previously developed multi-scale rat bi-ventricle mechanics modelling framework~\cite{Longobardi:2020}, we can investigate drug mechanisms of action and better understand the mechanistic processes linking cellular and whole-heart contraction. For this case study, we chose omecamtiv mecarbil (\acs{OM}), a novel drug currently in Phase $3$ clinical trial~\cite{Teerlink:2021} for treating HF. OM is a selective allosteric cardiac myosin modulator. It increases the rate of cross-bridge cycling by accelerating phosphate release~\cite{Malik:2011}, without disrupting intracellular calcium dynamics~\cite{Horvath:2017}. Recently, OM was shown to enhance the duty ratio, resulting in increased calcium sensitivity and slowed force development~\cite{Swenson:2017, Kampourakis:2018}.
 
 This paper outlines our methodology of incorporating OM into our model, that consists of calibrating the cellular model using \textit{in vitro} data from skinned cellular and trabecular preparations in OM-containing solutions~\cite{Nagy:2015,Kampourakis:2018,Kieu:2019}, and validating the biventricular multi-scale contraction model using pressure-volume measurements from \textit{in vivo} whole-heart studies in healthy animals with OM~\cite{Bakkehaug:2015}. Our simulation results are consistent with the available experimental data on OM and support the hypothesis (e.g.~\cite{Swenson:2017}) that OM affects the thin filament.
+
+Our work demonstrates how quantitative mapping from cellular to whole-organ level can be used to improve our understanding of drug action mechanisms.
 
 
 %
@@ -38,7 +35,7 @@ This paper outlines our methodology of incorporating OM into our model, that con
 \subsection{Cell-level measurements}\label{sec:ch5celllevelmeasurements}
 \textit{In vitro} measurements of the OM effects on the sarcomere in healthy rats were taken from literature experimental studies performed on skinned myocytes' preparations. OM effects were given in terms of alterations of the $\pCaf$ and $h$ features of the F-pCa curve (introduced in Section~\ref{sec:ch2theforcecalciumrelationship}, equation~\eqref{eq:FpCa}). To map these effects from skinned to intact/\textit{in vivo} results we used percentages of F-pCa features' change from the control muscle to the OM-containing solution-exposed muscle. These values are summarised in Table~\ref{tab:pshiftpslope}.
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{lXX}
     \toprule
@@ -48,7 +45,7 @@ This paper outlines our methodology of incorporating OM into our model, that con
     $P_{\textrm{slope}}$ (for $h$) & $[-0.7282,\,-0.2470]$ & \cite{Nagy:2015, Kampourakis:2018, Kieu:2019} \\
     \bottomrule
     \end{tabularx}
-    \caption{F-pCa fractions of change experimental variability in OM-containing solution-exposed healthy rat skinned muscles. Values are given as ranges of minimum and maximum fractions of change from control experimental mean values.}
+    \caption{F-pCa curve features' fractions of change experimental variability in OM-containing solution-exposed healthy rat skinned muscles. Values are given as ranges of minimum and maximum fractions of change from control experimental mean values.}
     \label{tab:pshiftpslope}
 \end{table}
 
@@ -60,7 +57,7 @@ This paper outlines our methodology of incorporating OM into our model, that con
 \subsection{Whole-organ measurements}\label{sec:ch5wholeorganlevelmeasurements}
 We did not have \textit{in vivo} measurements of the OM effects on the whole-organ function in healthy rats, so qualitative observations from a healthy pig study were used~\cite{Bakkehaug:2015}. Again, we used percentage changes in LV features from baseline values after OM administration. In particular, we focused on the features whose change from control was reported to be statistically significant. These values are summarised in Table~\ref{tab:pigdata}.
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{lXX}
         \toprule
@@ -97,7 +94,7 @@ To quantitatively link sarcomere properties to whole-organ function, we used the
 With the simulator input, we aimed at modelling the OM effect at the sarcomere level.
 As OM increases the rate of cross-bridge formation~\cite{Malik:2011}, we considered parameters that are specifically responsible for cross-bridge dynamics in the Land et al.~\cite{Land:2012} cell contraction sub-model, namely $\kxb$, $\nxb$, $\trpnf$ and $\tref$. These parameters, introduced in Section~\ref{sec:ch2contractionmodel} and again reported in Table~\ref{tab:paramswithdefom}, constituted the simulator $4$-dimensional input.
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{llX}
     \toprule
@@ -116,7 +113,7 @@ As OM increases the rate of cross-bridge formation~\cite{Malik:2011}, we conside
 \vspace{0.2cm}
 The simulator output aimed at describing the LV function using a set of scalar features. These were the same $12$ features used in the previous analysis (Table~\ref{tab:lvfeatures}) with the addition of other $2$ features (Table~\ref{tab:lvfeaturesom}), for a total of $14$ features.
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{llX}
     \toprule
@@ -147,7 +144,7 @@ When running the simulator at a new parameter point, we fixed all the parameters
 \subsection{Input parameter space}\label{sec:ch5inputparameterspace}
 The input parameter space $X\subset\mathbb{R}^{4}$ of the simulator map $f_{simul}$ introduced in equation~\eqref{eq:fsimulom} was defined as the hypercube obtained by the Cartesian product of $4$ one-dimensional parameter ranges. Each of these ranges was given as the combination of bounds inferred from the \textit{in vitro} F-pCa data presented in Section~\ref{sec:ch5celllevelmeasurements} (further details are provided in Section~\ref{sec:ch5inferringomeffectswholeorganfpca}) and a $\pm\SI{50}{\percent}$ ($\pm\SI{30}{\percent}$ for $\tref$) perturbation around the related parameter reference value. Adopted ranges are reported in Table~\ref{tab:omparamranges}.
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{XXX}
         \toprule
@@ -175,7 +172,7 @@ We sampled $4096$ points from a LHD over the input parameter space $X$ defined i
 Univariate GPEs, defined as in Section~\ref{sec:ch3gaussianprocessemulation}, were used to predict each of the $14$ LV output features, and all the GPE model hyperparameters (both from the mean function and from the zero-mean GP) were jointly optimised during training by maximisation of the model log marginal likelihood (equation~\eqref{eq:logmarginallikelihood}). The accuracy and adequacy of being used as a surrogate model for each of the resulting $14$ trained GPEs were evaluated using the $R^2$-score regression metric and the $ISE_2$, as described in Section~\ref{sec:ch3regressionaccuracy}. GPEs' implementation and training were performed using GPErks emulation tool~\cite{GPErks:2021} based on GPyTorch Python library~\cite{Gardner:2019}.
 
 \vspace{0.2cm}
-To study the input parameters' impact on the output LV features' total variance we performed a GSA using the trained GPEs. Model outputs' sensitivity to model inputs was characterised by Sobol' first-order and total effects. These were estimated using \texttt{SALib} Python library~\cite{Herman:2017}. GPErks tool~\cite{GPErks:2021} was used to incorporate GPEs' full posterior distribution samples to account for emulators' uncertainty in Sobol' indices estimates, by following the second emulation-based approach of equations~\eqref{eq:emulpostsamplesgsa1}--\eqref{eq:emulpostsamplesgsa2}, presented in Section~\ref{sec:ch3emulatorbasedestimates}. Parameters whose Sobol' indices' distributions' expectation was below the threshold $0.01$ were determined to have negligible effects.
+To study the input parameters' impact on the output LV features' total variance we performed a GSA using the trained GPEs. Model outputs' sensitivity to model inputs was characterised by Sobol' first-order and total effects. These were estimated using \texttt{SALib} Python library~\cite{Herman:2017}. GPErks tool~\cite{GPErks:2021} was used to incorporate GPEs' full posterior distribution samples to account for emulators' uncertainty in Sobol' indices' estimates, by following the second emulation-based approach of equations~\eqref{eq:emulpostsamplesgsa1}--\eqref{eq:emulpostsamplesgsa2}, presented in Section~\ref{sec:ch3emulatorbasedestimates}. Parameters whose Sobol' indices' distributions' expectation was below the threshold $0.01$ were determined to have negligible effects.
 
 
 
@@ -206,7 +203,7 @@ we can notice that among the $4$ chosen input parameters (Section~\ref{sec:ch5ra
 where $\pCaf(\cdot)$ and $h(\cdot)$ are now seen as functions of the reference $\mathbf{p}=(\trpnf,\,\nxb)$ and the new $\mathbf{p}_{\textrm{new}}=(\alpha\cdot\trpnf,\,\beta\cdot\nxb)$ parameter vectors.
 
 \vspace{0.2cm}
-The resulting $2$-dimensional space given by all the possible $\mathbf{p}_{\textrm{new}}$ vectors obtained by solving equations~\ref{eq:pcafeqalpha}--\ref{eq:heqbeta} for all the viable $(\Delta\pCaf,\,\Delta h)$ according to the experimentally observed variability for the F-pCa curve (Table~\ref{tab:pshiftpslope}) will constitute an OM-compatible sarcomere space encoded by the $\trpnf$ and $\nxb$ parameters. We obtained this space by first generating a LHD of $100,000$ points in the fractions of change $2$D experimental space (Table~\ref{tab:pshiftpslope}), and then projecting this into the corresponding $2$D sarcomere parameter space as described above.
+The resulting $2$-dimensional space, given by all the possible $\mathbf{p}_{\textrm{new}}$ vectors obtained by solving equations~\ref{eq:pcafeqalpha}--\ref{eq:heqbeta} for all the viable $(\Delta\pCaf,\,\Delta h)$ according to the experimentally observed variability for the F-pCa curve (Table~\ref{tab:pshiftpslope}), will constitute an OM-compatible sarcomere space encoded by the $\trpnf$ and $\nxb$ parameters. We obtained this space by first generating a LHD of $100,000$ points in the fractions of change $2$D experimental space (Table~\ref{tab:pshiftpslope}), and then projecting this into the corresponding $2$D sarcomere parameter space as described above.
 
 \vspace{0.2cm}
 We finally mapped this space, while keeping $\kxb$ and $\tref$ parameters for which we had no data fixed to their reference values, to EDV, ESV, ET/Tdiast and maxdP features using the corresponding GPEs, in order to see if these features were moving in the direction of change experimentally observed in the \textit{in vivo} pig haemodynamics after OM administration (Section~\ref{sec:ch5wholeorganlevelmeasurements}).
@@ -220,7 +217,7 @@ We wanted to understand what the experimental \textit{in vivo} pig data of alter
 (equation~\eqref{eq:maximplmeasure}) across multiple target features, with the model discrepancy term (and its corresponding variance) set to zero in equation~\eqref{eq:implmeasure}.
 
 \vspace{0.2cm}
-For the target features, we aimed at matching the experimental variability observed in the LV features that showed a significant change from baseline after OM administration (Table~\ref{tab:pigdata}), and at keeping all the other features constant by matching for those an experimental variability of $\SI{100}{\percent}\pm\SI{0}{\percent}$ (i.e. no change). We sampled $400,000$ $NROY$ points from a LHD in the input parameter space $X$ (derived in Section~\ref{sec:ch5inputparameterspace}). As the GPEs had very high accuracy and very low variance for the predictions (shown in the results Section~\ref{sec:modelemulatorsandoutputsensitivities}), the HM single iteration was performed with half the common value for the implausibility cutoff, i.e. $I_{\,\textrm{cutoff}}=1.5$. This allowed to cut most of the space while still retaining few $X_{NIMP}$ points, as we shell see in Section~\ref{sec:ch5inferringomeffectsfpcawholeorganresults}.
+For the target features, we aimed at matching the experimental variability observed in the LV features that showed a significant change from baseline after OM administration (Table~\ref{tab:pigdata}), and at keeping all the other features constant by matching for those an experimental variability of $\SI{100}{\percent}\pm\SI{0}{\percent}$ (i.e. no change). We sampled $400,000$ $NROY$ points from a LHD in the input parameter space $X$ (derived in Section~\ref{sec:ch5inputparameterspace}). As the GPEs had very high accuracy and very low variance for the predictions (shown in the results Section~\ref{sec:modelemulatorsandoutputsensitivities}), the HM single iteration was performed with half the common value for the implausibility cutoff, i.e. $I_{\,\textrm{cutoff}}=1.5$. This allowed to cut most of the space while still retaining few $X_{NIMP}$ points, as we shell see in Section~\ref{sec:ch5model_predicted_om_effects_on_the_fpca_relationship}.
 
 \vspace{0.2cm}
 The obtained $X_{NIMP}$ space constituted an OM-compatible sarcomere space encoded by the $\kxb$, $\nxb$, $\trpnf$ and $\tref$ parameters. The points from this space were finally mapped using the Land et al.~\cite{Land:2012} model of cellular contraction to F-pCa curves, in order to see if the corresponding $\pCaf$ and $h$ features were moving in the direction of change experimentally observed in rats' skinned muscle preparations in OM-containing solutions (Section~\ref{sec:ch5celllevelmeasurements}).
@@ -238,7 +235,7 @@ The obtained $X_{NIMP}$ space constituted an OM-compatible sarcomere space encod
 \subsection{Model emulators and output sensitivities}\label{sec:modelemulatorsandoutputsensitivities}
 All the trained GPEs had a cross-validation mean accuracy $>0.99$ and $>0.97$ for the $R^2$ score and $ISE_2$, respectively. These are reported in Table~\ref{tab:omgpesscores}. An example illustration of emulators doing inference on a test set from the cross-validation process is provided in Figure~\ref{fig:omgpes}.
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{XXX}
     \toprule
@@ -264,7 +261,7 @@ All the trained GPEs had a cross-validation mean accuracy $>0.99$ and $>0.97$ fo
     \label{tab:omgpesscores}
 \end{table}
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter05/bgpes_vs_bsplit_om.pdf}
     \caption{For each LV feature, the GPE with the highest $R^2$ split test score is used to make predictions at the respective left-out subset of test points. Predictions are sorted in ascending order for the sake of a better visualisation and joined with a thick blue line, and the respective observations (empty dots) are sorted accordingly. $2$ STD confidence intervals (shaded regions) are also plotted around predicted mean lines.}
@@ -274,7 +271,7 @@ All the trained GPEs had a cross-validation mean accuracy $>0.99$ and $>0.97$ fo
 \vspace{0.2cm}
 The performed GSA (Figure~\ref{fig:omgsa}) showed that $\trpnf$ was the most important parameter into explaining the LV features' total variance in the model. The second most important parameter was $\nxb$, followed by $\tref$ and $\kxb$ parameters. It is worth noticing that the two cross-bridge formation-regulating parameters that affect the LV function the most are also the ones that regulate the force-calcium relationship in the rat model.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter05/gsa_om.pdf}
     \caption{The impact of cross-bridge related sarcomere parameters on organ-scale LV features in the healthy rat. The contribution of each parameter is represented by its Sobol' main effect. For each LV feature, higher-order interactions (coloured in grey) are represented by the sum of all total effects minus the sum of all main effects.}
@@ -286,12 +283,12 @@ The performed GSA (Figure~\ref{fig:omgsa}) showed that $\trpnf$ was the most imp
 %
 %
 %
-\subsection{Model predicted OM effects on the LV function}
+\subsection{Model predicted OM effects on the LV function}\label{sec:ch5model_predicted_om_effects_on_the_lv_function}
 The OM-compatible $2$D sarcomere parameter space inferred from \textit{in vitro} rat F-pCa data is shown in Figure~\ref{fig:deltas}.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
-    \includegraphics[width=\textwidth]{figures/chapter05/Deltas_and_params_with_OM_blue.png}
+    \includegraphics[width=\textwidth]{figures/chapter05/Fig3_bonus.png}
     \caption{OM-compatible sarcomere space encoded by the $\nxb$ and $\trpnf$ parameters, inferred from \textit{in vitro} rat F-pCa data. A LHD of $100,000$ points in the ranges of experimental variability of the F-pCa curve (left panel) is projected into the corresponding plausible $2$D sarcomere parameter space (right panel). The reference parameter set is represented by a black dot, while reference dashed black lines divide the plane in four parts to highlight the quadrant of OM action.}
     \label{fig:deltas}
 \end{figure}
@@ -299,7 +296,7 @@ The OM-compatible $2$D sarcomere parameter space inferred from \textit{in vitro}
 \vspace{0.2cm}
 Figure~\ref{fig:lvfeatsdistr} shows that the corresponding inferred median effects of these changes to $\pCaf$ and $h$ due to OM on whole-organ function show a qualitative agreement in the direction of change for all the $4$ LV features reported to be significantly altered by OM in the pig study~\cite{Bakkehaug:2015}.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter05/Fig3.pdf}
     \caption{Predicted \textit{in silico} OM effects on whole-heart function as percentage changes of LV features' values from control values. Experimental uncertainty ranges are displayed as shaded regions using percentage-from-control mean $\pm$ standard deviation values for both the healthy (grey) and $+$OM (orange) cases.}
@@ -310,10 +307,10 @@ Figure~\ref{fig:lvfeatsdistr} shows that the corresponding inferred median effec
 %
 %
 %
-\subsection{Model predicted OM effects on the F-pCa relationship}\label{sec:ch5inferringomeffectsfpcawholeorganresults}
+\subsection{Model predicted OM effects on the F-pCa relationship}\label{sec:ch5model_predicted_om_effects_on_the_fpca_relationship}
 HM first wave identified $3,469$ points (corresponding to $\SI{0.8672}{\percent}$ of the initial space) as non-implausible for replicating the organ-scale effects of OM administration. The resulting OM-compatible $4$D sarcomere parameter space inferred from \textit{in vivo} pig haemodynamic data is shown in Figure~\ref{fig:wave0}. 
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter05/Fig1.png}
     \caption{OM-compatible sarcomere space encoded by the $\kxb$, $\nxb$, $\trpnf$ and $\tref$ parameters, inferred from \textit{in vivo} pig haemodynamic data. This space is obtained by running one iteration of HM which constrains the full parameter space according to an implausibility criterion that evaluates how plausible is a point to yield model predictions that are matching experimental observations.}
@@ -323,7 +320,7 @@ HM first wave identified $3,469$ points (corresponding to $\SI{0.8672}{\percent}
 \vspace{0.2cm}
 Figure~\ref{fig:wave0mappingtofpCa} shows that the corresponding inferred median effects of these changes to the LV function due to OM on the intact F-pCa curve show a qualitative agreement in the direction of change for both the $\pCaf$ and $h$ features reported to be altered by OM in the rat skinned muscle studies~\cite{Nagy:2015, Kampourakis:2018, Kieu:2019}.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter05/Fig2.pdf}
     \caption{Predicted \textit{in silico} OM effects on the sarcomere as described by F-pCa curves calculated from the constrained, OM-compatible sarcomere parameter space and by the related percentage changes of $\pCaf$ and $h$ values from control values. Experimental uncertainty ranges are displayed (the middle and far right panels) as shaded regions using percentage-from-control mean $\pm$ standard deviation values for both the healthy (grey) and $+$OM (orange) cases.}
@@ -349,4 +346,4 @@ As a result of the adopted simplified approach for sarcomere contraction modelli
 %
 %
 \section{Summary}\label{sec:ch5summary}
-We demonstrated how multi-scale heart contraction models can aid our understanding of the mechanistic links between cellular and whole-organ function and can help in interpreting skinned experimental preparations in the context of \textit{in vivo} whole-heart function.
+We demonstrated how multi-scale heart contraction models can aid our understanding of the mechanistic links between cellular and whole-organ function and can help in interpreting skinned experimental preparations in the context of \textit{in vivo} whole-heart function. We have also shown that the same models can be used to map pharmacological compounds' effects on the sarcomere through to whole heart function and back again.

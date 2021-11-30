@@ -5,7 +5,7 @@
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we personalise the $3$D biventricular rat heart contraction mechanics mathematical model to clinical data obtained from a cohort of sham-operated and $6$-weeks-post-surgery aortic banded rats. We specifically build one representative model for each cohort (control and diseased ones). For this purpose, we first personalise the rat anatomy to magnetic resonance images (Section~\ref{sec:ch4meshgeneration}). We then choose an ionic model which was specifically fitted to patch-clamp measurements in intact LV myocytes of rats from the same two animal cohorts (Section~\ref{sec:ch4ionicmodel}). We then build a surrogate model of both the sham-operated and the aortic banding rat heart models (Section~\ref{sec:ch4trainingdatasetandemulators}). Global sensitivities are then characterised for both models (Section~\ref{sec:ch4global_sensitivity_analysis}). Models are further fitted to volumetric and functional data from the available medical images and literature experimental studies (Section~\ref{sec:ch4historymatching}). Differences in the parameter space between the two personalised models confirmed that impaired cardiac function is linked to altered sarcomere kinetics.
+    In this chapter, we personalise the $3$D biventricular rat heart contraction mechanics mathematical model to clinical data obtained from a cohort of sham-operated and $6$-weeks-post-surgery aortic banded rats. We specifically build one representative model for each cohort (control and diseased ones). For this purpose, we first personalise the rat anatomy to magnetic resonance images (Section~\ref{sec:ch4meshgeneration}). We then choose an ionic model which was specifically fitted to patch-clamp measurements in intact LV myocytes of rats from the same two animal cohorts (Section~\ref{sec:ch4ionicmodel}). We then build a surrogate model of both the sham-operated and the aortic banding rat heart models (Section~\ref{sec:ch4trainingdatasetandemulators}). Global sensitivities are then characterised for both models (Section~\ref{sec:ch4global_sensitivity_analysis}). Models are further fitted to volumetric and functional data from the available medical images and literature experimental studies (Section~\ref{sec:ch4historymatching}). We conclude with a brief summary (Section~\ref{sec:ch4summary}).
 \end{remark}
 
 
@@ -13,20 +13,11 @@
 %
 %
 \section{Motivation}\label{sec:ch4motivation}
-\todo{this is Abstract copy-pasted from the paper: adapt it to thesis}
-
-\noindent
-Heart contraction is the result of integrated cellular, tissue and organ function. Biophysical \textit{in silico} cardiac models offer a systematic approach for studying these multi-scale interactions. The computational cost of such models is high, due to their multi-parametric and non-linear nature. This has so far made it difficult to perform model fitting and prevented global sensitivity analysis studies. We propose a machine learning approach based on Gaussian process emulation of model simulations using probabilistic surrogate models, which enables model parameter inference via a Bayesian history matching technique and global sensitivity analysis on whole-organ mechanics. This framework is applied to model healthy and aortic-banded hypertensive rats, a commonly used animal model of heart failure disease. The obtained probabilistic surrogate models accurately predicted the left ventricular pump function ($R^2=0.92$ for ejection fraction). The history matching technique allowed us to fit both the control and diseased virtual bi-ventricular rat heart models to MRI and literature data, with model outputs from the constrained parameter space falling within $2$ STD of the respective experimental values. The global sensitivity analysis identified Troponin C and cross-bridge kinetics as key parameters in determining both systolic and diastolic ventricular function.
-
-\vspace{0.2cm}\noindent
-\todo{this is Introduction copy-pasted from the paper: adapt it to thesis}
-
-\noindent
 With each beat, cardiac myocytes generate tension and relax. Cellular tension is transduced into a coordinated, global whole-heart deformation resulting in an effective, system-level pump function. The integration of cellular, tissue and organ-scale mechanisms is essential for achieving efficient transduction of work into concerted myocardial contraction and relaxation. The break down of this system of integrated mechanisms can give rise to heart failure (HF). 
 
 Cardiac biophysical models provide a useful tool for studying whole-organ contraction \cite{Niederer:2019} by simulation, and can therefore be used to understand how impaired cell level function is linked with impaired organ level activity. Building a virtual representation of the real system requires tuning the cardiac model's properties and boundary conditions to experimental data. Global sensitivity analysis (GSA) studies are also needed to determine the role of cellular, tissue and haemodynamics properties on whole-organ function.
 
-However, the high simulation cost and the multi-scale nature of the cardiac system have limited the formal parameter estimation and sensitivity analysis for this type of model. Different techniques have been employed for global parameter inference on cardiac cell models, including gradient descent \cite{Dokos:2004}, genetic algorithms \cite{Groenendaal:2015}, multivariate regression \cite{Sarkar:2010} and Markov chain Monte Carlo (MCMC) \cite{Johnstone:2016}. Most of these approaches are computationally intensive, and the computation burden is even higher when going from single to multiple scales.
+However, the high simulation cost and the multi-scale nature of the cardiac system have limited the formal parameter estimation and sensitivity analysis for this type of model. Different techniques have been employed for global parameter inference on cardiac cell models, including gradient descent \cite{Dokos:2004}, genetic algorithms \cite{Groenendaal:2015}, multivariate regression \cite{Sarkar:2010} and Markov chain MC (\acs{MCMC}) \cite{Johnstone:2016}. Most of these approaches are computationally intensive, and the computation burden is even higher when going from single to multiple scales.
 
 Surrogate models (or \textit{emulators}) can be used to replace the computationally expensive real model with a statistical representation of it, allowing rapid predictions of the model's output. Using emulators we can thus perform the high number of model evaluations required to estimate global sensitivities. In this study, we use Gaussian process emulators (GPEs), which provide confidence bounds on predictions and can therefore be used for Bayesian history matching (HM). Previously employed for fitting models of galaxy formation \cite{Vernon:2010}, infectious disease transmission \cite{Andrianakis:2015} and, more recently, human atrial cell~\cite{Coveney:2018}, HM has shown to be a valuable tool for global parameter inference.
 
@@ -66,10 +57,10 @@ One representative cine MRI scan was obtained for both the SHAM and the AB rat c
     \myfloatalign
     \subfloat[SHAM]
     {\label{fig:ratrepimag-a}
-    \includegraphics[width=.45\linewidth]{figures/chapter04/sham_image.png}}\quad
+    \includegraphics[width=0.65\linewidth]{figures/chapter04/sham_image.png}}\quad
     \subfloat[AB]
     {\label{fig:ratrepimag-b}
-    \includegraphics[width=.45\linewidth]{figures/chapter04/ab_image.png}}
+    \includegraphics[width=0.65\linewidth]{figures/chapter04/ab_image.png}}
     \caption{Rat representative MR Images.}\label{fig:ratrepimag}
 \end{figure}
 
@@ -106,10 +97,10 @@ Time frames were numbered from $1$ to $47$. Frame $\#1$ was assumed to be moment
     \myfloatalign
     \subfloat[SHAM]
     {\label{fig:ratrepseg-a}
-    \includegraphics[width=.45\linewidth]{figures/chapter04/sham_segmentation.png}}\quad
+    \includegraphics[width=0.65\linewidth]{figures/chapter04/sham_segmentation.png}}\quad
     \subfloat[AB]
     {\label{fig:ratrepseg-b}
-    \includegraphics[width=.45\linewidth]{figures/chapter04/ab_segmentation.png}}
+    \includegraphics[width=0.65\linewidth]{figures/chapter04/ab_segmentation.png}}
     \caption{Rat representative MRI scans segmentations. LV and RV blood pools and myocardium are tagged with respectively red, green and blue colours.}\label{fig:ratrepseg}
 \end{figure}
 

@@ -281,7 +281,7 @@ For this purpose, starting from the built ZSF1 rat model, we re-fitted model par
 
 \begin{figure}[!ht]
     \myfloatalign
-    \includegraphics[width=0.85\textwidth]{figures/chapter07/zsf1_vs_sham_last_wave_plus_ref.pdf}
+    \includegraphics[width=\textwidth]{figures/chapter07/zsf1_vs_sham_last_wave_plus_ref.pdf}
     \caption{ZSF1 and SHAM reference rat models. ZSF1 rat (red) and SHAM rat (blue) models' pressure (P) and volume (V) transients and PV-loops are plotted with dashed lines. SHAM model \textit{in silico} variability is also represented by a cloud of thin blue full lines. \todo{Black arrow represent the direction of recovery}}
     \label{fig:zsf1andshamrefwithvar}
 \end{figure}
@@ -400,6 +400,9 @@ In Figure~\ref{fig:s1stheat}, the calculated Sobol' first-order and total effect
 %
 \subsection{Personalised healthy rat heart model validation using emulators}\label{sec:ch7personalised_healthy_rat_model_validation_using_emulators}
 Having trained emulators available that can map $\Ca$ transient properties to LV function, we further validated the SHAM rat model against experimentally observed CiPA compounds' effects in the same manner as done in Section~\ref{sec:ch6validating_the_personalised_healthy_rat_heart_model}. We used the same \todo{continue...}.
+
+\vspace{0.2cm}
+Figure~\ref{fig:LVfeatsalldrugsrespcurves} shows that both the model (simulator) and the surrogate model (emulator) predict the same LV features' trend of change from control in the presence of increasing compounds' concentrations. In the case of LV features' decreasing trends, the emulators' predictions were more accurate for lower compounds' concentrations than for higher compounds' concentrations, where we observed increased uncertainties and unphysiological (negative) predicted values (see Discussion of the main manuscript).\todo{fix me}
 
 \begin{figure}[ht!]
     \myfloatalign

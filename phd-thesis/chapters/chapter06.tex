@@ -5,7 +5,7 @@
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we investigate how calcium transient variations can be mapped to the whole-organ function. For this purpose, we encode the shape of the calcium transient using scalar features of clinical interest, allowing these to be quantitatively mapped to the whole-organ function using both the personalised SHAM rat heart contraction model and emulators. We finally validate this model against known CiPA compounds' effects on calcium dynamics and how these propagate through to whole-heart function.
+    In this chapter, we investigate how $\Ca$ transient variations can be mapped to the rat whole heart function using the developed emulation framework. We propose to encode the shape of a given $\Ca$ transient using a set of scalar features of clinical interest (Section~\ref{sec:ch6encoding_ca_transient_variations}), allowing these to be quantitatively mapped to the LV features as an additional component to the emulator input parameter set. When using the full forward rat heart contraction model instead, different $\Ca$ transients can be simply plugged-in as new model inputs (previously fixed) to see how they will impact the LV function. Using this second approach, the personalised SHAM rat heart contraction model is validated against known CiPA compounds' effects on $\Ca$ dynamics and how these propagate through to whole heart function (Section~\ref{sec:ch6validating_the_personalised_healthy_rat_heart_model}). We conclude with a brief summary (Section~\ref{sec:ch6summary}).
 \end{remark}
 
 
@@ -13,8 +13,7 @@
 %
 %
 \section{Motivation}\label{sec:ch6motivation}
-$\Ca$ dynamics plays a key role in the heart contraction. If mapping myofilament properties to the whole-organ function quantitatively can elucidate the mechanisms that are behind pathological conditions of the heart or validate pharmacological compounds' mechanisms of action (Chapter~\ref{cha:chapter5}), the possibility to quantitatively map $\Ca$ dynamics alterations as well to the whole heart is even more desirable. In Chapter~\ref{cha:chapter4} we derived a personalised model of the SHAM rat heart contraction using a fixed $\Ca$ transient as an electrical signal. In this Chapter, we aim at incorporating $\Ca$ transient variations in the full simulator map (equation~\ref{eq:fsimul}) in order to understand how different, possibly more pathological $\Ca$ transient phenotypes can impact the LV function.
-
+$\Ca$ dynamics plays a key role in the heart contraction and relaxation. We have seen that mapping sarcomere properties to the LV function quantitatively can possibly elucidate the mechanisms that are behind pathological conditions of the heart (Chapter~\ref{cha:chapter4}) and validate pharmacological compounds' mechanisms of action (Chapter~\ref{cha:chapter5}). Building upon this concept, the possibility to quantitatively map also $\Ca$ dynamics alterations to the whole heart behaviour is desirable. In Chapter~\ref{cha:chapter4}, we derived a personalised model of the SHAM rat heart contraction using a fixed $\Ca$ transient as an electrical stimulus. In this Chapter, we aim at incorporating $\Ca$ transient variations in the full simulator map (equation~\ref{eq:fsimul}) in order to understand how different, possibly more pathological $\Ca$ transient phenotypes can impact the LV function.
 
 
 %
@@ -98,7 +97,7 @@ The existing coupling between $\tp$ and $\rtf$ $\Ca$ features manifests as regio
 %
 %
 \section{Validating the personalised healthy rat heart model}\label{sec:ch6validating_the_personalised_healthy_rat_heart_model}
-To test if the rat heart contraction model can predict how changes in calcium transients impact the whole heart function, we validated the computational framework by comparing qualitative measurements and predictions of changes in cardiac mechanics in the presence of compounds that manipulate the calcium transient. This provides a multi-scale test on the ability of the model to map from changes in ion channels conductances to changes in calcium transient and the resulting changes in whole heart function.
+To test if the rat heart contraction model can predict how changes in $\Ca$ transients impact the whole heart function, we validated the computational framework by comparing qualitative measurements and predictions of changes in cardiac mechanics in the presence of compounds that manipulate the $\Ca$ transient. This provides a multi-scale test on the ability of the model to map from changes in ion channels conductances to changes in $\Ca$ transient and the resulting changes in whole heart function.
 
 \vspace{0.2cm}\noindent
 A schematic of the adopted validation workflow is provided in Figure~\ref{fig:validationschematic}.
@@ -180,7 +179,7 @@ For each compound, we calculated $B$ for each channel when $C$ was set to equall
 \end{figure}
 
 \vspace{0.2cm}
-As the $\Ca$ transients obtained in the presence of the compound at different concentrations can be encoded by $\dca$, $\ampl$, $\tp$ and $\rtf$ features (Section~\ref{sec:ch6encoding_calcium_transient_variations}), we can visualise how these are varying in a dose-dependent manner. The $\Ca$ transient features' dose-response curves are shown in Figure~\ref{fig:cafeatsverapamilrespcurve} for the verapamil example compound.
+As the $\Ca$ transients obtained in the presence of the compound at different concentrations can be encoded by $\dca$, $\ampl$, $\tp$ and $\rtf$ features (Section~\ref{sec:ch6encoding_ca_transient_variations}), we can visualise how these features are varying in a dose-dependent manner. The $\Ca$ transient features' dose-response curves are shown in Figure~\ref{fig:cafeatsverapamilrespcurve} for verapamil.
 
 \begin{figure}[ht!]
     \myfloatalign
@@ -190,40 +189,31 @@ As the $\Ca$ transients obtained in the presence of the compound at different co
 \end{figure}
 
 \vspace{0.2cm}\noindent
-We can notice that in the $\tp$ and $\rtf$ cases the response is not following a fully logistic trend on the right branches. This is because for high compound concentrations we have seen (Figure~\ref{fig:calciumverapamil}) that the $\Ca$ signal had almost vanished, making the analysis of these curves challenging.
+We can notice that for the $\tp$ and $\rtf$ features the response is not following a fully logistic trend on the right branches. This is because for high compound concentrations we have seen (Figure~\ref{fig:calciumverapamil}) that the $\Ca$ signal had almost vanished, making the analysis of these curves challenging.
 
 
 %
 %
 %
 \subsection{Compounds' effects on whole-organ function}\label{sec:ch6compounds_effects_on_the_whole_organ_function}
-We finally used the full multi-scale healthy rat model (Section) to simulate the LV features' values using as an input the obtained $\Ca$ transients and the remaining parameters fixed to the reference values. This allowed us to obtain the LV features' change from baseline values in a dose-dependent manner. PeakP, maxdP and mindP features' simulated responses to different doses of all the tested compounds are reported in Figure~\ref{fig:LVfeatsallcompoundsrespcurves}.
-
-\vspace{0.2cm}
-Figure~\ref{fig:LVfeatsalldrugsrespcurves} shows that both the model (simulator) and the surrogate model (emulator) predict the same LV features' trend of change from control in the presence of increasing compounds' concentrations. In the case of LV features' decreasing trends, the emulators' predictions were more accurate for lower compounds' concentrations than for higher compounds' concentrations, where we observed increased uncertainties and unphysiological (negative) predicted values (see Discussion of the main manuscript).
-
-\vspace{0.2cm}\noindent
-The simulated and predicted LV features' percentage changes were also compared with quantitative experimental measurements~\cite{Amsterdam:1988,Langslet:1971,Koltai:1989,Saponara:2007,Wang:2007,Kolar:1990} of compounds' effects when these were available (Table~\ref{tab:drugvalidationrefs}). In particular, experimental data was taken from~\cite{Amsterdam:1988} (bepridil and verapamil -- PeakP), \cite{Langslet:1971} (chlorpromazine, PeakP), \cite{Koltai:1989} (diltiazem -- PeakP and maxdP), \cite{Saponara:2007} (nifedipine -- PeakP), \cite{Wang:2007} (ranolazine -- PeakP, maxdP and mindP), \cite{Kolar:1990} (verapamil -- maxdP).
-
-\vspace{0.2cm}
-Experimental data (highlighted in green in Figure~\ref{fig:LVRVfeatsalldrugsrespcurves}) confirmed the trend (decreasing or unchanged) simulated by the simulator, although with a non-negligible mismatch in the absolute values (see Discussion of the main manuscript) for bepridil, chlorpromazine, diltiazem and nifedipine compounds (more pronounced) and ranolazine and verapamil compounds (mild).
-
-\vspace{0.2cm}
-The compounds' \textit{in silico} effect on the pressure features of the right ventricle (RV) are reported as dose-response curves in Figure~\ref{fig:LVRVfeatsalldrugsrespcurves}, and compared with the predicted response seen for the LV. We can see that the simulated change in function in the RV is consistent with the LV.
+We finally used the personalised healthy (SHAM) rat model (Section~\ref{sec:ch4fittedmodels}) to simulate the LV features' values using as an input the obtained $\Ca$ transients and the remaining parameters fixed to the reference values (Table~\ref{tab:shamabbestfitparamvalues}). This allowed us to obtain the LV features' change from baseline values in a dose-dependent manner. PeakP, maxdP and mindP features' simulated responses to different doses of all the tested compounds are reported in Figure~\ref{fig:LVRVfeatsalldrugsrespcurves}. We additionally extracted the same features' values from the RV limit cycle solution to see if the compound-induced variations were consistent with what observed for the LV. These are provided in the same figure. Moreover, the simulated LV features' percentage changes were compared with quantitative experimental measurements~\cite{Amsterdam:1988,Langslet:1971,Koltai:1989,Saponara:2007,Wang:2007,Kolar:1990} of compounds' effects when these were available from literature (Section~\ref{sec:ch6model_simulated_compounds'_effects_on_whole-organ_function_comparison_with_experimental_observations}, Table~\ref{tab:compoundvalidationrefs}). In particular, in the same figure we report experimental observations for bepridil and verapamil -- PeakP~\cite{Amsterdam:1988}, chlorpromazine -- PeakP~\cite{Langslet:1971}, diltiazem -- PeakP and maxdP~\cite{Koltai:1989}, nifedipine -- PeakP~\cite{Saponara:2007}, ranolazine -- PeakP, maxdP and mindP~\cite{Wang:2007}, and verapamil -- maxdP~\cite{Kolar:1990}.
 
 \begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter06/simulated_cipa_compounds_effects_on_lv_rv_pressure_features_with_expdata.pdf}
-    \caption{LV and RV pressure features' dose-response curves for the eight CiPA compounds. Simulated PeakP, maxdP and mindP features' values are given as percentages of the respective control values, and are represented as dots in blue/orange variants, colour-coded with the compound doses for respectively the left/right ventricles. Black dots indicate the control values when no compound is present. Experimental data of compounds' effects on the LV (when available) is also displayed as green dots.}
+    \caption{LV and RV pressure features' dose-response curves for the eight CiPA compounds. Simulated PeakP, maxdP and mindP features' values are given as percentages of the respective control values, and are represented as dots in blue/orange variants, colour-coded with the compound doses for respectively the left/right ventricles. Black dots indicate the control values when no compound is present. Experimental data of compounds' effects on the LV (when available) is also displayed as red dots.}
     \label{fig:LVRVfeatsalldrugsrespcurves}
 \end{figure}
+
+\vspace{0.2cm}
+The \textit{in silico} obtained compounds' effects on the considered pressure features were consistent in both the LV and RV, and showed either a decreasing or unchanged trend from baseline values with increasing compounds' concentrations. Experimental data (highlighted in red in Figure~\ref{fig:LVRVfeatsalldrugsrespcurves}) confirmed the trend simulated by the simulator, although with a non-negligible mismatch in the absolute values (see~Section\ref{sec:ch6discussion} for discussion) for bepridil, chlorpromazine, diltiazem and nifedipine compounds (more pronounced) and ranolazine and verapamil compounds (mild).
 
 
 %
 %
 %
 \subsection{Simulated compounds' effects on LV function comparison with experimental observations}\label{sec:ch6model_simulated_compounds'_effects_on_whole-organ_function_comparison_with_experimental_observations}
-These features' qualitative responses after \textit{in silico} compound ``administration'' were compared to qualitative changes in the same LV features observed after compounds administration in literature experimental studies performed on either conscious, or Langendorff-perfused or working healthy rat heart preparations. These experimental changes were either recorded after a single dose in the pre-ischaemic phase of an ischaemia-reperfusion experiment, or in a dose-dependent manner, and are summarised in Table~\ref{tab:compoundvalidationrefs}.
+The LV pressure features' qualitative responses after \textit{in silico} compound ``administration'' were compared to qualitative changes in the same LV features observed after compounds administration in literature experimental studies performed on either conscious, or Langendorff-perfused or working healthy rat heart preparations. These experimental changes were either recorded after a single dose in the pre-ischaemic phase of an ischaemia-reperfusion experiment, or in a dose-dependent manner, and are summarised in Table~\ref{tab:compoundvalidationrefs}.
 
 \begin{table}[ht!]
     \myfloatalign
@@ -247,24 +237,22 @@ These features' qualitative responses after \textit{in silico} compound ``admini
     \label{tab:compoundvalidationrefs}
 \end{table}
 
-\vspace{0.2cm}\noindent
+\vspace{0.2cm}
 The comparison of qualitative model predictions to experimental observations is shown in Figure~\ref{fig:validationtable}. The model correctly predicted $16$ out of $19$ ($\SI{84}{\percent}$) experimental observations, with $5$ observations missing data, matching $6$ out of $8$ compounds. Model predictions were never opposite to observations, with either the model or observations reporting no-change when the model failed.
 
 \begin{figure}[ht!]
     \myfloatalign
-    \includegraphics[width=1\textwidth]{figures/chapter06/model_vs_experiments.pdf}
+    \includegraphics[width=\textwidth]{figures/chapter06/model_vs_experiments.pdf}
     \caption{Model validation against known CiPA compounds effects on whole-organ function. Eight CiPA compounds effects (``experiment" columns) on PeakP, maxdP and mindP are compared with model same compounds' predicted effects on the same features (``model" columns). compounds' effects are colour-coded as orange (feature unchanged) and green (feature decreased). None of the compounds caused an increase in the considered LV features. White/empty space means that the specific effect could not be retrieved from the examined literature studies. Model predicted effects are in agreement with the experimentally observed effects for $6$ out of $8$ compounds.}
     \label{fig:validationtable}
 \end{figure}
-
-
 
 
 %
 %
 %
 \section{Discussion}\label{sec:ch6discussion}
-The used approach simulates the compound induced changes in the $\Ca$ transient, thereby overcoming the issue when no directly recorded $\Ca$ transients are available. In so doing, we created a fully simulated map from compound properties to whole organ function.
+The used approach simulates the compound induced changes in the $\Ca$ transient, thereby overcoming the issue when no directly recorded $\Ca$ transients are available. In so doing, we created a fully simulated map from compound properties to whole organ function. \todo{write about mismatch}
 
 
 %
@@ -278,4 +266,4 @@ Most of the compounds we tested were calcium channel blockers, which are known t
 %
 %
 \section{Summary}\label{sec:ch6summary}
-Having a validated, personalised model of rat heart contraction is powerful as it can be trusted when this is used to predict compounds' mechanisms of action or for identifying in silico pharmacological cellular targets, as we shall see in the next Chapter.
+Having a validated, personalised model of rat heart contraction is powerful as it can be trusted when this is used to predict compounds' mechanisms of action or for identifying in silico pharmacological cellular targets, as we shall see in the next chapter.
