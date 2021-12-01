@@ -83,7 +83,7 @@ One representative cine MRI scan was obtained for both the SHAM and the AB rat c
 \vspace{0.2cm}
 For each rat, we segmented the LV blood pool at each time frame and collected the corresponding volume estimates based on voxels size/count. This allowed to extract LV volume transient for each rat, displayed in Figure~\ref{fig:lvvexptransients}.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=0.8\textwidth]{figures/chapter04/lvv_experimental_transient.pdf}
     \caption{LV volume transients obtained by segmenting the LV blood pool of $47$ consecutive time frames images for the SHAM (blue) and the AB (red) reference rat images. Dashed lines indicate approximately diastasis time during the cardiac cycle.}
@@ -123,7 +123,7 @@ Time frames were numbered from $1$ to $47$. Frame $\#1$ was assumed to be moment
 \noindent
 Rat meshes with fibres were generated from the representative MRI scans segmentations using the approach described in Section~\ref{sec:ch2anatomy}. We opted for an LoD of $2$ for both the SHAM and the AB mesh generation, as we prioritised stability for mechanics simulations over accuracy. The generated meshes are shown in Figure~\ref{fig:ratrepgeom}.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \subfloat[SHAM]
     {\label{fig:ratrepgeom-a}
@@ -142,7 +142,7 @@ Rat meshes with fibres were generated from the representative MRI scans segmenta
 \subsubsection{Ionic model}\label{sec:ch4ionicmodel}
 We employed two variants~\cite{Gattoni:2017} of the original ionic model~\cite{Gattoni:2016} the same authors developed in order to describe the control SHAM and the diseased AB rats specific calcium dynamics. The experimental data the authors used to re-fit the original model comes from exactly the same experimental study (\cite{Roe:2017}) which we obtained the MRI scans from. For this reason, we were able have both sham-operated and aortic-banded rat cohorts-specific anatomy and electrophysiology mathematical descriptions at the same time. Simulated action potentials and calcium transients from the two different models are shown in Figure~\ref{fig:shamvsabcaap}.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter02/sham_vs_ab_ca_ap.pdf}
     \caption{SHAM (blue) and AB (red) rats characteristic action potentials and calcium transients simulated using the Gattoni et al.~\cite{Gattoni:2017} model of rat left ventricular myocyte electrophysiology at $\SI{6}{\hertz}$ pacing frequency and $\SI{37}{\celsius}$.}
@@ -205,7 +205,7 @@ The input parameter space $X\subset\mathbb{R}^{8}$ of the simulator map $f_{simu
 \end{landscape}
 
 \newpage
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{XXX}
         \toprule
@@ -235,10 +235,10 @@ We trained GPEs on model simulations to replace the simulator multi-scale map (S
 \vspace{0.2cm}
 The emulation framework is outlined in Figure~\ref{fig:emulatorframework}. Briefly, $8$ LHDs of $1,024$ input parameter points each were simulated and the successfully completed simulations were collected to form the training dataset, with final size of $825$ and $850$ points for the SHAM and AB models, respectively. The low number of successful runs relates to a combination of failure of the mechanics simulations converging or completing a full cardiac cycle, which may happen if the contraction is insufficient to reach the aortic pressure. One GPE was then trained for each LV output feature (Table~\ref{tab:lvfeatures}), for a total of $12$ GPEs. 
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter04/emulator_framework.pdf}
-    \caption{Building the surrogate model. Input points (a) are sampled in the parameter space using a Latin hypercube design (b). The model (simulator) is run using these points. The simulator output is composed of features extracted from the LV volume and pressure transients and PV loop (c). The initial input matrix and the corresponding output matrix represent the training dataset for the surrogate model (emulator) based on Gaussian processes. The trained emulator (d) is used to predict the simulator output at a new point in the input parameter space. \todo{renew figure}}
+    \caption{Building the surrogate model. Input points (a) are sampled in the parameter space using a Latin hypercube design (b). The model (simulator) is run using these points. The simulator output is composed of features extracted from the LV volume and pressure transients and PV loop (c). The initial simulator input matrix and the corresponding output matrix represent the training dataset for the surrogate model (emulator) based on Gaussian processes. The trained emulator (d) is used to predict the simulator output at new points in the input parameter space.}
     \label{fig:emulatorframework}
 \end{figure}
 
@@ -268,7 +268,7 @@ We constrained the model parameters based on model read-outs that describe key f
 \vspace{0.2cm}
 Target features' mean and standard deviation experimental values to match came from two different sources. Specific organ-scale feature unavailable in the MRI data \cite{Roe:2017} were deduced from literature experimental studies all performed on male rats at body temperature with abdominal/ascending aortic banding~\cite{Nemeth:2016, Sato:1990, Schunkert:1995, Loot:2005, Liu:2014, Ku:2014, Ruppert:2018, Schunkert:1990, Ruppert:2016}. In particular, EDV, ESV, ET and IVRT features were immediately available from the MRI data, while information about PeakP, maxdP and mindP features was collected from literature. We did not have specific values for IVCT, Tdiast, Tpeak and ESP, and we chose not to match EF explicitly as this is derived from EDV and ESV. This gave us $7$ organ-scale features to constrain our model parameters. Their experimental variability is reported in Table~\ref{tab:values2match}.
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{lXXX}
     \toprule
@@ -307,7 +307,7 @@ The cutoff value $I_{\,\text{cutoff}}$ was initialised to $3.0$, and incremented
 \subsection{Model emulation}
 The obtained cross-validation GPEs' test scores used as a measure of accuracy as described in Section~\ref{sec:ch3gaussianprocessemulation} are reported in Tables~\ref{tab:gpescores1_sham}--\ref{tab:gpescores1_ab} for the SHAM and AB models' emulators, respectively. The mean $R^2$ score was $>0.9$ for all the $12$ features but mindP, which had an $R^2$ score of $0.74$ in both the SHAM and AB models, and IVRT, which had an $R^2$ score of $0.85$ in the AB model. The $ISE_2$ was $>0.8$ for all the features for both the rat models. Each emulator evaluation at a new input parameter point took $\sim 1.2$ seconds against a full simulator single-core run of $\sim 4$ hours, for a total gained speed-up of $12,000$ fold per evaluation. An example illustration of emulators doing inference on a test set from the cross-validation process is provided in Figures~\ref{fig:gpesexampleinferencesham}--\ref{fig:gpesexampleinferenceab} for the SHAM and AB models' emulators, respectively.
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{XXX}
     \toprule
@@ -331,7 +331,7 @@ The obtained cross-validation GPEs' test scores used as a measure of accuracy as
     \label{tab:gpescores1_sham}
 \end{table}
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{XXX}
     \toprule
@@ -355,14 +355,14 @@ The obtained cross-validation GPEs' test scores used as a measure of accuracy as
     \label{tab:gpescores1_ab}
 \end{table}
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter04/bgpes_vs_bsplit_sham.pdf}
     \caption{For each LV feature, the GPE with the highest $R^2$ split test score is used to make predictions at the respective left-out subset of test points. Predictions are sorted in ascending order for the sake of a better visualisation and joined with a thick blue line, and the respective observations (empty dots) are sorted accordingly. $2$ STD confidence intervals (shaded regions) are also plotted around predicted mean lines.}
     \label{fig:gpesexampleinferencesham}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter04/bgpes_vs_bsplit_ab.pdf}
     \caption{For each LV feature, the GPE with the highest $R^2$ split test score is used to make predictions at the respective left-out subset of test points. Predictions are sorted in ascending order for the sake of a better visualisation and joined with a thick blue line, and the respective observations (empty dots) are sorted accordingly. $2$ STD confidence intervals (shaded regions) are also plotted around predicted mean lines.}
@@ -376,14 +376,14 @@ The obtained cross-validation GPEs' test scores used as a measure of accuracy as
 \subsection{Model output sensitivity to model input}
 Figures~\ref{fig:shamgsa}--\ref{fig:abgsa} show how input parameters contribute to explaining each LV feature's total variance in the SHAM and AB models.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter04/gsa_sham.pdf}
     \caption{The impact of cell, tissue and boundary conditions properties on organ-scale LV features in the SHAM rat model. The contribution of each parameter is represented by the sum of its first- and (when present) second-order effects. For each LV feature, higher-order interactions (coloured in grey) are represented by the sum of total effects minus the sum of all first- and second-order effects.}
     \label{fig:shamgsa}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter04/gsa_ab.pdf}
     \caption{The impact of cell, tissue and boundary conditions properties on organ-scale LV features in the AB rat model. The contribution of each parameter is represented by the sum of its first- and (when present) second-order effects. For each LV feature, higher-order interactions (coloured in grey) are represented by the sum of total effects minus the sum of all first- and second-order effects.}
@@ -400,21 +400,21 @@ The $\Caif$ parameter is the most influential across all the LV features. The $\
 \subsection{Model fitting}\label{sec:ch4modelfitting}
 The HM process is illustrated in Figures~\ref{fig:shamhm}--\ref{fig:abhm} for the SHAM and AB rat models. The input parameter points in $8$D are plotted as a $2$D projection for each pair of parameters. The initial $X$ space (lightest colour variants) became progressively constrained to smaller $X_{NIMP}$ regions (darker colour variants) as the HM process went forward. During the last waves, as we continued to observe a decrease in the $X_{NIMP}$ space volume, we stopped the process when the percentage of $X_{NIMP}$ points out of the total testing $NROY$ points fell below $\SI{5}{\percent}$. This prevented exhaustion of computational resources, although convergence of the $X_{NIMP}$ space had not yet been reached, completing SHAM and AB models' fitting in $8$ and $9$ waves, respectively. Details of HM progression including cutoff values and percentages of space reduction are given in Table~\ref{tab:hmdetails}.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter04/hm_sham.png}
     \caption{High-dimensional input parameter space reduction during SHAM history matching. SHAM HM completed within eight waves.}
     \label{fig:shamhm}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter04/hm_ab.png}
     \caption{High-dimensional input parameter space reduction during AB history matching. AB HM completed within nine waves.}
     \label{fig:abhm}
 \end{figure}
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{lXXXX}
         \toprule
@@ -442,7 +442,7 @@ The HM process is illustrated in Figures~\ref{fig:shamhm}--\ref{fig:abhm} for th
 \vspace{0.2cm}
 Although HM does not ensure the reduction in individual parameters' ranges but rather a whole high-dimensional space reduction \cite{Coveney:2018}, the diagonal plots in Figures~\ref{fig:shamhm}--\ref{fig:abhm} suggest that all the parameters underwent reduction (to different degrees) along their $1$D domain, both in the SHAM and AB models. We therefore analysed whether these parameters had been constrained to lie in spaces which differ according to the rat phenotype. This phenomenon was observed in $5$ of the $8$ total parameters, as highlighted in Figure~\ref{fig:onedspacered}. We can see that $z$, $\Caif$, $\kxb$, $\koff$ and $\tref$ take values in completely separated spaces for the SHAM and AB models. The biggest space separation is observed for $\Caif$ and $\tref$.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=0.8\textwidth]{figures/chapter04/sham_vs_ab_final_ranges.pdf}
     \caption{Input parameters’ one-dimensional ranges after completing HM procedure. Comparison between SHAM (blue) and AB (red) rat models’ fittings. For each input parameter, the displayed intervals are scaled according to the initial range for that specific parameter. When SHAM and AB intervals’ intersection is non-empty, this is also displayed with dotted lines.}
@@ -453,10 +453,10 @@ Although HM does not ensure the reduction in individual parameters' ranges but r
 \vspace{0.2cm}
 We finally investigated whether the constrained input parameter space was mapped by the simulator into model read-outs that matched experimental observations. For this purpose, we sampled using the cloud technique and simulated $1,024$ points in the HM final wave's $X_{NIMP}$ parameter space of both the SHAM and AB models. Of these, only $264$ and $178$ points led to a successfully completed simulation for SHAM and AB models, respectively. After extracting the LV features from the simulator outputs, we examined their distributions and compared them to the same features' experimentally observed variability (Table~\ref{tab:values2match}). This is summarised in Figure~\ref{fig:simulatormatchtoexpvar}.
 
-\begin{figure}[!ht]
+\begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter04/sham_vs_ab_fit.pdf}
-    \caption{Simulator runs using the HM last wave’s $X_{NIMP}$ points as an input. (A) Obtained LV features’ (empty, coloured dots) distributions around experimental mean values (filled, black dots) for SHAM (.$1$) and AB (.$2$). $2$ standard deviations confidence intervals are shown as vertical straight lines centred in their respective mean value. All the displayed values (including confidence intervals) are normalized by the respective experimental mean values. (B) Simulated LV volume (.$1$) and pressure (.$2$) curves which the features in (A) were extracted from, for SHAM (blue) and AB (red). The average curves are displayed in darker colour variant. (C) Resulting SHAM (.$1$) and AB (.$2$) pressure-volume loops with approximately $\SI{95}{\percent}$ EDV, ESV, PeakP features’ experimental confidence intervals. \todo{add A-B-C tags}}
+    \caption{Simulator runs using the HM last wave’s $X_{NIMP}$ points as an input. (A) Obtained LV features’ (empty, coloured dots) distributions around experimental mean values (filled, black dots) for SHAM (.$1$) and AB (.$2$). $2$ standard deviations confidence intervals are shown as vertical straight lines centred in their respective mean value. All the displayed values (including confidence intervals) are normalised by the respective experimental mean values. (B) Simulated LV volume (.$1$) and pressure (.$2$) curves which the features in (A) were extracted from, for SHAM (blue) and AB (red). The average curves are displayed in darker colour variant. (C) Resulting SHAM (.$1$) and AB (.$2$) pressure-volume loops with EDV, ESV, PeakP features’ $\sim\SI{95}{\percent}$ experimental confidence intervals.}
     \label{fig:simulatormatchtoexpvar}
 \end{figure}
 
@@ -471,7 +471,7 @@ By comparing the highlighted average curves, we can notice smaller end-diastolic
 \subsection{Fitted models}\label{sec:ch4fittedmodels}
 Unlike classical optimisation algorithms that converge to a single set of parameters possibly representing a global minimum of the chosen loss function, the HM procedure proposes an entire cloud of points (belonging to the last wave's non-implausible, restricted parameter space) which are all possible candidates to yield a model features' match to experimental observation within experimental uncertainty. In order to have one representative model for the SHAM rat and one for the AB rat to be used respectively as baseline, reference models of a healthy and diseased rat hearts, we selected one candidate represented by the best-fit according to the $L_2$ norm of the difference between the simulated features' values vector and the corresponding experimental mean values vector. The complete sets of fitted model parameters and corresponding LV features for both the reference SHAM and AB rat models are reported in Tables~\ref{tab:shamabbestfitparamvalues}--\ref{tab:shamabbestfitfeatvalues}.
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{XXXl}
     \toprule
@@ -493,7 +493,7 @@ Unlike classical optimisation algorithms that converge to a single set of parame
     \label{tab:shamabbestfitparamvalues}
 \end{table}
 
-\begin{table}[!ht]
+\begin{table}[ht!]
     \myfloatalign
     \begin{tabularx}{\textwidth}{XXXl}
     \toprule
