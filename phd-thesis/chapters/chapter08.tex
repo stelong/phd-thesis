@@ -5,7 +5,7 @@
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we investigate on the force-calcium relationship (F-pCa), as described by the cell contraction sub-model of our full personalised SHAM rat hart contraction model. Using a combination of simulator and emulators, we show that changes in the F-pCa cannot be uniquely described changes in sarcomere properties. At the same time, we show that changes in the LV function (e.g. ejection fraction) cannot be described by unique changes in the sarcomere properties. By coupling these two information, we prove that the mapping from the F-pCa curve to the LV function and the corresponding inverse mapping are non-unique. This finding sheds a new light on the problem of interpreting pharmacological interventions' effects on the F-pCa curve in terms of the desired effects on whole-heart contraction and relaxation.
+    In this chapter, we investigate on the force-calcium relationship using the cell contraction sub-model of our full personalised SHAM rat hart contraction model (Section~\ref{sec:cellcontr}). Using a combination of simulator and emulators (Section~\ref{subsec:quantlink}), we show that changes in the F-pCa curve cannot be uniquely described by changes in sarcomere properties (Sections~\ref{sec:changespCa50result1}--\ref{sec:changespCa50result2}). At the same time, we show that changes in the LV function (e.g. ejection fraction) cannot be uniquely described by changes in the sarcomere properties (Section~\ref{sec:changesLVfunctionresult}). By coupling these two information, we prove that the mapping from the F-pCa curve to the LV function and the corresponding inverse mapping are non-unique (Section~\ref{sec:ch8nonuniquemappings}). We then provide a discussion and address specific limitations (Section~\ref{sec:ch8discussion}), and we conclude with a brief summary (Section~\ref{sec:ch8summary}).
 \end{remark}
 
 
@@ -13,21 +13,6 @@
 %
 %
 \section{Motivation}\label{sec:ch8motivation}
-\todo{this is Abstract copy-pasted from the paper: adapt it to thesis}
-
-\noindent
-The force-pCa (F-pCa) curve is used to characterise steady state contractile properties of cardiac trabeculae, muscle strips and myocytes under different physiological, pathological and pharmacological conditions. This provides a reduced preparation to isolate sarcomere mechanisms. However, how changes in the F-pCa curve quantitatively impact emergent whole heart mechanics is not clear.
-
-We study the link between sarcomere to whole heart function using a multi-scale mathematical model of rat ventricle cardiac biomechanics that quantitatively describes sarcomere properties, tissue structure and properties, cardiac anatomy and preload and afterload. Using the model, we first map individual cell level changes in sarcomere-regulating parameters to whole-organ level changes in pressure-volume (PV) loop characteristics (end-diastolic and end-systolic volumes, stroke volume and ejection fraction (EF)). We then use the cell contraction sub-model of the full $3$D whole heart contraction model to map changes in the sarcomere-regulating parameters to changes in the F-pCa curve. A global sensitivity analysis (GSA) is also performed to assess the impact of the parameters into affecting the PV loop characteristics' total variance.
-
-We show that changes in sarcomere properties cause non-linear and, most importantly, non-monotonic changes in PV loop characteristics. By showing that changes in sarcomere properties also alter the F-pCa curve, we demonstrate that (1) changes in the F-pCa curve cause non-monotonic changes in PV loop characteristics. We further demonstrate that (2) changes in F-pCa curve cannot be described uniquely in terms of changes in sarcomere properties, and that (3) changes in left ventricular (LV) contractile function as described by EF and other features of the PV loop (e.g. isovolumetric relaxation time) cannot be described uniquely in terms of changes in sarcomere properties. As a consequence of (1)-(2)-(3), we conclude that the F-pCa curve mapping to LV function and its inverse mapping are not unique.
-
-Our findings suggest that further measurements are needed to map F-pCa through to whole heart mechanics and that the impact of a shift in F-pCa curve can not be universally assumed to cause improved PV loop phenotypes.
-
-\vspace{0.2cm}\noindent
-\todo{this is Introduction copy-pasted from the paper: adapt it to thesis}
-
-\noindent
 Heart failure (HF) affects nearly a million people in the UK alone~\cite{Bhf:2021}. In the disease with reduced ejection fraction (EF) phenotype (HFrEF), the gold standard pharmacotherapies are beta-blockers, angiotensin receptor/neprilysin inhibitors, sodium-glucose co-transporter inhibitors, beta-blockers and mineralocorticoid receptor antagonists. These were all shown to improve the primary endpoint composite of cardiovascular death and HF hospitalisation in breakthrough clinical trials~\cite{Debska-Kozlowska:2021}. Nevertheless, improved treatment strategies are constantly being sought for, and the Food and Drug Administration has recently stated~\cite{FDA:2019} that an improvement in symptoms and/or physical function, even without a documented favourable effect on the above mentioned primary endpoints, can be the basis for a drug to be approved as HF treatment~\cite{Fiuzat:2020}. For this reason, physiopathologic or "explanatory'' endpoints in the initial drug assessment phase and secondary endpoints in later phases have gained attention. Non-invasive measurements of the left ventricular (LV) function such as cardiac output fall within these categories as targets for improvement (e.g. increased stroke volume (SV) / EF)~\cite{Zanolla:2003}.
 
 Novel strategies of HF treatment are being developed that tend to differ from the above mentioned pharmacotherapies which all agree to the well-accepted neurohormonal modulation paradigm, with direct sarcomere modulators being an important, example compound class in this direction~\cite{Tsukamoto:2020}. Sarcomere modulators' method of action rely on the fact that sarcomeric proteins dynamics are the basis of myocardial contraction and relaxation~\cite{Solaro:1998}. The two new compounds omecamtiv mecarbil~\cite{Teerlink:2016} and mavacamten~\cite{Olivotto:2020} provide new sarcomere modulators that can increase and decrease sarcomere activation by cardiac myosin stimulation and inhibition, respectively. Both these compounds alter myofilament calcium ($\Ca$) sensitivity, and knowing when and why this will result in improved cardiac function is an important question.
@@ -49,34 +34,25 @@ To design new treatment strategies, solely looking at the induced shift in the $
 %
 %
 \subsection{Cellular contraction model}\label{sec:cellcontr}
-We employed the Land et al.~\cite{Land:2012} rat myocyte contraction model to simulate active tension generation at sarcomere level and isometric steady-state force-calcium relationship in the rat heart. This model was previously integrated within a $3$D whole-organ rat mechanics modelling framework and validated~\cite{Longobardi:2021} by showing it can recapitulate the main mechanisms of action of sarcomeric pharmacological interventions by manipulating specific parameters responsible for $\Ca$ binding to troponin C (TnC) and/or for cross-bridge formation.
+We employed the Land et al.~\cite{Land:2012} myocyte contraction model (Section~\ref{sec:ch2contractionmodel}) to simulate active tension generation at the sarcomere level and isometric steady-state F-pCa relationship in the rat heart. Parameters were all set to the personalised SHAM rat model values (Table~\ref{tab:bestfitparametersvalues}) when applicable, or to the Land et al.~\cite{Land:2012} model baseline values when otherwise.
 
 \vspace{0.2cm}
-The experimentally derived F-pCa curve can be described by a Hill-type relationship between the force and the negative logarithm of $\Ca$ concentration values $\pCa = -\log{\Cai}$:
+We recall that an experimentally derived F-pCa curve can be described by a Hill-type relationship between the force ($F$) and the negative logarithm of the $\Ca$ concentration ($\pCa$)~\cite{Walker:2010}:
 %
-\begin{equation}\label{eq:FpCa}
+\begin{equation}
     \frac{F}{F_0} = \frac{1}{1+10^{h(\pCaf-\pCa)}}
 \end{equation}
 
 \noindent
-where $F_{0}$ is the maximal reference force and $\pCaf$ and $h$ are respectively the negative logarithm of the half maximal effective $\Ca$ concentration and the Hill coefficient of this relationship.
-
-\vspace{0.2cm}
-From equation~\eqref{eq:FpCa}, it follows that F-pCa curves are uniquely determined by the $\pCaf$ and $h$ values. By re-arranging the steady-state solution of the Land et al.~\cite{Land:2012} model, we can derive analytic definitions of the $\pCaf$ and $h$ features in terms of model parameters. In particular, given the two sets of parameters
+where $F_{0}$ is the maximal reference force and $\pCaf$ and $h$ are respectively the negative logarithm of the half maximal effective $\Ca$ concentration and the Hill coefficient of this relationship. It immediately follows that F-pCa curves are uniquely determined by the $\pCaf$ and $h$ values. We have also seen that the steady-state force solution of the Land et al.~\cite{Land:2012} model can be derived analytically, with both the $\pCaf$ and $h$ features expressed in terms of model parameters. In particular, we recall that the $\pCaf$ was given as:
 %
 \begin{align}
-    & \mathbf{p} := (\Caif, \kon, \koff, \trpnf, \ntrpn) \label{eq:pCa50params} \\
-    & \mathbf{q} := (\nxb,\,\trpnf,\,\ntrpn) \label{eq:hparams}
+    & \pCaf(\mathbf{p}) =  -\log\left[\Caif\left(\frac{\koff}{\kon}\frac{\trpnf}{1-\trpnf}\right)^{1/\ntrpn}\right]\,,\quad\text{with} \label{eq:pCa50}\\
+    & \mathbf{p} := (\Caif, \kon, \koff, \trpnf, \ntrpn) \label{eq:pCa50params}
 \end{align}
 
-we have that:
-%
-\begin{align}
-    & \pCaf = \pCaf(\mathbf{p}) =  -\log\left[\Caif\left(\frac{\koff}{\kon}\frac{\trpnf}{1-\trpnf}\right)^{1/\ntrpn}\right] \label{eq:pCa50} \\
-    & h = h(\mathbf{q}) = \nxb\,\ntrpn\,(1-\trpnf) \label{eq:hnew}
-\end{align}
-
-Parameters appearing in equations~\eqref{eq:pCa50params}--\eqref{eq:hparams} were introduced in Section\todo{fixa}Table~\ref{tab:bestfitparametersvalues}, while the Land et al.~\cite{Land:2012} model equations, their steady-state solutions and details for deriving equations~\eqref{eq:pCa50}--\eqref{eq:hnew} can be found in the Supplementary material.
+\vspace{0.2cm}\noindent
+In the next section, we shall make use of equations~\eqref{eq:pCa50}--\eqref{eq:pCa50params} to investigate on F-pCa curve shifts. 
 
 
 %
@@ -89,7 +65,7 @@ A given change ($\Delta$) in the $\pCaf$ feature value of the F-pCa curve can be
     \Delta = \pCaf^{\text{new}} - \pCaf
 \end{equation}
 
-\vspace{0.2cm}
+\vspace{0.2cm}\noindent
 where $\pCaf^{\text{new}}$ is the feature value characterising the newly observed F-pCa curve. We tested whether a shift of $\Delta$ units in the $\pCaf$ could be the result of unique changes in sarcomere properties. Testing for non-unique changes was carried out analytically and numerically (as visualised in Figure~\ref{fig:2perclwrwshift}) in the case where the change was driven by perturbations in one model parameter (Section~\ref{sec:changespCa50result1}), and numerically (as visualised in Figure~\ref{fig:pca50isolines}) in the case where this was driven by perturbations in two model parameters (Section~\ref{sec:changespCa50result2}).
 
 \vspace{0.2cm}
@@ -99,52 +75,42 @@ In the one-parameter case, it sufficed to prove that for each parameter $p_i,\,i
     \mathbf{p}^{\text{new}} := (p_1,\,\dots,\,\p_{i-1},\,\alpha_i\times\p_i,\,p_{i+1},\,\dots,\,p_5)
 \end{equation}
 
-\vspace{0.2cm}
+\noindent
 is such that
 %
 \begin{equation}
     \pCaf^{\text{new}} = \pCaf(\mathbf{p}^{\text{new}})
 \end{equation}
 
-\vspace{0.2cm}
-We computed this scaling coefficient for each parameter $\p_i$ by solving for $\alpha_i$ equation~\eqref{eq:delta} (see results in Section~\ref{sec:changespCa50result1}).
+\vspace{0.2cm}\noindent
+We computed this scaling coefficient for each parameter $\p_i$ by solving for $\alpha_i$ equation~\eqref{eq:delta}.
 
 \vspace{0.2cm}
-In the two-parameter case, we proceeded as follows. We allowed $2$ parameters to take equally-spaced values in the range obtained as a $\pm\SI{50}{\percent}$ perturbation around their baseline values (Table~\ref{tab:bestfitparametersvalues}). We then generated a $2$D uniform grid from all the combinations of $2$ parameter values, and used the Land et al.~\cite{Land:2012} cell contraction model to calculate the $\pCaf$ value at each parameter point of the grid. By plotting the resulting $\pCaf$ values across the whole grid as a heat map, we could discern regions in the $2$D parameter space which share the same $\pCaf$ value (isolines). The same process was repeated for every pair of parameters coming from vector $\mathbf{p}$ (equation~\eqref{eq:pCa50params}), which was shown to regulate the $\pCaf$ feature of the F-pCa curve in equation~\eqref{eq:pCa50} (see results in Section~\ref{sec:changespCa50result2}).
+In the two-parameter case, we proceeded as follows. We allowed $2$ parameters to take equally-spaced values in the range obtained as a $\pm\SI{50}{\percent}$ perturbation around their baseline values (Table~\ref{tab:bestfitparametersvalues}). We then generated a $2$D uniform grid from all the combinations of $2$ parameter values, and used the Land et al.~\cite{Land:2012} cell contraction model to calculate the $\pCaf$ value at each parameter point of the grid. By plotting the resulting $\pCaf$ values across the whole grid as a heat map, we could discern regions in the $2$D parameter space which share the same $\pCaf$ value (isolines). The same process was repeated for pairs of parameters coming from vector $\mathbf{p}$ (equation~\eqref{eq:pCa50params}), which was shown to regulate the $\pCaf$ feature of the F-pCa curve (equation~\eqref{eq:pCa50}).
 
 
 %
 %
 %
-\subsection{A quantitative link between sarcomere properties and whole heart function}\label{subsec:quantlink}
-To quantitatively link sarcomere properties to whole heart function, we employed a personalised model of $3$D biventricular healthy rat heart contraction~\cite{Longobardi:2020}, which integrates the Land et al.~\cite{Land:2012} cell contraction model (Section~\ref{sec:cellcontr}) in the context of whole-organ simulations. The full $3$D model simulation input comprises: $4$ parameters encoding the shape of the intracellular $\Ca$ transient used to electrically activate the myocardium, namely $\dca$, $\ampl$, $\tp$, $\rtf$; $8$ parameters regulating the sarcomere, namely $\Caif$, $\betaone$, $\koff$, $\ntrpn$, $\kxb$, $\nxb$, $\trpnf$, $\tref$; $4$ parameters describing boundary hemodynamics conditions and tissue properties, namely $\p$, $\pao$, $\Z$, $\Cone$. Each parameter definition and baseline value is reported in Table~\ref{tab:bestfitparametersvalues}. The model simulation output comprises LV volume and pressure transients and the associated pressure-volume (PV) loop. LV contractile function is described using scalar quantities of clinical interest extracted from the model output, such as end-diastolic volume (EDV), end-systolic volume (ESV), SV and EF.
+\subsection{The relationship between sarcomere properties and LV function}\label{subsec:quantlink}
+To quantitatively link sarcomere properties to the LV function, we employed the personalised model of $3$D biventricular healthy (SHAM) rat heart contraction derived in Chapter~\ref{cha:chapter4} and extended in Chapter~\ref{cha:chapter7}. This model integrates the Land et al.~\cite{Land:2012} cell contraction model in the context of whole-organ simulations.
 
-
-%
-%
-%
-\subsubsection{Simulator of the whole heart function}
-The full model can be viewed as a multi-scale function that maps the $16$ input parameters $\mathbf{x}$ to each of the considered LV output features $y_j$ (e.g. $y_1=\textrm{EDV}$, $y_2=\textrm{ESV}$, et cetera):
+\vspace{0.2cm}
+We have seen (Section~\ref{sec:ch7rat_heart_contraction_model}) that this model can be represented as a multi-scale function (simulator) that maps a $16$D vector of input parameters $\mathbf{x}$ to a scalar quantity of interest $y_j$ (e.g. $y_1=\textrm{EDV}$, $y_2=\textrm{ESV}$, et cetera):
 %
 \begin{align}\label{eq:fsimul}
     f_{\textrm{simul}}\colon\mathbb{R}^{16} &\to\mathbb{R}\times\mathbb{R}\times\dots \\
     \mathbf{x} &\mapsto (y_1,\,y_2,\dots) \nonumber
 \end{align}
 
-This map takes the name of \textit{simulator}.
+\vspace{0.2cm}\noindent
+At the same time, we have replaced (Section~\ref{sec:ch7training_dataset_emulators_global_sensitivity_analysis}) the simulator with a fast-evaluating surrogate model (emulator), based on Gaussian process emulation.
 
 \vspace{0.2cm}
-We firstly investigated the EDV, ESV, SV and EF features' dependence on model parameters. For this purpose, we run the simulator at parameter sets $\mathbf{x}_i,\,i=1,\,\dots,\,128$ where all the components were fixed to their baseline values (Table~\ref{tab:bestfitparametersvalues}) but one component, which instead was taking $128$ equally-spaced values in the $\pm\SI{50}{\percent}$ range of perturbation around its baseline value. The simulator was therefore run $128$ times, and each time LV features' values were collected. In this way, we were able to obtain the relationship between each of the LV features and one model input parameter. The entire process was repeated by changing the free parameter to be each of the $\Caif$, $\koff$, $\ntrpn$, $\trpnf$ parameters in turn. These parameters were chosen as they directly modulated the $\pCaf$ feature of the F-pCa curve, as seen in equation~\eqref{eq:pCa50}.
-
-
-%
-%
-%
-\subsubsection{Emulator of the whole heart function}
-Every simulator evaluation at a new parameter set $f_{\textrm{simul}}(\mathbf{x}_{\textrm{new}})$ requires the full model to be run. However, running the full model is computationally intensive, as it takes $\sim 4-10$ hours to complete one simulation on a single-core machine. We therefore made use of pre-trained \textit{emulators} to replace each restricted simulator map $\mathbf{x}\mapsto y_j$ with a fast-evaluating, univariate probabilistic surrogate, based on Gaussian processes (GP)~\cite{Longobardi:2020}, also called \textit{Gaussian process emulator} (GPE). Due to lower computational costs, emulators enable performing uncertainty quantification of expensive models using global sensitivity analysis (GSA). GSA normally requires a huge number of simulator evaluations, which become feasible when the simulator is replaced with an emulator (each prediction now taking $\sim 1$ second instead of $\sim 4$ hours).
+We firstly used the simulator to investigate on LV volume features, namely EDV, ESV, SV and EF, dependence on model parameters. For this purpose, we run the simulator at parameter sets $\mathbf{x}_i,\,i=1,\,\dots,\,128$ where all the components were fixed to their baseline values (Table~\ref{tab:bestfitparametersvalues}) but one component, which instead was taking $128$ equally-spaced values in the $\pm\SI{50}{\percent}$ range of perturbation around its baseline value. The simulator was therefore run $128$ times, and each time LV features' values were collected. In this way, we were able to obtain the relationship between each of the LV features and one model input parameter. The entire process was repeated by changing the free parameter to be each of the $\Caif$, $\koff$, $\ntrpn$, $\trpnf$ parameters in turn. These parameters were chosen as they directly modulated the $\pCaf$ feature of the F-pCa curve, as seen in equation~\eqref{eq:pCa50}.
 
 \vspace{0.2cm}
-We performed a GPE-based GSA and calculated the Sobol' first-order, second-order and total effects~\cite{Sobol:2001} as a measure of model outputs' sensitivity to model inputs. We evaluated the impact of $\Caif$, $\koff$, $\ntrpn$, $\trpnf$ parameters into affecting the total variance of EDV, ESV, SV, EF features. Parameters whose Sobol' sensitivity indices were below the threshold of $0.01$ were considered to have negligible effects and thus set to $0$ to simplify visualisation (see Figure~\ref{fig:gsarestr}).
+We then used the emulator to perform a GPE-based GSA. We calculated the Sobol' first-order, second-order and total effects (Section~\ref{sec:ch3globalsensitivityanalysis}) as a measure of model outputs' sensitivity to model inputs. We evaluated the impact of $\Caif$, $\koff$, $\ntrpn$, $\trpnf$ parameters into affecting the total variance of EDV, ESV, SV, EF features. Parameters whose Sobol' indices' distributions' expectation was below the threshold $0.01$ were determined to have negligible effects.
 
 
 %
@@ -158,10 +124,10 @@ We wanted to test if changes observed in the LV function at whole-organ level, a
 %
 %
 \subsection{Non-unique mappings of F-pCa curve to LV function and of LV function to F-pCa curve}
-In order to test if the mapping from the F-pCa curve to LV function is not unique, we considered all the parameter points of the $2$D grids generated in Section~\ref{sec:changespCa50} that produced the same shift in the reference $\pCaf$ feature value. As mentioned previously, these points all belong to isolines of the local $2$D parameter space. We then used the emulator to map the points to the corresponding organ-level EF value (see results in Section~\ref{sec:fpcatolvnonuniquemapping}).
+In order to test if the mapping from the F-pCa curve to LV function is not unique, we considered all the parameter points of the $2$D grids generated in Section~\ref{sec:changespCa50} that produced the same shift in the reference $\pCaf$ feature value. As mentioned previously, these points all belong to isolines of the local $2$D parameter space. We then used the emulator to map the points to the corresponding organ-level EF value.
 
 \vspace{0.2cm}
-We also tested if the inverse mapping from the LV function to the F-pCa curve is not unique. For this purpose, we considered all the parameter points of the $2$D grids generated in Section~\ref{sec:changesLVfunction} that produced the same shift in the reference EF feature value. We then used the cellular contraction model to map the points to the corresponding cell-level $\pCaf$ value (see results in Section~\ref{sec:lvtofpcanonuniquemapping}).
+We also tested if the inverse mapping from the LV function to the F-pCa curve is not unique. For this purpose, we considered all the parameter points of the $2$D grids generated in Section~\ref{sec:changesLVfunction} that produced the same shift in the reference EF feature value. We then used the cellular contraction sub-model of the full simulator to map the points to the corresponding cell-level $\pCaf$ value.
 
 
 %
@@ -191,7 +157,7 @@ The variations of EDV, ESV, SV and EF features as a function of the considered F
 \end{figure}
 
 \vspace{0.2cm}
-We used pre-trained GPEs~\cite{Longobardi:2020} to evaluate how uncertainty in the simulator input (F-pCa curve-modulating parameters) affects the simulator output (LV features) via a GPE-based GSA. The regression accuracy of the employed GPEs is reported in the Supplementary material. The obtained GSA Sobol' sensitivity indices are displayed as donut charts in Figure~\ref{fig:gsarestr}. We can see that the reference thin filament $\Ca$ sensitivity ($\Caif$) is the most important parameter into explaining the total variance of EDV, ESV, SV and EF features. The second most important parameter is the degree of cooperativity of $\Ca$ binding to TnC ($\ntrpn$), followed by the fraction of bound $\Ca$-TnC complexes for half maximal cross-bridges activation ($\trpnf$) and the unbinding rate of $\Ca$ from TnC ($\koff$).
+The obtained GSA Sobol' sensitivity indices are displayed as donut charts in Figure~\ref{fig:gsarestr}. We can see that the reference thin filament $\Ca$ sensitivity ($\Caif$) is the most important parameter into explaining the total variance of EDV, ESV, SV and EF features. The second most important parameter is the degree of cooperativity of $\Ca$ binding to TnC ($\ntrpn$), followed by the fraction of bound $\Ca$-TnC complexes for half maximal cross-bridges activation ($\trpnf$) and the unbinding rate of $\Ca$ from TnC ($\koff$).
 
 \begin{figure}[h!]
     \myfloatalign
@@ -228,7 +194,7 @@ We show that an observed change in $\pCaf$ can be caused by multiple different c
 \begin{figure}[h!]
     \myfloatalign
     \includegraphics[width=0.8\textwidth]{figures/chapter08/Fig4.pdf}
-    \caption{Different parameters can be individually perturbed to achieve the very same shift in the force-calcium relationship. Example showing $\SI{2}{\percent}$ leftwards (upper plot) and rightwards (bottom plot) shifts of the reference $\pCaf$ value. As $\trpnf$ and $\ntrpn$ also regulate the force-pCa curve's Hill coefficient (equation~\eqref{eq:hnew}), notice that for these two parameters the shift in the $\pCaf$ value is also affecting the curve's slope.}
+    \caption{Different parameters can be individually perturbed to achieve the very same shift in the force-calcium relationship. Example showing $\SI{2}{\percent}$ leftwards (upper plot) and rightwards (bottom plot) shifts of the reference $\pCaf$ value. As $\trpnf$ and $\ntrpn$ also regulate the force-pCa curve's Hill coefficient (equation~\eqref{eq:h}), notice that for these two parameters the shift in the $\pCaf$ value is also affecting the curve's slope.}
     \label{fig:2perclwrwshift}
 \end{figure}
 
@@ -278,7 +244,7 @@ Parameter points inducing the same no-shift in the EF feature value (isolines of
 %
 %
 %
-\subsection{F-pCa curve to LV function mapping and its inverse mapping are not unique}
+\subsection{F-pCa curve to LV function mapping and its inverse mapping are not unique}\label{sec:ch8nonuniquemappings}
 In Sections~\ref{sec:changespCa50result1}--\ref{sec:changespCa50result2}, we proved that changes in the $\pCaf$ feature value are not uniquely caused by changes in sarcomere properties. In Section~\ref{sec:fpcatolvnonuniquemapping}, we also showed that changes in the EF feature value are not uniquely caused by changes in the $\pCaf$ value. Because of these two findings, we can state that observed changes in the F-pCa curve cannot be uniquely mapped to changes in the LV function.
 
 \vspace{0.2cm}
@@ -317,3 +283,5 @@ Indications from the GSA coupled with the information of F-pCa curve vs. LV func
 %
 \section{Summary}\label{sec:ch8summary}
 We have used a biophysically detailed mathematical model of a healthy rat heart contraction to quantitatively map sarcomere properties to whole heart function. Using this mapping, we demonstrated that the relationship between F-pCa curve and LV function is non-linear and non-monotonic. This results in the non-interpretability of observed changes in the LV function in terms of unique sarcomere modulations, which highlights the need for muscle experimental findings to be put into a broader context where not only the $\pCaf$ and Hill coefficient, but also active and passive force, length and velocity dependencies, calcium transient and boundary conditions are analysed.
+
+This finding sheds a new light on the problem of interpreting pharmacological interventions' effects on the F-pCa curve in terms of the desired effects on whole-heart contraction and relaxation.

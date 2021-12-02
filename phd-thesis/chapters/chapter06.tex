@@ -5,7 +5,7 @@
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we investigate how $\Ca$ transient variations can be mapped to the rat whole heart function using the developed emulation framework. We propose to encode the shape of a given $\Ca$ transient using a set of scalar features of clinical interest (Section~\ref{sec:ch6encoding_ca_transient_variations}), allowing these to be quantitatively mapped to the LV features as an additional component to the emulator input parameter set. When using the full forward rat heart contraction model instead, different $\Ca$ transients can be simply plugged-in as new model inputs (previously fixed) to see how they will impact the LV function. Using this second approach, the personalised SHAM rat heart contraction model is validated against known CiPA compounds' effects on $\Ca$ dynamics and how these propagate through to whole heart function (Section~\ref{sec:ch6validating_the_personalised_healthy_rat_heart_model}). We conclude with a brief summary (Section~\ref{sec:ch6summary}).
+    In this chapter, we investigate how $\Ca$ transient variations can be mapped to the rat whole heart function using the developed emulation framework. We propose to encode the shape of a given $\Ca$ transient using a set of scalar features of clinical interest (Section~\ref{sec:ch6encoding_ca_transient_variations}), allowing these to be quantitatively mapped to the LV features as an additional component to the emulator input parameter set. When using the full forward rat heart contraction model instead, different $\Ca$ transients can be simply plugged-in as new model inputs (previously fixed) to see how they will impact the LV function. Using this second approach, the personalised SHAM rat heart contraction model is validated against known CiPA compounds' effects on $\Ca$ dynamics and how these propagate through to whole heart function (Section~\ref{sec:ch6validating_the_personalised_healthy_rat_heart_model}). We then provide a discussion and address specific limitations (Section~\ref{sec:ch6discussion}), and we conclude with a brief summary (Section~\ref{sec:ch6summary}).
 \end{remark}
 
 
@@ -68,7 +68,7 @@ The specific implementation of this scaling strategy is presented in Algorithm~\
 \end{algorithm}
 
 \vspace{0.2cm}
-Figure~\ref{fig:algintopractice} shows how the algorithm works and how new random calcium transients can be generated.
+Figure~\ref{fig:algintopractice} shows how the algorithm works and how new random $\Ca$ transients can be generated.
 
 \begin{figure}[ht!]
     \myfloatalign
@@ -260,7 +260,7 @@ The used approach simulates the compound induced changes in the $\Ca$ transient,
 %
 %
 \subsection{Limitations}\label{sec:ch6limitations}
-Most of the compounds we tested were calcium channel blockers, which are known to reduce the heart rate. Although this can be neutralised by secondary effects such as a reflex increase in beta adrenergic tone in response to systemic vascular dilation, so that because of the level of reflex beta adrenergic discharge the net effect on heart rate could be balanced out~\cite{Low:1982}, our model doesn't account for heart rate variations, so the validation was performed by evaluating the effects of compounds at a fixed, physiological rate. The negative chronotropic effect, coupled with the impact calcium channel blockers have on muscle sympathetic nerve activity~\cite{Binggeli:2002}, can also partially explain the mismatch observed (Figure~\ref{fig:LVRVfeatsalldrugsrespcurves}) when quantitatively comparing compounds' effects onto LV pressure features with the model simulations. Another source of mismatch can be linked to the fixed LV volume setup normally used in the considered experimental studies to evaluate the compounds' effects, which differ from our rat heart model.
+Most of the compounds we tested were $\Ca$ channel blockers, which are known to reduce the heart rate. Although this can be neutralised by secondary effects such as a reflex increase in beta adrenergic tone in response to systemic vascular dilation, so that because of the level of reflex beta adrenergic discharge the net effect on heart rate could be balanced out~\cite{Low:1982}, our model doesn't account for heart rate variations, so the validation was performed by evaluating the effects of compounds at a fixed, physiological rate. The negative chronotropic effect, coupled with the impact $\Ca$ channel blockers have on muscle sympathetic nerve activity~\cite{Binggeli:2002}, can also partially explain the mismatch observed (Figure~\ref{fig:LVRVfeatsalldrugsrespcurves}) when quantitatively comparing compounds' effects onto LV pressure features with the model simulations. Another source of mismatch can be linked to the fixed LV volume setup normally used in the considered experimental studies to evaluate the compounds' effects, which differ from our rat heart model.
 
 
 %
