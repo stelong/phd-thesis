@@ -1,11 +1,15 @@
 %==============================================================================
-\chapter{In silico mapping calcium pharmacological modulations to whole-organ function and model validation}\label{cha:chapter6}
+\chapter{Introducing and validation of calcium transient variation into the whole heart model}\label{cha:chapter6}
 %==============================================================================
 %
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we investigate how $\Ca$ transient variations can be mapped to the rat whole heart function using the developed emulation framework. We propose to encode the shape of a given $\Ca$ transient using a set of scalar features of clinical interest (Section~\ref{sec:ch6encoding_ca_transient_variations}), allowing these to be quantitatively mapped to the LV features as an additional component to the emulator input parameter set. When using the full forward rat heart contraction model instead, different $\Ca$ transients can be simply plugged-in as new model inputs (previously fixed) to see how they will impact the LV function. Using this second approach, the personalised SHAM rat heart contraction model is validated against known CiPA compounds' effects on $\Ca$ dynamics and how these propagate through to whole heart function (Section~\ref{sec:ch6validating_the_personalised_healthy_rat_heart_model}). We then provide a discussion and address specific limitations (Section~\ref{sec:ch6discussion}), and we conclude with a brief summary (Section~\ref{sec:ch6summary}).
+    In this chapter, we investigate how $\Ca$ transient variations can be mapped to the rat whole heart function using the developed emulation framework. We propose to encode the shape of a given $\Ca$ transient using a set of scalar features of clinical interest (Section~\ref{sec:ch6encoding_ca_transient_variations}), allowing these to be quantitatively mapped to the LV features as an additional component to the emulator input parameter set. When using the full forward rat heart contraction model instead, different $\Ca$ transients can be simply plugged-in as new model inputs (previously fixed) to test how they will impact the LV function. Using this second approach, the personalised SHAM rat heart contraction model is validated against known 
+
+pharmacological channel blocking experimental validation 
+
+    CiPA compounds' effects on $\Ca$ dynamics and how these propagate through to whole heart function (Section~\ref{sec:ch6validating_the_personalised_healthy_rat_heart_model}). We then provide a discussion and address specific limitations (Section~\ref{sec:ch6discussion}), and we conclude with a brief summary (Section~\ref{sec:ch6summary}).
 \end{remark}
 
 
@@ -13,7 +17,7 @@
 %
 %
 \section{Motivation}\label{sec:ch6motivation}
-$\Ca$ dynamics plays a key role in the heart contraction and relaxation. We have seen that mapping sarcomere properties to the LV function quantitatively can possibly elucidate the mechanisms that are behind pathological conditions of the heart (Chapter~\ref{cha:chapter4}) and validate pharmacological compounds' mechanisms of action (Chapter~\ref{cha:chapter5}). Building upon this concept, the possibility to quantitatively map also $\Ca$ dynamics alterations to the whole heart behaviour is desirable. In Chapter~\ref{cha:chapter4}, we derived a personalised model of the SHAM rat heart contraction using a fixed $\Ca$ transient as an electrical stimulus. In this Chapter, we aim at incorporating $\Ca$ transient variations in the full simulator map (equation~\ref{eq:fsimul}) in order to understand how different, possibly more pathological $\Ca$ transient phenotypes can impact the LV function.
+$\Ca$ dynamics plays a key role in the heart contraction and relaxation. We have seen that mapping sarcomere properties to the LV function quantitatively can predict the mechanisms that are behind pathological conditions of the heart (Chapter~\ref{cha:chapter4}) and validate pharmacological compounds' mechanisms of action (Chapter~\ref{cha:chapter5}). Building upon this concept, the possibility to quantitatively map also $\Ca$ dynamics alterations to the whole heart behaviour is desirable. In Chapter~\ref{cha:chapter4}, we derived a personalised model of the SHAM rat heart contraction using a fixed $\Ca$ transient as stimulus. In this chapter, we aim at incorporating $\Ca$ transient variations in the full simulator map (equation~\ref{eq:fsimul}) in order to understand how different, physiological and possibly more pathological variations in $\Ca$ transient phenotypes can impact LV function.
 
 
 %
@@ -41,7 +45,7 @@ We used a $4$-feature parametric representation of the $\Ca$ transient that maps
 We wish to sample random sets of these features such that the final samples will uniformly cover the feature space, in order to possibly cover both healthy and pathological $\Ca$ transient phenotypes. For this purpose, we used linear weighs to scale each of the four features from a representative $\Ca$ transient. This parametric encoding of $\Ca$ transient variation ensured that all transients maintained a characteristic $\Ca$ transient morphology.
 
 \vspace{0.2cm}
-The specific implementation of this scaling strategy is presented in Algorithm~\ref{alg:cascaling}. Note that \texttt{features} function returns the set of four features given an input $\Ca$ transient; \texttt{concatenate} function returns a $1$D array obtained as the horizontal stack of the given input row $1$D arrays; \texttt{linear\_interpolator} function returns a function whose call method uses $1$D linear interpolation to find the value of new points.
+The specific implementation of this scaling strategy is presented in Algorithm~\ref{alg:cascaling}. Note that the \texttt{features} function returns the set of four features given an input $\Ca$ transient; the \texttt{concatenate} function returns a $1$D array obtained by concatenating all the given input $1$D arrays of different sizes; the \texttt{linear\_interpolator} function returns a function whose call method uses $1$D linear interpolation to find the value of new points.
 
 \begin{algorithm}[ht!]
     \caption{Scaling a representative calcium transient (y:=$\Cai(t)$) using linear interpolation.}\label{alg:cascaling}
@@ -88,7 +92,7 @@ An important property of this $\Ca$ scaling strategy is that the features scale 
 \end{figure}
 
 \vspace{0.2cm}
-The employed Gattoni et al.~\cite{Gattoni:2017} ionic model simulates a $\Ca$ transient for a fixed pacing rate ($\SI{6}{Hz}$), so that it occurs within a fixed time span. At physiological pacing rates, the rat $\Ca$ transient never reaches an equilibrium in diastole, so that during a $\Ca$ transient time is spent rising or relaxing. As the cell is paced at a fixed cycle length, the sum of time to peak and relaxation time is capped. This means that one cannot increase without the other decreasing, and independent perturbation of $\tp$ and $\rtf$ can only decrease. If relaxation does interdependently slow, this will mean that the cell will not have enough time to fully relax, and this effect is captured by elevating $\dca$ while decreasing $\ampl$. From an algorithmic view point, not all the randomly picked $\Ca$ features' scaling coefficient sets will therefore be viable. The ``if" statement in Algorithm~\ref{alg:cascaling} controls this behaviour by discarding all those curves that decay outside the fixed time interval without fully repolarising.
+The employed Gattoni et al.~\cite{Gattoni:2017} ionic model simulates a $\Ca$ transient for a fixed pacing rate ($\SI{6}{Hz}$), so that it occurs within a fixed time span. At physiological pacing rates, the rat $\Ca$ transient never reaches an equilibrium in diastole, so that during a $\Ca$ transient time is spent rising or relaxing. As the cell is paced at a fixed cycle length, the sum of time to peak and relaxation time is capped. This means that one cannot increase without the other decreasing, and independent perturbation of $\tp$ and $\rtf$ can only decrease. In this framework, slowing of relaxation at a fixed cycle length means that the cell does not have enough time to relax causing $\dca$ to rise while $\ampl$ decreases. From an algorithmic view point, not all the randomly picked $\Ca$ features' scaling coefficient sets will therefore be viable. The ``if" statement in Algorithm~\ref{alg:cascaling} controls this behaviour by discarding all those curves that decay outside the fixed time interval without fully repolarising.
 
 \vspace{0.2cm}
 The existing coupling between $\tp$ and $\rtf$ $\Ca$ features manifests as regions of the feature space that can not be captured by our $\Ca$ transient scaling strategy. These are indicated by the blank triangles in the $p_3$-vs-$\rtf$ and $p_4$-vs-$\tp$ subplots, visible in Figure~\ref{fig:scalersvscafeatures}.
@@ -114,11 +118,11 @@ A schematic of the adopted validation workflow is provided in Figure~\ref{fig:va
 %
 %
 %
-\subsection{CiPA compounds}\label{sec:ch6cipa_compounds}
+\subsection{Comprehensive in vitro Proarrhythmia Assay compounds}\label{sec:ch6cipa_compounds}
 We selected $8$ compounds, which were well characterised for multiple ion channels and for which we could find whole organ measurements from literature, from the \textit{comprehensive in vitro proarrhythmia assay} (\acs{CiPA})~\cite{Park:2019} official list, namely bepridil, chlorpromazine, diltiazem, mexiletine, nifedipine, ranolazine, sotalol and verapamil, and we described their action at cellular level using a 4-channel description, namely I\textsubscript{Na}, I\textsubscript{to}, I\textsubscript{K1} and I\textsubscript{CaL}. I\textsubscript{Kr} channel was not included as the related current has a small amplitude in rats cardiomyocytes~\cite{Wymore:1997}, and so was not included in the employed rat cell model~\cite{Gattoni:2017}.
 
 \vspace{0.2cm}
-The affinity of each compound for each channel was taken from CiPA project datasets~\cite{Li:2018, Li:2019}, summarised in Table~\ref{tab:compoundporeblock}.
+The affinity of each compound for each ion channel was taken from CiPA project datasets~\cite{Li:2018, Li:2019}, summarised in Table~\ref{tab:compoundporeblock}.
 
 \begin{table}[ht!]
     \myfloatalign
@@ -159,7 +163,7 @@ The affinity of each compound for each channel was taken from CiPA project datas
 \end{table}
 
 \vspace{0.2cm}\noindent
-The affinity is described by the Hill coefficient $h$ and the half-maximal inhibitory concentration $\icf$ values of a Hill-type relationship which gives the fraction of blocked current $B$ as a function of the compound concentration $C$, also known as the \textit{pore block model}:
+The affinity of each compound for each ion channel is described by the Hill coefficient $h$ and the half-maximal inhibitory concentration $\icf$ values of a Hill-type relationship which gives the fraction of blocked current $B$ as a function of the compound concentration $C$, also known as the \textit{pore block model}:
 %
 \begin{equation}
     B = \frac{1}{1+\left(\frac{C}{\icf}\right)^h}
@@ -270,4 +274,4 @@ More general limitations of the adopted modelling framework can be found in Chap
 %
 %
 \section{Summary}\label{sec:ch6summary}
-Having a validated, personalised model of rat heart contraction is powerful as it can be trusted when this is used to predict compounds' mechanisms of action or for identifying in silico pharmacological cellular targets, as we shall see in the next chapter.
+Having a validated, personalised model of rat heart contraction is powerful as it can be trusted when this is used to predict compounds' mechanisms of action or for identifying \textit{in silico} pharmacological cellular targets, as we shall see in the next chapter.

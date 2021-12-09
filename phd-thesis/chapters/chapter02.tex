@@ -6,7 +6,7 @@ mechanics}\label{cha:chapter02}
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we systematically build a mathematical model of $3$D biventricular rat heart contraction mechanics. We start with modelling ion fluxes across each cell membrane using an ionic model for left ventricular myocytes at physiological temperature and pacing rate (Section~\ref{sec:ch2ionicmodel}). We then model active tension generation at cellular level using a model of sarcomere contraction, which includes length- and velocity- tension dependencies (Section~\ref{sec:ch2contractionmodel}). We present the framework to build a $3$D computer representation (mesh) of real biventricular anatomies (Section~\ref{sec:ch2anatomy}). We finally describe passive material properties (Section~\ref{sec:ch2tissuemodel}), myocardial electrical activation (Section~\ref{sec:ch2electricalactivation}) and spatial and haemodynamic boundary conditions (Section~\ref{sec:ch2boundaryconditions}). We conclude with a brief summary (Section~\ref{sec:ch2summary}).
+    In this chapter, we systematically build a mathematical model of $3$D biventricular rat heart contraction mechanics. We start with modelling ion fluxes across each cell membrane using an ionic model for left ventricular myocytes at physiological temperature and pacing rate (Section~\ref{sec:ch2ionicmodel}). We then model active tension generation at the cellular level using a model of sarcomere contraction, which includes length- and velocity- tension dependencies (Section~\ref{sec:ch2contractionmodel}). We present the framework to build a $3$D computer representation (mesh) of rat biventricular anatomies from experimental data (Section~\ref{sec:ch2anatomy}). We finally describe passive material properties (Section~\ref{sec:ch2tissuemodel}), myocardial electrical activation (Section~\ref{sec:ch2electricalactivation}) and spatial and haemodynamic boundary conditions (Section~\ref{sec:ch2boundaryconditions}). We conclude with a brief summary (Section~\ref{sec:ch2summary}).
 \end{remark}
 
 \begin{figure}[!ht]
@@ -66,10 +66,10 @@ We employed the Gattoni et al.~\cite{Gattoni:2016} model to simulate rat left ve
 %
 %
 \section{Contraction model}\label{sec:ch2contractionmodel}
-We employed the Land et al.~\cite{Land:2012} myocyte contraction model to simulate active tension generation at sarcomere level and isometric steady-state force-calcium relationship in the rat heart. This model describes the cooperative binding of calcium to TnC, which in turn causes unblocking of the actin sites for myosin cross-bridge cycling.
+We employed the Land et al.~\cite{Land:2012} myocyte contraction model to simulate both dynamic force generation at the sarcomere level in response to a calcium transient and the steady-state force-calcium relationship in the rat heart. This model describes the cooperative binding of calcium to TnC, which in turn causes unblocking of the actin sites for myosin cross-bridge cycling.
 
 \vspace{0.2cm}
-The process of $\Ca$ to TnC binding is described via the following equation:
+The process of $\Ca$ binding to TnC is described via the following equation:
 
 \begin{equation}\label{eq:landodesys1}
     \der{\trpn}{t} = \ktrpn\left[\left(\frac{\Cai}{\Caift}\right)^{\ntrpn}(1-\trpn)-\trpn\right]
@@ -88,7 +88,7 @@ where
 \end{tabular}
 
 \vspace{0.3cm}
-The cross-bridge cycle is instead represented by a two-state model. One state is the \textit{cross-bridge state} ($\xb$), where the cross-bridge is actively cycling and includes both the weakly, strongly and unbound states all collapsed into one state, while the other state is the \textit{non-permissive state} ($N$). The transition between these two states is described via the following equation:
+The cross-bridge cycle is represented by a two-state model. One state is the \textit{cross-bridge state} ($\xb$), where the cross-bridge is actively cycling and includes both the weakly, strongly and unbound states all collapsed into one state, while the other state is the \textit{non-permissive state} ($N$). The transition between these two states is described via the following equation:
 
 \begin{align}\label{eq:landodesys2}
     & \der{\xb}{t} = \kxb\left[\permtot(1-\xb)-\frac{1}{\permtot}\xb\right],\quad\text{with} \\
@@ -190,7 +190,7 @@ At the resting sarcomere configuration ($\lambda=1$), length-dependence effects 
 %
 %
 \subsection{Velocity-dependence}\label{sec:ch2velocitydependence}
-To phenomenologically represent the tension development dependence on cross-bridge kinetics, the \emph{fading memory model} was employed as previously done in~\cite{Niederer:2006}, describing the velocity response as several strain-rate-dependent variables decay with time. In particular, this model describes the relationship between tension and sarcomere sliding velocity, by separating tension development into a non-linear static component and a linear time-dependent component, as described by the following two equations:
+To phenomenologically represent the tension development dependence on cross-bridge kinetics, the \emph{fading memory model} was employed as previously done in~\cite{Niederer:2006}, describing the velocity response as several strain-rate-dependent variables that decay with time. In particular, this model describes the relationship between tension and sarcomere sliding velocity, by separating tension development into a non-linear static component and a linear time-dependent component, as described by the following two equations:
 %
 \begin{equation}
     \der{Q_i}{t} = A_i\,\der{\lambda}{t}-\alpha_i\,Q_i,\quad i=1,2
@@ -363,7 +363,7 @@ Equation~\eqref{eq:FpCa} takes the name of \textit{force-pCa} (\acs{F-pCa}) \tex
 %
 %
 \section{Anatomy model}\label{sec:ch2anatomy}
-Rat biventricular anatomy was \textit{in silico} represented by a cubic Hermite finite element mesh. This was generated using an automatic service for ventricular cardiac meshes personalisation developed by Lamata et al.~\cite{Lamata:2011, Lamata:2014}.
+Rat biventricular anatomy was represented \textit{in silico} by a cubic Hermite finite element mesh. This was generated using an automatic service for ventricular cardiac meshes personalisation developed by Lamata et al.~\cite{Lamata:2011, Lamata:2014}.
 
 \vspace{0.2cm}
 The mesh customisation pipeline starts from a binary image, which in general corresponds to a segmentation obtained from heart medical images (e.g. magnetic resonance images). An idealised template mesh composed of truncated ellipsoids is then tailored to the binary mask provided, and image registration is performed to assess the deformation field from template to real anatomy. During this step, the user can choose the so called \textit{level of detail} (\acs{LoD}), which gives a trade-off between fitting accuracy and numerical stability. The LoD ranges from $1$ (coarse and most stable) to $5$ (accurate but less likely to be stable). After having calculated the warping function by image registration, this is used to map the template mesh to the deformed space using a variational technique. The last step of the pipeline involves enhancing the quality of the mesh by improving the regularity of each element by linearising internal nodes transmural positions with no loss of accuracy.
@@ -418,24 +418,24 @@ where
 %
 \section{Electrical activation}\label{sec:ch2electricalactivation}
 The calcium transient was assumed not to vary spatially and it homogeneously activated contraction throughout the ventricular walls. Previous heart models
-have shown that heterogeneous activation patterns have negligible impact in the small rat heart \todo{REF}, and investigating those was out of the scope of this project.
+have shown that heterogeneous activation patterns have negligible impact in the small rat heart \todo{REF}, and so activation was assumed instantaneous for simplicity and to improve computational tractability.
 
 
 %
 %
 %
 \section{Boundary conditions}\label{sec:ch2boundaryconditions}
-We applied spatial boundary conditions to the mesh throughout all the mechanics solution process. Specifically, we constrained all the ventricles basal plane mesh nodes along the apex-base axis, and allowed no movement along any direction one mesh node on the interior LV wall. This constraint prevented free rotation and translation without limiting the deformation~\cite{Land:2012}.
+We applied spatial boundary conditions to the mesh throughout all the mechanics solution process. Specifically, we constrained all the ventricles basal plane mesh nodes along the apex-base axis, and allowed no movement along any direction for one node on the interior LV wall. This constraint prevented free rotation and translation without limiting the deformation~\cite{Land:2012}.
 
 \vspace{0.2cm}
-We also set haemodynamic boundary conditions to control blood flow and pressures at the computational domain boundaries, thereby coupling the biventricular heart with the rest of the body circulatory system. We used a three-element Windkessel model~\cite{Westerhof:1971} to regulate ejection, and we used the Windkessel model generalised formulation (equation~\eqref{eq:windkgeneral}) to regulate the other phases of the cardiac cycle, namely initial preload filling, isovolumetric contraction, isovolumetric relaxation and diastolic filling, as described in Section~\ref{sec:hemodynamics_math_modelling}. The RV boundary condition pressures (atrial and pulmonary artery) were set to be $1/3$ of the equivalent LV values. The RV Windkessel parameters were scaled to be equal to $R/3$, $Z/3$, $3C$ from the reference LV Windkessel parameter set ($R$, $Z$, $C$).
+We also set haemodynamic boundary conditions to control blood flow and pressures at the computational domain boundaries, thereby coupling the biventricular heart with the rest of the body circulatory system. We used a three-element Windkessel model~\cite{Westerhof:1971} to regulate ejection, and we used the Windkessel model generalised formulation (equation~\eqref{eq:windkgeneral}) to regulate the other phases of the cardiac cycle, namely initial preload filling, isovolumetric contraction, isovolumetric relaxation and diastolic filling, as described in Section~\ref{sec:hemodynamics_math_modelling}. The RV boundary condition pressures (atrial and pulmonary artery) were set to be $1/3$ of the equivalent LV values \todo{REF}. The RV Windkessel parameters were scaled to be equal to $R/3$, $Z/3$, $3C$ from the reference LV Windkessel parameter set ($R$, $Z$, $C$).
 
 
 %
 %
 %
 \section{Simulation protocol}\label{sec:ch2simulationprotocol}
-The whole-organ full cardiac cycle was simulated using the protocol described in~\cite{Land:2012, Land:2012*a, Land:2015}. Briefly, dynamic changes in the LV and RV cavities' boundary conditions were cyclically applied. During diastole, a fixed atrial preload pressure and filling resistance was applied. At activation, the cavity boundary conditions were switched to an isovolumetric constraint in both chambers. When each chamber reached pre-set aortic and pulmonary artery pressures, a three-element Windkessel model boundary condition was applied to each chamber to represent the aortic and pulmonary artery afterload. Once each chamber stopped ejecting, an isovolumetric boundary condition was applied to represent isovolumetric contraction. Once the cavity pressure fell below its respective atrial pressure, the heart returned to the diastolic cavity boundary conditions to complete the PV loop.
+The whole-organ full cardiac cycle was simulated using the protocol described in~\cite{Land:2012, Land:2012*a, Land:2015}. Briefly, dynamic changes in the LV and RV cavities' boundary conditions were cyclically applied. During diastole, a fixed atrial preload pressure and filling resistance was applied. At activation, the cavity boundary conditions were switched to an isovolumetric constraint in both chambers. When each chamber reached pre-set aortic and pulmonary artery pressures, a three-element Windkessel model boundary condition was applied to each chamber to represent the aortic and pulmonary artery afterload. Once each chamber stopped ejecting, an isovolumetric boundary condition was applied to represent isovolumetric relaxation. Once the cavity pressure fell below its respective atrial pressure, the heart returned to the diastolic cavity boundary conditions to complete the PV loop.
 
 
 %
