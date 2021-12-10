@@ -5,11 +5,7 @@
 %
 %
 \begin{remark}{Outline}
-    In this chapter, we investigate how $\Ca$ transient variations can be mapped to the rat whole heart function using the developed emulation framework. We propose to encode the shape of a given $\Ca$ transient using a set of scalar features of clinical interest (Section~\ref{sec:ch6encoding_ca_transient_variations}), allowing these to be quantitatively mapped to the LV features as an additional component to the emulator input parameter set. When using the full forward rat heart contraction model instead, different $\Ca$ transients can be simply plugged-in as new model inputs (previously fixed) to test how they will impact the LV function. Using this second approach, the personalised SHAM rat heart contraction model is validated against known 
-
-pharmacological channel blocking experimental validation 
-
-    CiPA compounds' effects on $\Ca$ dynamics and how these propagate through to whole heart function (Section~\ref{sec:ch6validating_the_personalised_healthy_rat_heart_model}). We then provide a discussion and address specific limitations (Section~\ref{sec:ch6discussion}), and we conclude with a brief summary (Section~\ref{sec:ch6summary}).
+    In this chapter, we investigate how $\Ca$ transient variations can be mapped to the rat whole heart function using the developed emulation framework. We propose to encode the shape of a given $\Ca$ transient using a set of scalar features of clinical interest (Section~\ref{sec:ch6encoding_ca_transient_variations}), allowing these to be quantitatively mapped to the LV features as an additional component to the emulator input parameter set. When using the full forward rat heart contraction model instead, different $\Ca$ transients can be simply plugged-in as new model inputs (previously fixed) to test how they will impact the LV function. Using this second approach, the personalised SHAM rat heart contraction model is validated against known pharmacological channel blocking experimental data (Section~\ref{sec:ch6validating_the_personalised_healthy_rat_heart_model}). We then provide a discussion and address specific limitations (Section~\ref{sec:ch6discussion}), and we conclude with a brief summary (Section~\ref{sec:ch6summary}).
 \end{remark}
 
 
@@ -189,7 +185,7 @@ As the $\Ca$ transients obtained in the presence of the compound at different co
 \begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter06/verapamil_dose_calcium_response_curve_drug.pdf}
-    \caption{Calcium transient features' dose-response curves. Calcium transient features are extracted from perturbed calcium transients and plotted against the respectively simulated compound concentrations.}
+    \caption{Calcium transient features' dose-response curves. Calcium transient features are extracted from perturbed calcium transients and plotted against the respective simulated compound concentrations.}
     \label{fig:cafeatsverapamilrespcurve}
 \end{figure}
 
@@ -206,7 +202,7 @@ We finally used the personalised healthy (SHAM) rat model (Section~\ref{sec:ch4f
 \begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter06/simulated_cipa_compounds_effects_on_lv_rv_pressure_features_with_expdata.pdf}
-    \caption{LV and RV pressure features' dose-response curves for the eight CiPA compounds. Simulated PeakP, maxdP and mindP features' values are given as percentages of the respective control values, and are represented as dots in blue/orange variants, colour-coded with the compound doses for respectively the left/right ventricles. Black dots indicate the control values when no compound is present. Experimental data of compounds' effects on the LV (when available) is also displayed as red dots.}
+    \caption{LV and RV pressure features' dose-response curves for the eight CiPA compounds. Simulated PeakP, maxdP and mindP features' values are given as percentages of the respective control values, and are represented as dots in blue and orange variants, colour-coded with the compound doses for the left and right ventricles, respectively. Black dots indicate the control values when no compound is present. Experimental data of compounds' effects on the LV (when available) is also displayed as red dots.}
     \label{fig:LVRVfeatsalldrugsrespcurves}
 \end{figure}
 

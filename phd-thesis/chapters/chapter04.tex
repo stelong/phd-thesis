@@ -96,7 +96,7 @@ For each rat, we segmented the LV blood pool at each time frame and collected th
 \end{figure}
 
 \vspace{0.2cm}
-Time frames were numbered from $1$ to $47$. Frame $\#1$ was assumed to be moment when the heart enters the ejection phase of the cardiac cycle. In order to approximate the stress-free configuration for mechanics simulations, we selected a time frame halfway through diastole which could possibly represent cardiac diastasis (specifically frame $\#40$, $\#44$ for the SHAM, AB rats respectively). We segmented the entire biventricular anatomy at these time frames, comprising three main tags: the LV and RV blood pools and the surrounding myocardium. All the segmentations were performed manually using \texttt{ITK-SNAP} (v.$3.6.0$)~\cite{Yushkevich:2006}. Obtained segmentations are displayed in Figure~\ref{fig:ratrepseg} and estimated volumes are summarised in Table~\ref{tab:segmchar}.
+Time frames were numbered from $1$ to $47$. Frame $\#1$ was assumed to be moment when the heart enters the ejection phase of the cardiac cycle. In order to approximate the stress-free configuration for mechanics simulations, we selected a time frame halfway through diastole which could possibly represent cardiac diastasis (specifically frame $\#40$ and $\#44$ for the SHAM and AB rats, respectively). We segmented the entire biventricular anatomy at these time frames, comprising three main tags: the LV and RV blood pools and the surrounding myocardium. All the segmentations were performed manually using \texttt{ITK-SNAP} (v.$3.6.0$)~\cite{Yushkevich:2006}. Obtained segmentations are displayed in Figure~\ref{fig:ratrepseg} and estimated volumes are summarised in Table~\ref{tab:segmchar}.
 
 \begin{figure}[ht!]
     \myfloatalign
@@ -106,7 +106,8 @@ Time frames were numbered from $1$ to $47$. Frame $\#1$ was assumed to be moment
     \subfloat[AB]
     {\label{fig:ratrepseg-b}
     \includegraphics[width=0.65\linewidth]{figures/chapter04/ab_segmentation.png}}
-    \caption{Rat representative MRI scans segmentations. LV and RV blood pools and myocardium are tagged with respectively red, green and blue colours.}\label{fig:ratrepseg}
+    \caption{Rat representative MRI scans segmentations. LV and RV blood pools and myocardium are tagged with red, green and blue colours, respectively.}
+    \label{fig:ratrepseg}
 \end{figure}
 
 \begin{table}[ht!]
@@ -474,7 +475,7 @@ By comparing the highlighted average curves, we can notice smaller end-diastolic
 %
 %
 \subsection{Fitted models}\label{sec:ch4fittedmodels}
-Unlike classical optimisation algorithms that converge to a single set of parameters possibly representing a global minimum of the chosen loss function, the HM procedure proposes an entire cloud of points (belonging to the last wave's non-implausible, restricted parameter space) which are all possible candidates to yield a model features' match to experimental observation within experimental uncertainty. In order to have one representative model for the SHAM rat and one for the AB rat to be used respectively as baseline, reference models of a healthy and diseased rat hearts, we selected one candidate represented by the best-fit according to the $L_2$ norm of the difference between the simulated features' values vector and the corresponding experimental mean values vector. The complete sets of fitted model parameters and corresponding LV features for both the reference SHAM and AB rat models are reported in Tables~\ref{tab:shamabbestfitparamvalues}--\ref{tab:shamabbestfitfeatvalues}.
+Unlike classical optimisation algorithms that converge to a single set of parameters possibly representing a global minimum of the chosen loss function, the HM procedure proposes an entire cloud of points (belonging to the last wave's non-implausible, restricted parameter space) which are all possible candidates to yield a model features' match to experimental observation within experimental uncertainty. In order to have one representative model for the SHAM rat and one for the AB rat to be used as baseline, reference models of a healthy and diseased rat hearts, respectively, we selected one candidate represented by the best-fit according to the $L_2$ norm of the difference between the simulated features' values vector and the corresponding experimental mean values vector. The complete sets of fitted model parameters and corresponding LV features for both the reference SHAM and AB rat models are reported in Tables~\ref{tab:shamabbestfitparamvalues}--\ref{tab:shamabbestfitfeatvalues}.
 
 \begin{table}[ht!]
     \myfloatalign

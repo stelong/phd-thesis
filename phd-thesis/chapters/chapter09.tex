@@ -1,5 +1,5 @@
 %==============================================================================
-\chapter{Summary and concluding remarks}\label{cha:chapter9}
+\chapter{Conclusion}\label{cha:chapter9}
 %==============================================================================
 %
 %
@@ -45,10 +45,10 @@ The common strategy adopted in each of these studies was to project experimental
 %
 %
 \subsection{Model emulation, fitting and uncertainty quantification}\label{sec:ch9model_emulation_fitting_and_uncertainty_quantification}
-The use of emulators adds an additional layer of uncertainty in modelling the whole heart behaviour (LV contraction and relaxation). This is because emulators are probabilistic surrogates of the simulator, which is already an \textit{in-silico} representation/approximation of the real world biological system. However, the speed-up that we gain by using emulators which enables efficient model fitting and global sensitivity analysis by far outweighs the loss in quantitative accuracy when making predictions. Unlike other supervised machine learning techniques used for regression such as nearest neighbours, linear/logistic regression, decision trees or neural networks, Gaussian process regression still relies on Bayesian statistics, providing confidence interval estimates on the predictions, which makes it the preferred choice to quantify uncertainty in the models.
+The use of emulators adds an additional layer of uncertainty in modelling the whole heart behaviour (LV contraction and relaxation). This is because emulators are probabilistic surrogates of the simulator, which is already an \textit{in silico} representation/approximation of the real world biological system. However, the speed-up that we gain by using emulators which enables efficient model fitting and global sensitivity analysis by far outweighs the loss in quantitative accuracy when making predictions. Unlike other supervised machine learning techniques used for regression such as nearest neighbours, linear/logistic regression, decision trees or neural networks, Gaussian process regression still relies on Bayesian statistics, providing confidence interval estimates on the predictions, which makes it the preferred choice to quantify uncertainty in the models.
 
 \vspace{0.2cm}
-For both HM and GSA we used independent GPEs for each output. This univariate approach provided us the flexibility to tune the hyperparameters and choose basis functions for each output independently. However, it did not account for potential correlations in outputs, which could be accounted for with a multivariate strategy (e.g.~\cite{Conti:2009}), although this assumes common hyperparameters across all outputs. The HM technique provides a bounded region of non-implausible parameter sets. Parameter bounds do not define parameter distributions. Including a MCMC parameter fit using the HM bounds as priors would extend this method to estimate likely parameter distributions as opposed to parameter bounds. In the used implausibility measure (equation~\eqref{eq:implmeasure}) calculation we omitted the model discrepancy term (its variance was set to zero), for which we did not have any estimate available. To completely replace animal models with virtual representations of them, further experts knowledge will be needed to quantify the difference between the \textit{in-silico} model and the real world system that it represents.
+For both HM and GSA we used independent GPEs for each output. This univariate approach provided us the flexibility to tune the hyperparameters and choose basis functions for each output independently. However, it did not account for potential correlations in outputs, which could be accounted for with a multivariate strategy (e.g.~\cite{Conti:2009}), although this assumes common hyperparameters across all outputs. The HM technique provides a bounded region of non-implausible parameter sets. Parameter bounds do not define parameter distributions. Including a MCMC parameter fit using the HM bounds as priors would extend this method to estimate likely parameter distributions as opposed to parameter bounds. In the used implausibility measure (equation~\eqref{eq:implmeasure}) calculation we omitted the model discrepancy term (its variance was set to zero), for which we did not have any estimate available. To completely replace animal models with virtual representations of them, further experts knowledge will be needed to quantify the difference between the \textit{in silico} model and the real world system that it represents.
 
 
 %
@@ -70,5 +70,5 @@ The third improvement we have in mind concerns the variance-based sensitivity an
 %
 %
 %
-\section{Conclusions}\label{sec:ch9conclusions}
-\todo{write}
+\section{Final remarks}\label{sec:ch9conclusions}
+Calibrating complex multi-scale cardiac models to biological data, incorporating experimental measurements' uncertainty and propagate this forward into model predictions still remains a challenge. However, this is a necessary step if we want our virtual heart representation to be a reliable platform for testing hypotheses and aid the drug discovery and development process. We have empathised the need for further research on better techniques towards a more synergic coupling between probabilistic tools and deterministic modelling. In this thesis, we have showcased this coupling in a number of applications, aligning with the currently increasing number of research outputs on this topic from the whole scientific community.
