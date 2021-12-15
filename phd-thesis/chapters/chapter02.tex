@@ -53,8 +53,8 @@ We employed the Gattoni et al.~\cite{Gattoni:2016} model to simulate rat left ve
 
 \begin{figure}[!ht]
     \myfloatalign
-    \includegraphics[width=\textwidth]{figures/chapter02/ep.pdf}
-    \caption{Main ion channels and pumps included in the Gattoni et al.~\cite{Gattoni:2016} model. \todo{improve figure e.g. move SR to the left to be closer to L-type Ca channel, make text font bigger...}}
+    \includegraphics[width=\textwidth]{figures/chapter02/new_ep.pdf}
+    \caption{Main ion channels and pumps included in the Gattoni et al.~\cite{Gattoni:2016} model.}
     \label{fig:gattonicurrentsfig}
 \end{figure}
 
@@ -77,7 +77,7 @@ where
 
 \vspace{0.2cm}
 \begin{tabular}{ll}
-    $\trpn$  & proportions of bound $\Ca$-TnC complexes \\
+    $\trpn$  & proportion of bound $\Ca$-TnC complexes \\
     $\ktrpn$ & unbinding rate of $\Ca$ from TnC \\
     $\Cai$   & representative $\Ca$ transient \\
     $\Caift$ & $\Ca$ thin filament sensitivity \\
@@ -85,7 +85,7 @@ where
 \end{tabular}
 
 \vspace{0.3cm}
-The cross-bridge cycle is represented by a two-state model. One state is the \textit{cross-bridge state} ($\xb$), where the cross-bridge is actively cycling and includes both the weakly, strongly and unbound states all collapsed into one state, while the other state is the \textit{non-permissive state} ($N$). The transition between these two states is described via the following equation:
+Tropomyosin kinetics and the cross-bridge cycle are represented by a two-state model. One state is the \textit{cross-bridge state} ($\xb$), where the cross-bridge is actively cycling and includes both the weakly, strongly and unbound states all collapsed into one state, while the other state is the \textit{non-permissive state} ($N=1-\xb$). The transition between these two states is described via the following equation:
 
 \begin{align}\label{eq:landodesys2}
     & \der{\xb}{t} = \kxb\left[\permtot(1-\xb)-\frac{1}{\permtot}\xb\right],\quad\text{with} \\
@@ -97,7 +97,7 @@ where
 
 \vspace{0.2cm}
 \begin{tabular}{ll}
-    $\xb$    & proportions of formed cross-bridges \\
+    $\xb$    & proportion of formed cross-bridges \\
     $\kxb$   & cross-bridges cycling rate \\
     $\trpnf$ & fraction of $\Ca$-TnC bounds for half-maximal cross-bridges activation \\
     $\nxb$   & cross-bridge formation degree of cooperativity

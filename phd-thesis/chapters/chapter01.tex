@@ -17,7 +17,7 @@ During each heartbeat, the chambers of the heart are activated by an electrical 
 
 \begin{figure}[!ht]
     \myfloatalign
-    \includegraphics[width=0.66\textwidth]{figures/chapter01/fig_elsv_8.png}
+    \includegraphics[width=0.66\textwidth]{figures/chapter01/fig8.png}
     \caption{The heart and its conduction system. Adapted from~\cite{Guyton:2021}, Unit III, Chapter 10, Page 128, Figure 10-1. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
     \label{fig:heartcondactionsystem}
 \end{figure}
@@ -28,8 +28,6 @@ During each heartbeat, the chambers of the heart are activated by an electrical 
 %
 \subsection{Cardiac electrophysiology}\label{sec:ch1cardiac_electrophysiology}
 The surface membrane of a cardiac cell is called the \textit{sarcolemma}. On either side of the sarcolemma, the intracellular and the extracellular environments consist of ionic solutions. For cardiac electrophysiology the major ion species are sodium (\acs{Na}), potassium (\acs{K}), chloride (\acs{Cl}) and calcium (\acs{Ca}). An important property of the sarcolemma is its ability to maintain concentration gradients, such that each ion species is unevenly distributed between the intracellular and extracellular space, resulting in concentration gradients across the membrane. As ions are charged particles, their uneven distribution across the sarcolemma also creates an electrical gradient. The resulting electrochemical gradient provides a driving force to move ions across the cell membrane.
-
-% (The diffusion gradient is also important so the voltage is not the sole force moving ions)
 
 \vspace{0.2cm}
 Another crucial property of the sarcolemma is its capacity to respond to electrical stimulation through the brief dynamic opening and closing of highly specific ion channels and electrogenic transporters to produce changes in its transmembrane potential. With each heartbeat, the cell membrane is depolarised and an AP is initiated as a result of a complex interplay of multiple ion channels, exchangers and transporters in the myocardium. A typical AP consists of five phases, each one associated with the opening of specific sarcolemma ion channels. The main ionic events at each AP phase can be summarised as follows.
@@ -62,7 +60,6 @@ Every ventricular myocyte is in general not excitable (\textit{refractory}) betw
 %     \label{fig:my_label1}
 % \end{figure}
 
-
 % In cardiac myocytes electrical activation elicits an intracellular calcium transient, that in turn signals contraction. % Following activation, the L-type Ca channel opens, causing Ca ions to enter the diadic space. Ca ions then bind to  Ryry causing ca induced Ca release from the SR through RyR. Ca diffuses into the cytosol and binds to and actviates the sarcomere. Then as the cell relaxes cytosolic Ca is pumped back up in the SR thrugh SERCATPase and across the cell membrane through the sodium calcium exchaner and Ca pump.
 
 
@@ -87,7 +84,7 @@ The basic contractile unit of each myocyte is called the \textit{sarcomere} and 
 
 \begin{figure}[!ht]
     \myfloatalign
-    \includegraphics[width=0.66\textwidth]{figures/chapter01/fig_elsv_5.png}
+    \includegraphics[width=0.66\textwidth]{figures/chapter01/fig5.png}
     \caption{Proteins' organisation within the sarcomere. Adapted from~\cite{Guyton:2021}, Unit II, Chapter 6, Page 81, Figure 6-3. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
     \label{fig:my_label3}
 \end{figure}
@@ -97,29 +94,10 @@ In the heart, contraction is initiated by a rise in $\Cai$. $\Ca$ binds to the c
 
 \begin{figure}[!ht]
     \myfloatalign
-    \includegraphics[width=0.66\textwidth]{figures/chapter01/fig_elsv_10.png}
+    \includegraphics[width=0.66\textwidth]{figures/chapter01/fig10.png}
     \caption{The sliding filament mechanisms at the basis of sarcomere contraction. Adapted from~\cite{Guyton:2021}, Unit II, Chapter 6, Page 84, Figure 6-8. Copyright $\textcopyright$ 2021 by Elsevier, Inc.}
     \label{fig:powerstroke}
 \end{figure}
-
-
-% In
-% the ventricles, fibre orientation has been known to smoothly rotate
-% between endocardium and epicardium ever since original work by
-% Streeter (Streeter et al., 1969). This finding obtained by visual
-% inspection of tissue has been confirmed using various techniques,
-% such as histology (Streeter et al., 1969), optical techniques (Hucker
-% et al., 2008; Sands et al., 2005; Smith et al., 2008), and diffusion
-% tensor MRI (Gilbert et al., 2007) (Fig. 3). Peskin also used mechanical
-% principles to derive the fibre architecture of the ventricles with
-% a prediction of about 180  of rotation between endocardium and
-% epicardium (Peskin, 1989).
-
-% In addition to the fibrous structure described above, ventricular
-% myocytes are organised into laminar structures, also called sheets,
-% which were first described in detail by Feneis and Hort (Hort, 1957a,
-% 1957b, 1960). These sheets are typically 4e6 myocytes thick and are
-% separated by cleavage planes and layers of connective tissue.
 
 
 %
@@ -255,8 +233,7 @@ $y_{\infty}$ & voltage-dependent steady-state function of the gate \\
 $\tau_{y}$ & voltage-dependent time constant
 \end{tabular}
 
-\vspace{0.5cm}
-\noindent
+\vspace{0.5cm}\noindent
 The gating variables described in the HH formulation do not represent specific kinetic states of the ion channel. Moreover, they are assumed to be independent.
 
 \vspace{0.2cm}
@@ -439,8 +416,7 @@ where
     $v_{\textrm{ao}}$ & aortic blood volume \\
 \end{tabular}
 
-\vspace{0.5cm}
-\noindent
+\vspace{0.5cm}\noindent
 Blood flow to the body is modelled using the simple \textit{Darcy's law of flow} which gives the flow as being proportional to the pressure drop between inlet and outlet pressures:
 %
 \begin{equation}\label{eq:secondwkelem}
@@ -457,8 +433,7 @@ where
     $p_{\textrm{out}}$ & external pressure \\
 \end{tabular}
 
-\vspace{0.5cm}
-\noindent
+\vspace{0.5cm}\noindent
 The external pressure $p_{\textrm{out}}$ is assumed to be approximately equal to zero. Equations~\eqref{eq:firstwkelem}--\eqref{eq:secondwkelem} make up the \textit{two-element Windkessel model}. However, more realistic aortic pressure waves can be obtained by introducing a second resistance for the aortic valve, making up the \textit{three-element Windkessel model}:
 %
 \begin{align}\label{eq:windk}
@@ -478,8 +453,7 @@ where
     $v_{\textrm{LV}}$ & left-ventricular volume
 \end{tabular}
 
-\vspace{0.5cm}
-\noindent
+\vspace{0.5cm}\noindent
 The three-element Windkessel model equations can also be re-written more concisely as:
 %
 \begin{equation}\label{eq:windkconcise}
