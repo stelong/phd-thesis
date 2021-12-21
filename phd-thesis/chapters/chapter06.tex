@@ -1,5 +1,5 @@
 %==============================================================================
-\chapter{Introducing and validation of calcium transient variations into the whole heart model}\label{cha:chapter6}
+\chapter{Introduction and validation of calcium transient variations into the whole heart model}\label{cha:chapter6}
 %==============================================================================
 %
 %
@@ -59,7 +59,7 @@ The specific implementation of this scaling strategy is presented in Algorithm~\
     \STATE $f\,\,\leftarrow\,\,\textrm{linear\_interpolator}(t_{tmp},\, y_{new})$
     \STATE $y_{new}\,\,\leftarrow\,\,f(t)$
     \ELSE
-    \PRINT ``Not a valid scaling! Returning original calcium curve."
+    \PRINT ``Not a valid scaling! Returning original calcium curve.''
     \STATE $y_{new}\,\,\leftarrow\,\,y$
     \ENDIF
     \RETURN $y_{new}$
@@ -88,7 +88,7 @@ An essential property of this $\Ca$ scaling strategy is that the features scale 
 \end{figure}
 
 \vspace{0.2cm}
-The employed Gattoni et al.~\cite{Gattoni:2017} ionic model simulates a $\Ca$ transient for a fixed pacing rate ($\SI{6}{Hz}$) so that it occurs within a fixed time span. At physiological pacing rates, the rat $\Ca$ transient never reaches an equilibrium in diastole so that, during a $\Ca$ transient, time is spent rising or relaxing. As the cell is paced at a fixed cycle length, the sum of time to peak and relaxation time is capped. This means that one cannot increase without the other decreasing, and independent perturbation of $\tp$ and $\rtf$ can only decrease. In this framework, slowing of relaxation at a fixed cycle length means that the cell does not have enough time to relax, causing $\dca$ to rise while $\ampl$ decreases. From an algorithmic viewpoint, not all the randomly picked $\Ca$ features' scaling coefficient sets will thus be viable. The ``if" statement in Algorithm~\ref{alg:cascaling} controls this behaviour by discarding all those curves that decay outside the fixed time interval without fully repolarising. The existing coupling between $\tp$ and $\rtf$ $\Ca$ features manifests as regions of the feature space that can not be captured by our $\Ca$ transient scaling strategy. These are indicated by the blank triangles in the $p_3$-vs-$\rtf$ and $p_4$-vs-$\tp$ subplots, visible in Figure~\ref{fig:scalersvscafeatures}.
+The employed Gattoni et al.~\cite{Gattoni:2017} ionic model simulates a $\Ca$ transient for a fixed pacing rate ($\SI{6}{Hz}$) so that it occurs within a fixed time span. At physiological pacing rates, the rat $\Ca$ transient never reaches an equilibrium in diastole so that, during a $\Ca$ transient, time is spent rising or relaxing. As the cell is paced at a fixed cycle length, the sum of time to peak and relaxation time is capped. This means that one cannot increase without the other decreasing, and independent perturbation of $\tp$ and $\rtf$ can only decrease. In this framework, slowing of relaxation at a fixed cycle length means that the cell does not have enough time to relax, causing $\dca$ to rise while $\ampl$ decreases. From an algorithmic viewpoint, not all the randomly picked $\Ca$ features' scaling coefficient sets will thus be viable. The ``if'' statement in Algorithm~\ref{alg:cascaling} controls this behaviour by discarding all those curves that decay outside the fixed time interval without fully repolarising. The existing coupling between $\tp$ and $\rtf$ $\Ca$ features manifests as regions of the feature space that can not be captured by our $\Ca$ transient scaling strategy. These are indicated by the blank triangles in the $p_3$-vs-$\rtf$ and $p_4$-vs-$\tp$ subplots, visible in Figure~\ref{fig:scalersvscafeatures}.
 
 
 %
@@ -241,7 +241,7 @@ The comparison of qualitative model predictions to experimental observations is 
 \begin{figure}[ht!]
     \myfloatalign
     \includegraphics[width=\textwidth]{figures/chapter06/model_vs_experiments.pdf}
-    \caption{Model validation against known CiPA compounds effects on whole-organ function. Eight CiPA compounds effects (``experiment" columns) on PeakP, maxdP and mindP are compared with model same compounds' predicted effects on the same features (``model" columns). Compounds' effects are colour-coded as orange (feature unchanged) and green (feature decreased). None of the compounds caused an increase in the considered LV features. White/empty space means that the specific effect could not be retrieved from the examined literature studies. The model predicted effects are in agreement with the experimentally observed effects for $6$ out of $8$ compounds.}
+    \caption{Model validation against known CiPA compounds effects on whole-organ function. Eight CiPA compounds effects (``experiment'' columns) on PeakP, maxdP and mindP are compared with model same compounds' predicted effects on the same features (``model'' columns). Compounds' effects are colour-coded as orange (feature unchanged) and green (feature decreased). None of the compounds caused an increase in the considered LV features. White/empty space means that the specific effect could not be retrieved from the examined literature studies. The model predicted effects are in agreement with the experimentally observed effects for $6$ out of $8$ compounds.}
     \label{fig:validationtable}
 \end{figure}
 

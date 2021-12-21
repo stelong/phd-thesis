@@ -1,5 +1,5 @@
 %==============================================================================
-\chapter{In silico personalised rat heart contraction models: the role of sarcomere kinetics in diastolic heart failure}\label{cha:chapter4}
+\chapter{In silico personalised rat heart contraction models: the role of sarcomere dynamics in diastolic heart failure}\label{cha:chapter4}
 %==============================================================================
 %
 %
@@ -25,11 +25,13 @@ However, the high simulation cost and the multi-scale nature of the cardiac syst
 Surrogate models (or \textit{emulators}) can be used to replace the computationally expensive real model with a statistical representation of it, allowing rapid predictions of the model output. Using emulators, we can thus perform the high number of model evaluations required to estimate global sensitivities. In this study, we use Gaussian process emulators (GPEs), which provide confidence bounds on predictions and can therefore be used for Bayesian history matching (HM). Previously employed for fitting models of galaxy formation \cite{Vernon:2010}, infectious disease transmission \cite{Andrianakis:2015} and, more recently, human atrial cell~\cite{Coveney:2018}, HM has shown to be a valuable tool for global parameter inference.
 
 \vspace{0.2cm}
-To demonstrate the capacity of GPE and HM to fit a virtual heart model, we tune model mechanics-related parameters to data from control and left ventricular (LV) hypertrophied rat hearts. LV hypertrophy is induced surgically by constricting the ascending aorta over $4$ to $6$ weeks and represents a common pathway to HF development. Aortic-banded (AB) rats are commonly used as an experimental animal model for HF pathology~\cite{Camacho:2016}.
+To demonstrate the capacity of GPE and HM to fit a virtual heart model, we tune model mechanics-related parameters to data from control and LV hypertrophied rat hearts. LV hypertrophy is induced surgically by constricting the ascending aorta over $4$ to $6$ weeks and represents a common pathway to HF development. Aortic-banded rats are commonly used as an experimental animal model for HF pathology~\cite{Camacho:2016}.
 
 \vspace{0.2cm}
 We also seek to quantitatively characterise the AB rat impaired LV contractile function. Therefore, we fit the virtual bi-ventricular rat model to changes in function that we measured or were recorded by others using HM. Finally, we perform a GSA to understand how uncertainty in cell, tissue and haemodynamics model properties affect LV function.
 
+\vspace{0.2cm}
+The work we shall present next incorporates the work we published in~\cite{Longobardi:2020}.
 
 
 %
@@ -269,7 +271,7 @@ Sobol' sensitivity indices were estimated using the \texttt{SALib} Python librar
 The \textit{in silico} rat heart biophysical model should aim to achieve the best representation of the real system. This requires tuning the model input parameters such that the model output features reflect the available experimental data.
 
 \vspace{0.2cm}
-We constrained the model parameters based on model read-outs that describe key features in the LV volume and pressure transients and PV loop (Table~\ref{tab:lvfeatures}). For this purpose, we adopted the HM approach described in Section~\ref{sec:ch3historymatching}. The maximum implausibility measure (equation~\eqref{eq:maximplmeasure}) across multiple target features was used, with the model discrepancy term (and its corresponding variance) set to zero in equation~\eqref{eq:implmeasure}. The real system observation $z$ and the related observation error $\mathbb{V}[e]$ were taken to be equal to the mean $\mu_j$ and the square of the standard deviation $\sigma_j$ characterising the experimental variability $\mu_j\pm\sigma_j\in\mathbb{R}$ of each given $j$-th feature.
+We constrained the model parameters based on model read-outs that describe key features in the LV volume and pressure transients and PV loop (Table~\ref{tab:lvfeatures}). For this purpose, we adopted the HM approach described in Section~\ref{sec:ch3historymatching}. The maximum implausibility measure (equation~\eqref{eq:maximplmeasure}) across multiple target features was used, with the model discrepancy term (and its corresponding variance) set to zero in equation~\eqref{eq:implmeasure}. The real system observation $z$ and the related observation error $\mathbb{V}[e]$ were taken to be equal to the mean $\mu_j$ and the square of the standard deviation $\sigma_j$ characterising the experimental variability $\mu_j\pm\sigma_j\in\mathbb{R}$ of each given $j$-th feature. The \texttt{Historia} Python tool~\cite{Historia:2021} was used for the HM implementation.
 
 \vspace{0.2cm}
 Target features' mean and standard deviation experimental values that we aimed to match using the model came from two different sources. Specific organ-scale features unavailable in the MRI data~\cite{Roe:2017} were deduced from literature experimental studies all performed on male rats at body temperature with abdominal/ascending aortic banding~\cite{Nemeth:2016, Sato:1990, Schunkert:1995, Loot:2005, Liu:2014, Ku:2014, Ruppert:2018, Schunkert:1990, Ruppert:2016}. In particular, EDV, ESV, ET and IVRT features were immediately available from the MRI data, while information about PeakP, maxdP and mindP features was collected from the literature. We did not have specific values for IVCT, Tdiast, Tpeak and ESP, and we chose not to match EF explicitly as this is derived from EDV and ESV. This gave us $7$ organ-scale features to constrain our model parameters. Their experimental variability is reported in Table~\ref{tab:values2match}.
