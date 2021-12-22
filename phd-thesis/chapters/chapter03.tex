@@ -135,7 +135,7 @@ For a given fixed $\Ca$ transient, cubic-Hermite finite element heart mesh and f
 Equation~\eqref{eq:fsimul} effectively constitutes a quantitative link between cellular, tissue and haemodynamic properties to whole-organ function. The multi-scale mapping $f_{simul}$ takes the name of \textit{simulator}.
 
 \vspace{0.2cm}
-One simulator evaluation at a new input parameter set requires the full-forward model of rat heart contraction mechanics to be run. However, this is computationally expensive ($\sim 4$-$10$ CPU hours per evaluation). We overcome the computational burden of running such a complex model by replacing it with a probabilistic surrogate based on \textit{Gaussian process emulation}, as we shall see in the next section.
+One simulator evaluation at a new input parameter set requires the full-forward model of rat heart contraction mechanics to be run. However, this is computationally expensive ($\sim 4$-$10$ CPU hours per evaluation). We overcome the computational burden of running such a complex model by replacing it with a probabilistic surrogate based on \textit{Gaussian process emulation}, as we shall see in the next section. We will adopt the mathematical formalism of the standard textbook of Gaussian processes for machine learning by Rasmussen and Williams~\cite{Rasmussen:2006}.
 
 
 %
@@ -484,7 +484,7 @@ In \textsc{step 5}, refocusing on the $X_{NIMP}$ space will not take place if a 
 %
 %
 \section{Global sensitivity analysis}\label{sec:ch3globalsensitivityanalysis}
-In order to assess the contribution of the model input parameters' uncertainty into explaining the model output features' total variance, a global sensitivity analysis can be performed. In the next paragraphs, we shall see how having fast-evaluating trained emulators enable characterisation of model sensitivities even for complex, computationally expensive simulators.
+In order to assess the contribution of the model input parameters' uncertainty into explaining the model output features' total variance, a global sensitivity analysis (\acs{GSA}) can be performed. In the next paragraphs, we shall see how having fast-evaluating trained emulators enable characterisation of model sensitivities even for complex, computationally expensive simulators.
 
 \vspace{0.2cm}
 By assuming that for our specific biophysical system model $f$ (=$f_{simul}$) only low order correlations between input variables $\mathbf{X}:=(X_1,\,\dots,\,X_D)$ have an impact on the output ($Y=f(\mathbf{X})$) variance, we can make use of the \textit{high-dimensional model representation}~\cite{Rabitz:1999} to introduce a functional decomposition of our simulator of the form:

@@ -13,25 +13,27 @@
 %
 %
 \section{Motivation}\label{sec:ch4motivation}
-With each beat, cardiac myocytes generate tension and relax. Cellular tension is transduced into a coordinated, global whole-heart deformation resulting in an effective, system-level pump function. The integration of cellular, tissue and organ-scale mechanisms is essential for achieving efficient transduction of work into concerted myocardial contraction and relaxation. The breakdown of this system of integrated mechanisms can give rise to heart failure (HF). 
+With each beat, cardiac myocytes generate tension and relax. Cellular tension is transduced into a coordinated, global whole-heart deformation resulting in an effective, system-level pump function. The integration of cellular, tissue and organ-scale mechanisms is essential for achieving efficient transduction of work into concerted myocardial contraction and relaxation. The breakdown of this system of integrated mechanisms can give rise to HF.
 
 \vspace{0.2cm}
-Cardiac biophysical models provide a useful tool for studying whole-organ contraction \cite{Niederer:2019} by simulation and can therefore be used to understand how impaired cell level function is linked with impaired organ level activity. Building a virtual representation of the real system requires tuning the cardiac model properties and boundary conditions to experimental data. Global sensitivity analysis (GSA) studies are also needed to determine the role of cellular, tissue and haemodynamics properties on whole-organ function.
+Cardiac biophysical models provide a useful tool for studying whole-organ contraction \cite{Niederer:2019} by simulation and can therefore be used to understand how impaired cell level function is linked with impaired organ level activity. Building a virtual representation of the real system requires tuning the cardiac model properties and boundary conditions to experimental data. GSA studies are also needed to determine the role of cellular, tissue and haemodynamics properties on whole-organ function.
 
 \vspace{0.2cm}
 However, the high simulation cost and the multi-scale nature of the cardiac system have limited the formal parameter estimation and sensitivity analysis for this type of model. Different techniques have been employed for global parameter inference on cardiac cell models, including gradient descent \cite{Dokos:2004}, genetic algorithms \cite{Groenendaal:2015}, multivariate regression \cite{Sarkar:2010} and Markov chain MC (\acs{MCMC}) \cite{Johnstone:2016}. Most of these approaches are computationally intensive, and the computation burden is even higher when going from single to multiple scales.
 
 \vspace{0.2cm}
-Surrogate models (or \textit{emulators}) can be used to replace the computationally expensive real model with a statistical representation of it, allowing rapid predictions of the model output. Using emulators, we can thus perform the high number of model evaluations required to estimate global sensitivities. In this study, we use Gaussian process emulators (GPEs), which provide confidence bounds on predictions and can therefore be used for Bayesian history matching (HM). Previously employed for fitting models of galaxy formation \cite{Vernon:2010}, infectious disease transmission \cite{Andrianakis:2015} and, more recently, human atrial cell~\cite{Coveney:2018}, HM has shown to be a valuable tool for global parameter inference.
+Surrogate models (emulators) can be used to replace the computationally expensive real model with a statistical representation of it, allowing rapid predictions of the model output. Using emulators, we can thus perform the high number of model evaluations required to estimate global sensitivities. In this study, we use GPEs, which provide confidence bounds on predictions and can therefore be used for HM. Previously employed for fitting models of galaxy formation \cite{Vernon:2010}, infectious disease transmission \cite{Andrianakis:2015} and, more recently, human atrial cell~\cite{Coveney:2018}, HM has shown to be a valuable tool for global parameter inference.
 
 \vspace{0.2cm}
-To demonstrate the capacity of GPE and HM to fit a virtual heart model, we tune model mechanics-related parameters to data from control and LV hypertrophied rat hearts. LV hypertrophy is induced surgically by constricting the ascending aorta over $4$ to $6$ weeks and represents a common pathway to HF development. Aortic-banded rats are commonly used as an experimental animal model for HF pathology~\cite{Camacho:2016}.
+To demonstrate the capacity of GPE and HM to fit a virtual heart model, we tune model mechanics-related parameters to literature experimental data from control and LV hypertrophied rat hearts. LV hypertrophy is induced surgically by constricting the ascending aorta over $4$ to $6$ weeks and represents a common pathway to HF development. Aortic-banded rats are commonly used as an experimental animal model for HF pathology~\cite{Camacho:2016}.
 
 \vspace{0.2cm}
-We also seek to quantitatively characterise the AB rat impaired LV contractile function. Therefore, we fit the virtual bi-ventricular rat model to changes in function that we measured or were recorded by others using HM. Finally, we perform a GSA to understand how uncertainty in cell, tissue and haemodynamics model properties affect LV function.
+We also seek to quantitatively characterise the diseased rat impaired LV contractile function. Therefore, we first compare the parameter spaces obtained after fitting both the control and diseased rat heart models. We then perform a GSA to understand how model properties differently affect the LV function across the two rat phenotypes.
 
 \vspace{0.2cm}
-The work we shall present next incorporates the work we published in~\cite{Longobardi:2020}.
+This work, which incorporates our previous publication~\cite{Longobardi:2020}, confirms that impaired whole-organ function
+in rat HF is linked to altered properties at the sarcomere level.
+
 
 
 %
@@ -561,4 +563,4 @@ More general limitations of the adopted modelling framework can be found in Chap
 %
 %
 \section{Summary}\label{sec:ch4summary}
-We have shown that GPE can effectively be used to robustly and rapidly constrain multi-scale cardiac models from organ-scale measurements. The obtained virtual bi-ventricular rat hearts are a valuable system to be used for further investigation of heart failure. Moreover, we demonstrated that our GPE-based GSA approach enables the computationally efficient identification of key components in 3D ventricular mechanics, giving a deeper insight into the link between cell, tissue, shape and boundary conditions properties and organ-scale function.
+We have shown that GPE can effectively be used to robustly and rapidly constrain multi-scale cardiac models from organ-scale measurements. The obtained virtual biventricular rat hearts are a valuable system to be used for further investigation of heart failure. Moreover, we demonstrated that our GPE-based GSA approach enables the computationally efficient identification of key components in 3D ventricular mechanics, giving a deeper insight into the link between cell, tissue, shape and boundary conditions properties and organ-scale function.
