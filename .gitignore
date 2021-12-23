@@ -15,4 +15,4 @@ chapters/*.aux
 *.toc
 *.xml
 
-thesis.pdf
+#thesis.pdf
