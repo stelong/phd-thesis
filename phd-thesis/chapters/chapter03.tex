@@ -244,21 +244,24 @@ where
     &\Sigma := \Sigma_{X_{*}X_{*}}-\Sigma_{X_{*}X}\Sigma_{XX}^{-1}\Sigma_{XX_{*}}
 \end{align}
 
-We can additionally model the learning sample observations to be affected by noise:
+We will additionally model the learning sample observations to be affected by noise:
 %
 \begin{equation}
     y^{(i)}:=f(\mathbf{x}^{(i)}) + \varepsilon,\qquad \varepsilon\sim\mathcal{N}(0,\,\sigma_n^2)
 \end{equation}
 
 \noindent
-where $\sigma_n^2\in\mathbb{R}^{+}$ is the noise variance, and the noise is assumed to be additive, independent and identically distributed. This results in adding a diagonal matrix to the latent function $\mathbf{f}$ covariance matrix:
+where $\sigma_n^2\in\mathbb{R}^{+}$ is the noise variance, and the noise is assumed to be additive, independent and identically distributed. The use of a noise term (or \textit{nugget}) might seem counter-intuitive as the learning sample is the result of a deterministic model run (i.e., for the same input you always get the same output). However, it has been previously shown~\cite{Andrianakis:2012} that it is beneficial to include it even when emulating deterministic models. From a technical point of view, having a noisy representation of the learning sample results in adding a diagonal matrix to the latent function $\mathbf{f}$ covariance matrix:
 %
 \begin{equation}
     k_{\text{SE}}(\mathbf{x},\,\mathbf{x}') = k_{\text{SE}}(\mathbf{x},\,\mathbf{x}') + \sigma_n^2\delta_{\mathbf{x},\,\mathbf{x}'} \quad\Rightarrow\quad \text{Cov}(\mathbf{y})=\Sigma_{XX}+\sigma_n^2 I
 \end{equation}
 
 \noindent
-where $\delta_{\mathbf{x},\,\mathbf{x}'}$ is the \textit{Kronecker delta}. The joint probability distribution becomes:
+where $\delta_{\mathbf{x},\,\mathbf{x}'}$ is the \textit{Kronecker delta} (equals $1$ when $\mathbf{x} = \mathbf{x}'$ and $0$ when otherwise). This in turn ensures that the GP covariance matrix is always invertible, even in the case when the latent function covariance matrix ($\Sigma_{XX}$) is ill-conditioned. Apart from the numerical stabilisation purpose, the use of the nugget can account for discrepancies between the GP emulator and the simulator and, since it modifies the shape of the GP model likelihood, it corresponds to modelling the variability which is not explained by the simulator inputs.
+
+\vspace{0.2cm}
+The joint probability distribution associated to the noisy formulation becomes:
 %
 \begin{equation}
     \begin{bmatrix}
@@ -340,7 +343,7 @@ We can notice that the convolution of two Gaussian distributions is still Gaussi
 This equation has three terms which can be interpreted as follows. The first term is large when the data fit the model well; the second term is a complexity penalty and is large when the model is simple; the last term is a normalisation constant.
 
 \vspace{0.2cm}
-At this point, a fully Bayesian approach would involve assigning a prior distribution to the hyperparameters and deriving a posterior distribution in the same manner as done in equation~\ref{eq:paramspostdistr}, using the marginal likelihood of equation~\ref{eq:paramsmarglike} as likelihood. However, as the resulting integrals cannot be solved analytically and require numerical strategies to be estimated, to maintain computational tractability we opt for a simpler approach where a single value is estimated for each hyperparameter and considered as the true value. A drawback to this technique is a possible underestimation of the simulator variability, but this is outweighed by savings in the computational effort. This approach takes the name of \textit{maximum likelihood-II} type of inference, and consists in maximising the log marginal likelihood with respect to the model hyperparameters:
+At this point, a fully Bayesian approach would involve assigning a prior distribution to the hyperparameters and deriving a posterior distribution in the same manner as done in equation~\eqref{eq:paramspostdistr}, using the marginal likelihood of equation~\eqref{eq:paramsmarglike} as likelihood. However, as the resulting integrals cannot be solved analytically and require numerical strategies to be estimated, to maintain computational tractability we opt for a simpler approach where a single value is estimated for each hyperparameter and considered as the true value. A drawback to this technique is a possible underestimation of the simulator variability, but this is outweighed by savings in the computational effort. This approach takes the name of \textit{maximum likelihood-II} type of inference, and consists in maximising the log marginal likelihood with respect to the model hyperparameters:
 %
 \begin{equation}
     \hat{\boldsymbol{\theta}} := \textrm{arg\,max}_{\boldsymbol{\theta}\in\R}{\log{p(\mathbf{y}\;\vert\; X,\,\boldsymbol{\theta})}}
