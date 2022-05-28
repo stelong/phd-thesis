@@ -416,12 +416,12 @@ y = f_{simul}(\mathbf{x}) + d
 \noindent
 so that:
 %
-\begin{equation}
+\begin{equation}\label{eq:modeldiscrerr}
 z = f_{simul}(\mathbf{x}) + d + e
 \end{equation}
 
 \noindent
-We further assume that the model discrepancy is independent of $\mathbf{x}$ and uncorrelated with $f$.
+The model discrepancy term $d$ was formally introduced in~\cite{Kennedy:2001} as an additional source of uncertainty in simulator predictions (referred to as \textit{model inadequacy}) and the correct characterisation of it often requires experts' knowledge. Here we assume that $d$ is independent of $\mathbf{x}$ and uncorrelated with $f$.
 
 \vspace{0.2cm}
 HM is an iterative process that allows to thoroughly explore the input space by discarding regions of input points that are unlikely to yield a simulator output match with real system observations. In order to do that, it makes use of emulators $f_{emul}$ to approximate the simulator output at many input points where the simulator would be too computationally expensive to be run. HM relies on the so-called \textit{implausibility measure}, which is calculated for each test point $\mathbf{x}$ in the input space:
