@@ -489,17 +489,17 @@ Unlike classical optimisation algorithms that converge to a single set of parame
     \midrule
     & & \tableheadline{SHAM} & \tableheadline{AB} \\
     \midrule
-    $\Caif$ & $\SI{}{\micro\Molar}$      & $2.1723$  & $0.7087$ \\
-    $\koff$ & $\SI{}{\per\milli\second}$            & $0.0515$  & $0.0686$ \\
-    $\kxb$  & $\SI{}{\per\milli\second}$            & $0.0172$  & $0.0090$ \\
-    $\tref$ & $\SI{}{\kilo\pascal}$                 & $156.067$ & $112.582$ \\
-    $\p$    & $\SI{}{\kilo\pascal}$                 & $0.3122$  & $0.3914$ \\
-    $\pao$  & $\SI{}{\kilo\pascal}$                 & $7.1136$  & $7.0047$ \\
-    $\Z$    & $\SI{}{\mmHg\second\per\milli\liter}$ & $5.6234$  & $9.9301$ \\
-    $\Cone$ & $\SI{}{\kilo\pascal}$                 & $0.9141$  & $1.6725$ \\
+    \multirow{2}{*}{$\Caif$} & \multirow{2}{*}{$\SI{}{\micro\Molar}$}                 & $2.1723$  & $0.7087$ \\  & & $[2.06,\,2.27]$ & $[0.54,\,0.77]$ \\
+    \multirow{2}{*}{$\koff$} & \multirow{2}{*}{$\SI{}{\per\milli\second}$}            & $0.0515$  & $0.0686$ \\  & & $[0.05,\,0.06]$ & $[0.06,\,0.11]$ \\
+    \multirow{2}{*}{$\kxb$}  & \multirow{2}{*}{$\SI{}{\per\milli\second}$}            & $0.0172$  & $0.0090$ \\  & & $[0.01,\,0.02]$ & $[0.01,\,0.02]$ \\
+    \multirow{2}{*}{$\tref$} & \multirow{2}{*}{$\SI{}{\kilo\pascal}$}                 & $156.067$ & $112.582$ \\ & & $[148.38,\,159.83]$ & $[109.80,\,119.41]$ \\
+    \multirow{2}{*}{$\p$}    & \multirow{2}{*}{$\SI{}{\kilo\pascal}$}                 & $0.3122$  & $0.3914$ \\  & & $[0.30,\,0.46]$ & $[0.30,\,0.84]$ \\
+    \multirow{2}{*}{$\pao$}  & \multirow{2}{*}{$\SI{}{\kilo\pascal}$}                 & $7.1136$  & $7.0047$ \\  & & $[6.01,\,9.04]$ & $[6.01,\,7.68]$ \\
+    \multirow{2}{*}{$\Z$}    & \multirow{2}{*}{$\SI{}{\mmHg\second\per\milli\liter}$} & $5.6234$  & $9.9301$ \\  & & $[5.51,\,8.31]$ & $[9.06,\,11.80]$ \\
+    \multirow{2}{*}{$\Cone$} & \multirow{2}{*}{$\SI{}{\kilo\pascal}$}                 & $0.9141$  & $1.6725$ \\  & & $[0.86,\,1.84]$ & $[1.63,\,2.91]$ \\
     \bottomrule
     \end{tabularx}
-    \caption{Representative SHAM and AB rat models' input parameters' values.}
+    \caption{Representative SHAM and AB rat models' input parameters' values. Parameter bounds of all non-implausible models are also provided.}
     \label{tab:shamabbestfitparamvalues}
 \end{table}
 
@@ -511,21 +511,21 @@ Unlike classical optimisation algorithms that converge to a single set of parame
     \midrule
                                     &                                        & \tableheadline{SHAM} & \tableheadline{AB} \\
     \midrule
-    $\textrm{EDV}$                  & $\SI{}{\micro\liter}$                  & $516.23$             & $467.88$ \\
-    $\textrm{ESV}$                  & $\SI{}{\micro\liter}$                  & $173.82$             & $137.88$ \\
-    $\textrm{EF}$                   & $\SI{}{\percent}$                      & $66.33$              & $70.53$ \\
-    $\textrm{IVCT}$                 & $\SI{}{\milli\second}$                 & $19.3$               & $13.2$ \\
-    $\textrm{ET}$                   & $\SI{}{\milli\second}$                 & $52.9$               & $57.7$ \\
-    $\textrm{IVRT}$                 & $\SI{}{\milli\second}$                 & $23.8$               & $40.0$ \\
-    $\textrm{Tdiast}$               & $\SI{}{\milli\second}$                 & $93.5$               & $94.8$ \\
-    $\textrm{PeakP}$                & $\SI{}{\kilo\pascal}$                  & $16.15$              & $20.94$ \\
-    $\textrm{Tpeak}$                & $\SI{}{\milli\second}$                 & $46.6$               & $38.3$ \\
-    $\textrm{ESP}$                  & $\SI{}{\kilo\pascal}$                  & $10.04$              & $9.79$ \\
-    $\textrm{maxdP}$ & $\SI{}{\kilo\pascal\per\milli\second}$                & $0.9973$             & $1.4462$ \\
-    $\textrm{mindP}$ & $\SI{}{\kilo\pascal\per\milli\second}$                & $-0.5712$            & $-0.3306$ \\
+    \multirow{2}{*}{$\textrm{EDV}$}                  & \multirow{2}{*}{$\SI{}{\micro\liter}$}                  & $516.23$             & $467.88$ \\  & & $[463.33,\,538.12]$ & $[434.30,\,513.83]$ \\
+    \multirow{2}{*}{$\textrm{ESV}$}                  & \multirow{2}{*}{$\SI{}{\micro\liter}$}                  & $173.82$             & $137.88$ \\  & & $[173.23,\,193.67]$ & $[135.76,\,147.62]$ \\
+    \multirow{2}{*}{$\textrm{EF}$}                   & \multirow{2}{*}{$\SI{}{\percent}$}                      & $66.33$              & $70.53$ \\  & & $[58.87,\,66.85]$ & $[66.83,\,73.22]$ \\
+    \multirow{2}{*}{$\textrm{IVCT}$}                 & \multirow{2}{*}{$\SI{}{\milli\second}$}                 & $19.3$               & $13.2$ \\  & & $[18.60,\,22.30]$ & $[10.20,\,13.80]$ \\
+    \multirow{2}{*}{$\textrm{ET}$}                   & \multirow{2}{*}{$\SI{}{\milli\second}$}                 & $52.9$               & $57.7$ \\  & & $[52.40,\,56.00]$ & $[53.00,\,60.10]$ \\
+    \multirow{2}{*}{$\textrm{IVRT}$}                 & \multirow{2}{*}{$\SI{}{\milli\second}$}                 & $23.8$               & $40.0$ \\  & & $[20.80,\,27.90]$ & $[32.20,\,45.10]$ \\
+    \multirow{2}{*}{$\textrm{Tdiast}$}               & \multirow{2}{*}{$\SI{}{\milli\second}$}                 & $93.5$               & $94.8$ \\  & & $[87.60,\,94.30]$ & $[93.20,\,101.70]$ \\
+    \multirow{2}{*}{$\textrm{PeakP}$}                & \multirow{2}{*}{$\SI{}{\kilo\pascal}$}                  & $16.15$              & $20.94$ \\  & & $[14.75,\,17.52]$ & $[20.82,\,22.28]$ \\
+    \multirow{2}{*}{$\textrm{Tpeak}$}                & \multirow{2}{*}{$\SI{}{\milli\second}$}                 & $46.6$               & $38.3$ \\  & & $[46.10,\,50.40]$ & $[32.80,\,38.50]$ \\
+    \multirow{2}{*}{$\textrm{ESP}$}                  & \multirow{2}{*}{$\SI{}{\kilo\pascal}$}                  & $10.04$              & $9.79$ \\  & & $[8.77,\,11.45]$ & $[8.76,\,10.41]$ \\
+    \multirow{2}{*}{$\textrm{maxdP}$} & \multirow{2}{*}{$\SI{}{\kilo\pascal\per\milli\second}$}                & $0.9973$             & $1.4462$ \\  & & $[0.84,\,1.07]$ & $[1.32,\,1.48]$ \\
+    \multirow{2}{*}{$\textrm{mindP}$} & \multirow{2}{*}{$\SI{}{\kilo\pascal\per\milli\second}$}                & $-0.5712$            & $-0.3306$ \\  & & $[-0.59,\,-0.52]$ & $[-0.72,\,-0.26]$ \\
     \bottomrule
     \end{tabularx}
-    \caption{Representative SHAM and AB rat models' output LV features' values.}
+    \caption{Representative SHAM and AB rat models' output LV features' values. Feature bounds of all non-implausible models are also provided.}
     \label{tab:shamabbestfitfeatvalues}
 \end{table}
 
