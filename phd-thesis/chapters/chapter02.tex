@@ -66,7 +66,7 @@ All the currents present in the Gattoni et al.~\cite{Gattoni:2016} model are sum
 %
 %
 \section{Contraction model}\label{sec:ch2contractionmodel}
-We employed the Land et al.~\cite{Land:2012} myocyte contraction model to simulate both dynamic force generation at the sarcomere level in response to a calcium transient and the steady-state force-calcium relationship in the rat heart. This model describes the cooperative binding of $\Ca$ to TnC, which causes unblocking of the actin sites for myosin cross-bridge cycling.
+We employed the Land et al.~\cite{Land:2012} myocyte contraction model to simulate both dynamic force generation at the sarcomere level in response to a calcium transient and the steady-state force-calcium relationship in the rat heart. This model describes the cooperative binding of $\Ca$ to TnC, which causes unblocking of the actin sites for myosin cross-bridge cycling. We selected this specific model because it is regulated by only $4$ ODEs, which makes it computationally inexpensive to be run. This was a desired feature, as we aim at incorporating the model within a larger multi-scale, whole-organ contraction mechanics model where general performances can be heavily affected by their cellular sub-unit model. Despite the low number of equations, the Land et al.~\cite{Land:2012} model is still able capture all the key mechanisms regulating sarcomeric function (previously discussed in Section~\ref{sec:cell_contr_modelling}), including active tension generation dependence on sarcomere length (Section~\ref{sec:ch2lengthdependence}) and velocity (Section~\ref{sec:ch2velocitydependence}). At the same time, this model was previously shown to be suitable for being incorporated within whole-heart computational frameworks~\cite{Land:2012, Lewalle:2018}.
 
 \vspace{0.2cm}
 The process of $\Ca$ binding to TnC is described via the following equation:
@@ -355,7 +355,10 @@ where
 \end{tabular}
 
 \vspace{0.2cm}\noindent
-Moreover, cardiac tissue was assumed to be fully incompressible. This was enforced by expanding the strain-energy function in equation~\eqref{eq:guccstrainenergy} with a \textit{Lagrange multiplier scheme}, in combination with an \textit{incompressibility penalty} to improve stability of mechanics simulations~\cite{Land:2015*b}:
+We adopted this formulation since it is widely used in the cardiac modelling community~\cite{Land:2015} and most importantly because it is regulated by a few parameters, with one ($C_1$) being particularly interesting for modelling purposes as it can be scaled to directly impact the whole tissue stiffness.
+
+\vspace{0.2cm}
+Cardiac tissue was further assumed to be fully incompressible. This was enforced by expanding the strain-energy function in equation~\eqref{eq:guccstrainenergy} with a \textit{Lagrange multiplier scheme}, in combination with an \textit{incompressibility penalty} to improve stability of mechanics simulations~\cite{Land:2015*b}:
 %
 \begin{align}\label{eq:landstrainenergy}
     &W = W_g(\mathbf{E}) - p(J - 1) + \frac{\kappa}{2}(J - 1)^2\,,\quad\text{with}\quad J:=\text{det}(\mathbf{F}) \\
